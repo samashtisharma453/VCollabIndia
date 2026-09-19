@@ -1,494 +1,1481 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VCollab Platform - Multi-Stakeholder Dashboard</title>
-    <!-- Tailwind CSS for modern, high-quality styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .active-tab { border-bottom: 3px solid #2563eb; color: #2563eb; font-weight: 600; }
-        .modal { transition: opacity 0.25s ease; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>VCollab India — Hyperlocal Furniture & Appliance Rentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --sage-primary: #2D4A3E;
+      --sage-dark: #1E332A;
+      --sage-light: #4A6E5E;
+      --amber-accent: #E8A33D;
+      --amber-hover: #D4912D;
+      --bg-cream: #FAF7F2;
+      --card-white: #FFFFFF;
+      --text-charcoal: #1F2320;
+      --text-muted: #626863;
+      --border-light: #E2DDD5;
+      --teal-brand: #008080;
+      --teal-light: #E6F2F2;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-soft: 0 10px 30px rgba(0,0,0,0.05);
+      --shadow-card: 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--bg-cream); color: var(--text-charcoal); line-height: 1.5; }
+    h1, h2, h3, .serif-font { font-family: 'Fraunces', serif; }
+
+    /* Top Navigation Bar */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250, 247, 242, 0.98);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-light);
+      padding: 12px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .brand-group { display: flex; align-items: center; gap: 16px; }
+    .brand-logo {
+      font-size: 22px; font-weight: 800; color: var(--sage-primary);
+      text-decoration: none; display: flex; align-items: center; gap: 4px; cursor: pointer; white-space: nowrap;
+    }
+    .brand-logo span { color: var(--amber-accent); }
+
+    .location-dropdown-wrapper {
+      display: flex; align-items: center; gap: 6px;
+      background: #FFFFFF; border: 1px solid var(--border-light);
+      padding: 6px 12px; border-radius: 50px; font-size: 13px; font-weight: 500;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03); transition: all 0.2s;
+    }
+    .location-dropdown-wrapper:hover { border-color: var(--sage-primary); }
+    .location-select {
+      border: none; outline: none; background: transparent;
+      font-size: 13px; font-weight: 600; color: var(--text-charcoal); cursor: pointer;
+    }
+
+    .nav-search-bar {
+      display: flex; align-items: center; background: #FFFFFF;
+      border: 1px solid var(--border-light); border-radius: 50px;
+      padding: 6px 14px; flex-grow: 1; max-width: 320px; gap: 8px;
+    }
+    .nav-search-bar input {
+      border: none; outline: none; width: 100%; font-size: 13px; background: transparent;
+    }
+
+    .nav-links { display: flex; gap: 20px; list-style: none; align-items: center; }
+    .nav-links a {
+      text-decoration: none; color: var(--text-charcoal); font-weight: 500; font-size: 14px;
+      transition: color 0.2s; cursor: pointer; white-space: nowrap;
+    }
+    .nav-links a.active, .nav-links a:hover { color: var(--sage-primary); font-weight: 600; }
+
+    .nav-actions { display: flex; align-items: center; gap: 14px; }
+    
+    .cart-btn-nav {
+      position: relative; background: var(--teal-brand); color: #FFF;
+      border: none; padding: 8px 16px; border-radius: 50px; font-weight: 600;
+      font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+    }
+    .cart-badge {
+      background: var(--amber-accent); color: var(--text-charcoal);
+      border-radius: 50%; width: 20px; height: 20px; font-size: 11px;
+      display: flex; align-items: center; justify-content: center; font-weight: 700;
+    }
+
+    .view-switcher {
+      background: #EAE5DC; padding: 3px; border-radius: 50px; display: flex; gap: 2px;
+    }
+    .view-btn {
+      border: none; background: transparent; padding: 6px 14px; border-radius: 50px;
+      font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+    }
+    .view-btn.active { background: var(--sage-primary); color: #FFF; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+
+    /* HERO CAROUSEL */
+    .hero-carousel {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      overflow: hidden;
+      background: var(--sage-dark);
+    }
+    .carousel-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+    }
+    .slide-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.05) 100%);
+    }
+    .slide-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 8%;
+      max-width: 680px;
+      color: #FFFFFF;
+    }
+    .slide-headline {
+      font-size: 46px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .slide-subheadline {
+      font-size: 18px;
+      margin-bottom: 28px;
+      color: #E2DDD5;
+      font-weight: 400;
+    }
+    .cta-pill-btn {
+      display: inline-block;
+      background: #FFFFFF;
+      color: var(--sage-primary);
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .cta-pill-btn:hover {
+      background: var(--amber-accent);
+      color: var(--text-charcoal);
+      transform: translateY(-2px);
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #FFF;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .carousel-arrow:hover {
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--sage-primary);
+    }
+    .carousel-arrow.prev { left: 24px; }
+    .carousel-arrow.next { right: 24px; }
+    .carousel-dots {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .dot.active {
+      background: #FFFFFF;
+      width: 32px;
+      border-radius: 10px;
+    }
+
+    /* Section Sub-heading */
+    .section-subheading {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-charcoal);
+      margin-top: 24px;
+      margin-bottom: 8px;
+      letter-spacing: -0.2px;
+    }
+
+    /* Page Views Container */
+    .page-view { display: none; padding: 24px 5%; max-width: 1280px; margin: 0 auto; }
+    .page-view.active { display: block; }
+
+    /* Category Navigation Grid */
+    .category-scroll {
+      display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: thin; margin-top: 12px;
+    }
+    .category-card {
+      min-width: 110px; background: var(--card-white); border: 1px solid var(--border-light);
+      border-radius: var(--radius-md); padding: 14px 10px; text-align: center;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .category-card:hover, .category-card.active {
+      border-color: var(--teal-brand); background: var(--teal-light); transform: translateY(-2px);
+    }
+    .category-icon { font-size: 28px; margin-bottom: 6px; }
+    .category-title { font-size: 13px; font-weight: 600; }
+
+    /* Marketplace Layout */
+    .product-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 20px;
+    }
+    .product-card {
+      background: var(--card-white); border: 1px solid var(--border-light);
+      border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);
+      transition: transform 0.2s; display: flex; flex-direction: column;
+    }
+    .product-card:hover { transform: translateY(-4px); }
+    .product-thumb { width: 100%; height: 210px; object-fit: cover; background: #FFF; padding: 0; }
+    .product-info { padding: 16px; display: flex; flex-direction: column; flex-grow: 1; }
+    .shop-tag { font-size: 11px; font-weight: 700; color: var(--teal-brand); text-transform: uppercase; margin-bottom: 4px; }
+    .product-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text-charcoal); line-height: 1.3; }
+    .pricing-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px; }
+    .price-main { font-size: 20px; font-weight: 800; color: var(--sage-primary); }
+    .price-strike { text-decoration: line-through; color: var(--text-muted); font-size: 13px; }
+    .discount-badge { background: #E6F4EA; color: #137333; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; }
+
+    .card-actions { margin-top: auto; display: flex; gap: 8px; }
+    .btn-primary {
+      flex: 1; background: var(--teal-brand); color: #FFF; border: none; padding: 10px;
+      border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #006666; }
+    .btn-secondary {
+      background: transparent; border: 1px solid var(--border-light); color: var(--text-charcoal);
+      padding: 10px 14px; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer;
+    }
+
+    /* Product Detail View */
+    .product-detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; background: #FFF; padding: 24px; border-radius: var(--radius-lg); }
+    .main-detail-img { width: 100%; height: 380px; object-fit: cover; border-radius: var(--radius-md); background: #FAF7F2; }
+    .gallery-thumbs { display: flex; gap: 10px; margin-top: 12px; }
+    .gallery-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; cursor: pointer; }
+    .gallery-thumb.active { border-color: var(--teal-brand); }
+
+    .variant-chips { display: flex; gap: 10px; margin: 12px 0; }
+    .variant-chip { border: 1px solid var(--border-light); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; }
+    .variant-chip.active { border-color: var(--teal-brand); background: var(--teal-light); color: var(--teal-brand); }
+
+    /* Cart Page */
+    .cart-container { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 28px; }
+    .cart-box { background: #FFF; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 20px; }
+    .cart-item { display: flex; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border-light); margin-bottom: 16px; }
+    .cart-item-img { width: 90px; height: 90px; object-fit: cover; border-radius: var(--radius-sm); background: #FAF7F2; }
+    .qty-counter { display: flex; align-items: center; border: 1px solid var(--border-light); border-radius: 50px; padding: 2px 8px; width: fit-content; margin-top: 8px; }
+    .qty-btn { border: none; background: none; font-size: 16px; font-weight: 700; padding: 0 8px; cursor: pointer; }
+
+    .coupon-box { background: #FFF8E7; border: 1px dashed var(--amber-accent); padding: 12px 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000;
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-card {
+      background: #FFF; border-radius: var(--radius-lg); padding: 28px;
+      max-width: 520px; width: 90%; max-height: 90vh; overflow-y: auto;
+      box-shadow: var(--shadow-soft); position: relative;
+    }
+    .modal-close { position: absolute; top: 16px; right: 20px; font-size: 24px; border: none; background: none; cursor: pointer; }
+
+    /* QR Display */
+    .qr-container { text-align: center; padding: 20px 0; }
+    #qrcode { display: flex; justify-content: center; margin: 16px 0; }
+    .verify-badge { background: #E6F4EA; color: #137333; padding: 6px 12px; border-radius: 50px; font-weight: 700; font-size: 12px; display: inline-block; }
+
+    /* Admin / Retailer Tables */
+    .data-table { width: 100%; border-collapse: collapse; margin-top: 16px; background: #FFF; border-radius: var(--radius-sm); overflow: hidden; }
+    .data-table th, .data-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-light); font-size: 13px; }
+    .data-table th { background: #F4F1EA; font-weight: 700; }
+
+    /* Form Input Styles */
+    .form-input-styled {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm); font-size: 13px; outline: none; margin-top: 4px;
+      background: #FFF;
+    }
+    .form-input-styled:focus { border-color: var(--teal-brand); }
+
+    /* 50/50 Retailer Dashboard Grid */
+    .retailer-dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans antialiased text-gray-800">
+<body>
 
-    <!-- Top Navigation Bar -->
-    <nav class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50">
-        <div class="flex items-center space-x-3">
-            <span class="text-2xl font-bold tracking-wider text-blue-400"><i class="fa-solid fa-handshake"></i> VCollab</span>
-            <span class="text-xs bg-blue-800 text-blue-200 px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">Interactive Prototype</span>
-        </div>
+  <!-- Top Taskbar -->
+  <header class="navbar">
+    <div class="brand-group">
+      <a class="brand-logo" onclick="switchView('customer-view')">VCollab India<span>.</span></a>
+      <div class="location-dropdown-wrapper">
+        <span>📍</span>
+        <select class="location-select" id="city-selector" onchange="handleCityChange(this.value)">
+          <option value="Delhi-NCR">Delhi-NCR</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Bengaluru">Bengaluru</option>
+          <option value="Hyderabad" selected>Hyderabad</option>
+          <option value="Chennai">Chennai</option>
+          <option value="Kolkata">Kolkata</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="nav-search-bar">
+      <span>🔍</span>
+      <input type="text" id="catalog-search" placeholder="Search furniture, appliances..." oninput="handleSearch(this.value)">
+    </div>
+
+    <ul class="nav-links">
+      <li><a id="nav-relocate" onclick="switchView('relocate-view')">Relocate with VCollab</a></li>
+      <li id="nav-rani-orders-link" style="display: none;">
+        <a id="nav-rani-orders" onclick="switchView('rani-orders-view')" style="color: var(--teal-brand); font-weight: 700;">📦 My Rented Items (2)</a>
+      </li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="cart-btn-nav" onclick="switchView('cart-view')">
+        🛒 Cart <div class="cart-badge" id="cart-count">0</div>
+      </button>
+      <div class="view-switcher">
+        <button class="view-btn active" id="mode-cust" onclick="setDemoMode('customer')">Customer</button>
+        <button class="view-btn" id="mode-rani" onclick="setDemoMode('rani')">Rani</button>
+        <button class="view-btn" id="mode-ret" onclick="setDemoMode('retailer')">Retailer</button>
+        <button class="view-btn" id="mode-adm" onclick="setDemoMode('admin')">Admin</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- VIEW 1: CUSTOMER MARKETPLACE -->
+  <main id="customer-view" style="padding: 0; max-width: 100%;" class="page-view active">
+    
+    <!-- HERO CAROUSEL -->
+    <section class="hero-carousel" id="heroCarousel">
+      <div class="carousel-track" id="carouselTrack">
         
-        <!-- Role Switching Bar for Demonstration -->
-        <div class="flex bg-slate-800 rounded-lg p-1 space-x-1 border border-slate-700">
-            <button onclick="switchRole('retailer')" id="nav-retailer" class="px-3 py-1.5 text-xs rounded-md bg-blue-600 text-white font-medium transition">Retailer View</button>
-            <button onclick="switchRole('customer')" id="nav-customer" class="px-3 py-1.5 text-xs rounded-md text-gray-300 hover:text-white font-medium transition">Customer (Nonu)</button>
-            <button onclick="switchRole('admin')" id="nav-admin" class="px-3 py-1.5 text-xs rounded-md text-gray-300 hover:text-white font-medium transition">Admin Panel</button>
-        </div>
-    </nav>
-
-    <div class="max-w-7xl mx-auto p-6">
-
-        <!-- ================================================================= -->
-        <!-- RETAILER DASHBOARD INTERFACE                                      -->
-        <!-- ================================================================= -->
-        <div id="view-retailer" class="space-y-6">
-            
-            <!-- Shop Header -->
-            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex flex-wrap justify-between items-center gap-4">
-                <div class="flex items-center space-x-4">
-                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-bold">
-                        <i class="fa-solid fa-store"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <h1 class="text-2xl font-bold text-gray-900">Sharma Furnishings</h1>
-                            <span id="retailer-status-badge" class="bg-green-100 text-green-800 text-xs px-2.5 py-0.5 rounded-full font-medium"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Verified & Active</span>
-                        </div>
-                        <p class="text-sm text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i> Janakpuri Branch, New Delhi</p>
-                    </div>
-                </div>
-                
-                <div class="flex items-center space-x-3">
-                    <button onclick="openModal('add-stock-modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-semibold shadow flex items-center gap-2 transition">
-                        <i class="fa-solid fa-plus-circle"></i> Add Idle Stock
-                    </button>
-                    <button onclick="openSupportModal('Sharma Furnishings (Retailer)')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition border">
-                        <i class="fa-solid fa-headset text-blue-600"></i> Support
-                    </button>
-                </div>
-            </div>
-
-            <!-- KPI Ribbon -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Rented Idle Stock</p>
-                    <p class="text-2xl font-bold text-gray-800 mt-1">14 <span class="text-sm font-normal text-gray-500">/ 20 items</span></p>
-                    <p class="text-xs text-green-600 mt-2"><i class="fa-solid fa-arrow-up"></i> 70% inventory yield</p>
-                </div>
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Monthly Rent Earnings</p>
-                    <p class="text-2xl font-bold text-gray-800 mt-1">₹42,500</p>
-                    <p class="text-xs text-green-600 mt-2"><i class="fa-solid fa-wallet"></i> Auto-settles 1st of month</p>
-                </div>
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Commission Giving</p>
-                    <p class="text-2xl font-bold text-amber-600 mt-1">10% <span class="text-sm font-normal text-gray-500">(₹4,250)</span></p>
-                    <p class="text-xs text-gray-500 mt-2">Tier: Standard Partner</p>
-                </div>
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer Rating</p>
-                    <p class="text-2xl font-bold text-gray-800 mt-1">4.8 <span class="text-yellow-400 text-lg">★</span></p>
-                    <p class="text-xs text-blue-600 mt-2 cursor-pointer hover:underline">Based on 128 reviews</p>
-                </div>
-            </div>
-
-            <!-- Main Content Split: Inventory & Logistics Interface -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                <!-- Left 2 Cols: Idle Inventory Management -->
-                <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-                    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-boxes-stacked text-blue-600"></i> Active Idle Stock Listings
-                    </h2>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="border-b text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50">
-                                    <th class="p-3">Item Details</th>
-                                    <th class="p-3">Monthly Rent</th>
-                                    <th class="p-3">Platform Comm.</th>
-                                    <th class="p-3">Current Status</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100 text-sm">
-                                <tr>
-                                    <td class="p-3 font-medium text-gray-900 flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-gray-500"><i class="fa-solid fa-couch"></i></div>
-                                        <span>3-Seater Fabric Sofa</span>
-                                    </td>
-                                    <td class="p-3 font-semibold text-gray-800">₹2,500/mo</td>
-                                    <td class="p-3 text-gray-500">10% (₹250)</td>
-                                    <td class="p-3"><span class="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-medium">Rented (Nonu)</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="p-3 font-medium text-gray-900 flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-gray-500"><i class="fa-solid fa-table"></i></div>
-                                        <span>Oak Wooden Dining Table</span>
-                                    </td>
-                                    <td class="p-3 font-semibold text-gray-800">₹1,800/mo</td>
-                                    <td class="p-3 text-gray-500">10% (₹180)</td>
-                                    <td class="p-3"><span class="bg-blue-100 text-blue-700 text-xs px-2.5 py-1 rounded-full font-medium">Available in Shop</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="p-3 font-medium text-gray-900 flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-gray-500"><i class="fa-solid fa-bed"></i></div>
-                                        <span>Queen Size Bed + Mattress</span>
-                                    </td>
-                                    <td class="p-3 font-semibold text-gray-800">₹3,200/mo</td>
-                                    <td class="p-3 text-gray-500">10% (₹320)</td>
-                                    <td class="p-3"><span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-medium">In Transit</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Right 1 Col: Embedded Logistics Interface -->
-                <div class="bg-slate-50 rounded-xl border border-slate-200 p-6 shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fa-solid fa-truck-fast text-indigo-600"></i> Logistics Hub
-                        </h2>
-                        <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-medium">3 Scheduled</span>
-                    </div>
-                    
-                    <p class="text-xs text-gray-500 mb-4">Scheduled appointments for product pickup, return, and customer relocation.</p>
-
-                    <!-- Logistics Appointments Queue -->
-                    <div class="space-y-3" id="logistics-appointments-list">
-                        <!-- Appointment Card 1 -->
-                        <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm space-y-2">
-                            <div class="flex justify-between items-start">
-                                <span class="bg-amber-100 text-amber-800 text-[10px] uppercase tracking-wide font-bold px-2 py-0.5 rounded">Return Pickup</span>
-                                <span class="text-xs font-semibold text-gray-500">Today, 4:00 PM</span>
-                            </div>
-                            <p class="text-sm font-bold text-gray-800">3-Seater Fabric Sofa</p>
-                            <p class="text-xs text-gray-600"><i class="fa-solid fa-user mr-1"></i> Customer: Nonu (Janakpuri Block B)</p>
-                            <p class="text-xs text-gray-600"><i class="fa-solid fa-truck-moving mr-1"></i> Partner: Express Movers (Ramesh Driver)</p>
-                            
-                            <button onclick="openConditionVerificationModal('Nonu', 'Sofa')" class="w-full mt-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs py-2 rounded font-semibold border border-indigo-200 transition">
-                                <i class="fa-solid fa-camera mr-1"></i> Complete 3-Photo Pickup Check
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+        <!-- Slide 1: SOFA -->
+        <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="serif-font slide-headline">Gorgeous Furniture & Living</h1>
+            <p class="slide-subheadline">Upgrade your living room with zero deposit & free 72hr setup near your pin code.</p>
+            <a class="cta-pill-btn" onclick="scrollToCatalogAndFilter('sofa')">Rent Sofas Now</a>
+          </div>
         </div>
 
-        <!-- ================================================================= -->
-        <!-- CUSTOMER INTERFACE (NONU)                                         -->
-        <!-- ================================================================= -->
-        <div id="view-customer" class="hidden space-y-6">
-            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex justify-between items-center">
-                <div class="flex items-center space-x-4">
-                    <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-xl font-bold">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Welcome, Nonu!</h1>
-                        <p class="text-sm text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i> Janakpuri, New Delhi</p>
-                    </div>
-                </div>
-                <button onclick="openSupportModal('Nonu (Customer)')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 border">
-                    <i class="fa-solid fa-headset text-purple-600"></i> Help & Support
-                </button>
-            </div>
-
-            <!-- Active Rental Status Section -->
-            <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-box-open text-purple-600"></i> Your Active Subscriptions & Rentals
-                </h2>
-
-                <div id="customer-active-rental-card" class="border border-purple-200 bg-purple-50/40 rounded-xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500 text-3xl">
-                            <i class="fa-solid fa-couch"></i>
-                        </div>
-                        <div>
-                            <span class="bg-purple-100 text-purple-700 text-xs px-2.5 py-0.5 rounded-full font-bold">Active Rental</span>
-                            <h3 class="text-xl font-bold text-gray-900 mt-1">3-Seater Fabric Sofa</h3>
-                            <p class="text-sm text-gray-600">Rented from: <span class="font-semibold text-gray-800">Sharma Furnishings (Janakpuri)</span></p>
-                            <p class="text-xs text-gray-500 mt-1">Monthly Fee: ₹2,500 | Next billing: Oct 15, 2026</p>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-                        <button onclick="triggerCustomerAction('Return')" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow transition">
-                            <i class="fa-solid fa-rotate-left mr-1"></i> Request Return
-                        </button>
-                        <button onclick="triggerCustomerAction('Relocate')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow transition">
-                            <i class="fa-solid fa-truck-ramp-box mr-1"></i> Relocate Item
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Interactive Status Tracker (Dynamic) -->
-                <div id="logistics-live-tracker" class="mt-6 border-t pt-4 hidden">
-                    <p class="text-sm font-bold text-gray-700 mb-3">Live Order Status Tracker:</p>
-                    <div class="flex items-center justify-between text-xs text-gray-500 max-w-2xl mx-auto">
-                        <div class="text-center text-blue-600 font-bold"><i class="fa-solid fa-check-circle text-lg block"></i> Request Sent</div>
-                        <div class="h-1 bg-blue-600 flex-1 mx-2"></div>
-                        <div class="text-center text-blue-600 font-bold"><i class="fa-solid fa-truck text-lg block"></i> Logistics Alerted</div>
-                        <div class="h-1 bg-gray-200 flex-1 mx-2"></div>
-                        <div class="text-center"><i class="fa-solid fa-camera text-lg block"></i> 3-Photo Inspection</div>
-                        <div class="h-1 bg-gray-200 flex-1 mx-2"></div>
-                        <div class="text-center"><i class="fa-solid fa-house-circle-check text-lg block"></i> Completed</div>
-                    </div>
-                </div>
-            </div>
+        <!-- Slide 2: Appliances -->
+        <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="serif-font slide-headline">Smart Kitchen & Home Appliances</h1>
+            <p class="slide-subheadline">Top rated ACs, refrigerators, and washing machines straight from local stores.</p>
+            <a class="cta-pill-btn" onclick="scrollToCatalogAndFilter('appliances')">Explore Appliances</a>
+          </div>
         </div>
 
-        <!-- ================================================================= -->
-        <!-- ADMIN PANEL                                                       -->
-        <!-- ================================================================= -->
-        <div id="view-admin" class="hidden space-y-6">
-            <div class="bg-slate-900 text-white rounded-xl p-6 shadow-sm flex justify-between items-center">
-                <div>
-                    <h1 class="text-2xl font-bold">VCollab Admin & Governance Center</h1>
-                    <p class="text-sm text-slate-400">Manage automated commissions, platform queries, and seller blacklisting</p>
-                </div>
-                <div class="text-right">
-                    <span class="text-xs text-slate-400 block">Total Calculated Platform Earnings</span>
-                    <span class="text-2xl font-bold text-emerald-400">₹1,48,200</span>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Commission Engine Overview -->
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <h2 class="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-calculator text-blue-600"></i> Commission Calculator Engine
-                    </h2>
-                    <div class="space-y-3 text-sm">
-                        <div class="flex justify-between py-2 border-b">
-                            <span class="text-gray-600">Standard Retailer Cut:</span>
-                            <span class="font-bold">10%</span>
-                        </div>
-                        <div class="flex justify-between py-2 border-b">
-                            <span class="text-gray-600">Logistics Share:</span>
-                            <span class="font-bold">15%</span>
-                        </div>
-                        <div class="flex justify-between py-2 border-b">
-                            <span class="text-gray-600">Sharma Furnishings (Gross):</span>
-                            <span class="font-bold">₹42,500</span>
-                        </div>
-                        <div class="flex justify-between py-2 border-b text-emerald-600 font-bold">
-                            <span>Admin Commission Collected:</span>
-                            <span>₹4,250</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Support Ticket & Blacklist Center -->
-                <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-shield-halved text-red-600"></i> Customer & Retailer Support Queries
-                    </h2>
-
-                    <div id="admin-tickets-container" class="space-y-3">
-                        <!-- Dynamic support tickets render here -->
-                        <p class="text-sm text-gray-500 italic">No open queries reported yet.</p>
-                    </div>
-                </div>
-            </div>
+        <!-- Slide 3: Beds -->
+        <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="serif-font slide-headline">Premium Beds & Solid Wood Comfort</h1>
+            <p class="slide-subheadline">Transform your bedroom and study spaces with verified local seller inventory.</p>
+            <a class="cta-pill-btn" onclick="scrollToCatalogAndFilter('bed')">Browse Beds</a>
+          </div>
         </div>
 
+      </div>
+
+      <!-- Navigation Arrows -->
+      <button class="carousel-arrow prev" onclick="moveSlide(-1)">&#10094;</button>
+      <button class="carousel-arrow next" onclick="moveSlide(1)">&#10095;</button>
+
+      <!-- Dot Indicators -->
+      <div class="carousel-dots" id="carouselDots">
+        <span class="dot active" onclick="goToSlide(0)"></span>
+        <span class="dot" onclick="goToSlide(1)"></span>
+        <span class="dot" onclick="goToSlide(2)"></span>
+      </div>
+    </section>
+
+    <!-- CONTENT BODY CONTAINER -->
+    <div style="padding: 24px 5%; max-width: 1280px; margin: 0 auto;" id="catalog-section">
+      
+      <!-- SUBHEADING -->
+      <h2 class="section-subheading">Rent Furniture and Home Appliances</h2>
+
+      <!-- CATEGORY NAV -->
+      <div class="category-scroll">
+        <div class="category-card active" id="cat-all" onclick="filterCategory('all', this)">
+          <div class="category-icon">🏠</div>
+          <div class="category-title">All Items</div>
+        </div>
+        <div class="category-card" id="cat-appliances" onclick="filterCategory('appliances', this)">
+          <div class="category-icon">🧊</div>
+          <div class="category-title">Appliances</div>
+        </div>
+        <div class="category-card" id="cat-sofa" onclick="filterCategory('sofa', this)">
+          <div class="category-icon">🛋️</div>
+          <div class="category-title">Sofas</div>
+        </div>
+        <div class="category-card" id="cat-kitchen" onclick="filterCategory('kitchen', this)">
+          <div class="category-icon">🍳</div>
+          <div class="category-title">Modular Kitchen</div>
+        </div>
+        <div class="category-card" id="cat-bed" onclick="filterCategory('bed', this)">
+          <div class="category-icon">🛏️</div>
+          <div class="category-title">Beds</div>
+        </div>
+      </div>
+
+      <div class="product-grid" id="marketplace-grid"></div>
+    </div>
+  </main>
+
+  <!-- RANI'S MY ORDERS VIEW -->
+  <main id="rani-orders-view" class="page-view">
+    <div style="background: #FFF; padding: 24px; border-radius: var(--radius-lg); border: 1px solid var(--border-light); margin-bottom: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <span class="verify-badge">👤 Verified Account: Rani</span>
+          <h2 class="serif-font" style="margin-top: 6px; font-size: 24px;">My Active Rented Items</h2>
+          <p style="color: var(--text-muted); font-size: 13px;">Manage your active local shop rentals, initiate intra-city relocation, or request a return pickup.</p>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 12px; color: var(--text-muted);">Current Address</div>
+          <div style="font-weight: 700; font-size: 14px; color: var(--sage-primary);">Gachibowli, Hyderabad</div>
+        </div>
+      </div>
     </div>
 
-    <!-- ================================================================= -->
-    <!-- MODALS & POPUPS                                                   -->
-    <!-- ================================================================= -->
-
-    <!-- Add Idle Stock Modal -->
-    <div id="add-stock-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-lg font-bold text-gray-900">List Idle Stock Product</h3>
-                <button onclick="closeModal('add-stock-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <form onsubmit="handleAddStock(event)" class="space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">Product Title</label>
-                    <input type="text" required placeholder="e.g. Ergonomic Office Chair" class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Monthly Rent (₹)</label>
-                        <input type="number" required placeholder="1200" class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Security Deposit (₹)</label>
-                        <input type="number" required placeholder="3000" class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">Upload Product Photos</label>
-                    <input type="file" multiple class="w-full border rounded-lg p-2 text-xs text-gray-500">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg text-sm shadow transition">Submit Listing for Review</button>
-            </form>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+      
+      <!-- Rani Item 1: Sofa -->
+      <div class="product-card" style="flex-direction: row; align-items: center; padding: 16px; gap: 16px;">
+        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80" style="width: 130px; height: 130px; border-radius: var(--radius-sm); object-fit: cover;">
+        <div style="flex-grow: 1;">
+          <div class="shop-tag">STORE: Sharma Furnitures (Gachibowli)</div>
+          <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Luxury 3-Seater Living Sofa</h3>
+          <div style="font-size: 13px; font-weight: 800; color: var(--sage-primary); margin-bottom: 8px;">₹1,050/month</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Active Location: Gachibowli, Hyderabad</div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-primary" style="padding: 8px 12px; font-size: 12px;" onclick="initiateRaniRelocate('VC-RANI-SOFA', 'Luxury 3-Seater Living Sofa')">🚚 Relocate</button>
+            <button class="btn-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="openReturnModal('VC-RANI-SOFA', 'Luxury 3-Seater Living Sofa', 'Sharma Furnitures')">🔄 Return</button>
+          </div>
         </div>
+      </div>
+
+      <!-- Rani Item 2: Washing Machine -->
+      <div class="product-card" style="flex-direction: row; align-items: center; padding: 16px; gap: 16px;">
+        <img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80" style="width: 130px; height: 130px; border-radius: var(--radius-sm); object-fit: cover;">
+        <div style="flex-grow: 1;">
+          <div class="shop-tag">STORE: Sharma Furnitures (Gachibowli)</div>
+          <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Fully Automatic Washing Machine</h3>
+          <div style="font-size: 13px; font-weight: 800; color: var(--sage-primary); margin-bottom: 8px;">₹800/month</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Active Location: Gachibowli, Hyderabad</div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-primary" style="padding: 8px 12px; font-size: 12px;" onclick="initiateRaniRelocate('VC-RANI-WASH', 'Fully Automatic Washing Machine')">🚚 Relocate</button>
+            <button class="btn-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="openReturnModal('VC-RANI-WASH', 'Fully Automatic Washing Machine', 'Sharma Furnitures')">🔄 Return</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- VIEW 2: PRODUCT DETAIL PAGE -->
+  <main id="product-detail-view" class="page-view">
+    <button class="btn-secondary" onclick="switchView('customer-view')" style="margin-bottom: 16px;">← Back to Catalogue</button>
+    <div class="product-detail-layout" id="product-detail-container"></div>
+  </main>
+
+  <!-- VIEW 3: RENT CART / BASKET -->
+  <main id="cart-view" class="page-view">
+    <h2 class="serif-font" style="margin-bottom: 20px;">Your Rent Cart</h2>
+    <div class="cart-container">
+      <div class="cart-box">
+        <div style="background: var(--teal-light); padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--teal-brand); margin-bottom: 16px;">
+          🚚 Delivery Estimate: Free Express Handover to your location within 24 Hours
+        </div>
+        <div id="cart-items-list"></div>
+      </div>
+
+      <div>
+        <div class="coupon-box">
+          <div>
+            <div style="font-weight: 700; font-size: 13px;">Apply Offer: FURMAX</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Get 18% OFF on monthly rent</div>
+          </div>
+          <button class="btn-secondary" onclick="applyCoupon()" style="padding: 6px 12px; font-size: 12px;">Apply</button>
+        </div>
+
+        <div class="cart-box">
+          <h3 style="font-size: 16px; margin-bottom: 16px;">Rent Cost Breakup</h3>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
+            <span>Monthly Rent Total</span>
+            <span id="summary-base-rent">₹0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
+            <span>Refundable Deposit</span>
+            <span style="color: #137333; font-weight: 700;">₹0 (Zero Deposit)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
+            <span>Delivery & Installation</span>
+            <span style="color: #137333; font-weight: 700;">FREE</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #137333;" id="discount-row">
+            <span>Coupon Discount (FURMAX)</span>
+            <span id="summary-discount">-₹0</span>
+          </div>
+          <hr style="border: none; border-top: 1px solid var(--border-light); margin: 12px 0;">
+          <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; margin-bottom: 20px;">
+            <span>First Month Payable</span>
+            <span id="summary-final-total" style="color: var(--sage-primary);">₹0</span>
+          </div>
+          <button class="btn-primary" style="width: 100%; padding: 14px; font-size: 15px;" onclick="openPaymentModal()">Proceed to Pay & Place Order →</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- VIEW 4: RELOCATION LOGISTICS -->
+  <main id="relocate-view" class="page-view">
+    <div style="max-width: 700px; margin: 0 auto; background: #FFF; padding: 32px; border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
+      <h2 class="serif-font" style="color: var(--sage-primary); margin-bottom: 8px;">Relocate with VCollab</h2>
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Moving houses in the same city? Shift your rented furniture & appliances seamlessly without penalty.</p>
+      
+      <!-- Product Selection Dropdown -->
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 12px; font-weight: 700;">Select Product to Relocate</label>
+        <select id="relocate-product-select" class="form-input-styled">
+          <!-- Dynamically populated -->
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Current Address Locality</label>
+          <input type="text" id="relocate-current-addr" placeholder="House No., Locality, City, Pincode" value="Gachibowli, Hyderabad" class="form-input-styled">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Destination Relocation Locality</label>
+          <input type="text" id="relocate-dest-addr" placeholder="House No., Locality, City, Pincode" value="Hitech City, Hyderabad" class="form-input-styled">
+        </div>
+      </div>
+
+      <div style="background: var(--bg-cream); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 20px;">
+        <h4 style="font-size: 14px; margin-bottom: 10px;">Transparent Logistics Fee Breakup:</h4>
+        
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; align-items: center;">
+          <span>Base Transit & Packing Fee (Compulsory)</span>
+          <span>₹799</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; align-items: center;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="reinstall-checkbox" onchange="toggleReinstallationFee(this.checked)" checked style="accent-color: var(--teal-brand); width: 16px; height: 16px;">
+            <span>Appliance Reinstallation (AC / Washing Machine)</span>
+          </label>
+          <span id="reinstall-fee-display">₹350</span>
+        </div>
+
+        <hr style="border-top: 1px dashed var(--border-light); margin: 10px 0;">
+
+        <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: var(--sage-primary); margin-bottom: 6px;">
+          <span>Total Relocation Service Fee</span>
+          <span id="relocate-total-fee">₹1,149</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--teal-brand); font-weight: 600;">
+          <span>• 60% Advance Payment Required</span>
+          <span id="relocate-advance-fee">₹689</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+          <span>• 40% Balance Payable After Relocation</span>
+          <span id="relocate-post-fee">₹460</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="openRelocationModal()">Schedule Relocation Shift</button>
+    </div>
+  </main>
+
+  <!-- RELOCATION SCHEDULING POPUP MODAL -->
+  <div class="modal-overlay" id="relocation-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('relocation-modal')">×</button>
+      <div class="verify-badge">📋 Request Submitted</div>
+      <h3 class="serif-font" style="margin-top: 10px; margin-bottom: 4px;">Schedule Relocation Slot</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Your relocation request is submitted! Please select your convenient date & time slot.</p>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Choose Relocation Date</label>
+          <input type="date" id="relocate-date-input" class="form-input-styled">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Free Time Slot / Preferred Time</label>
+          <input type="text" id="relocate-time-input" placeholder="e.g. 10:00 AM - 1:00 PM" class="form-input-styled">
+        </div>
+      </div>
+
+      <div style="background: var(--bg-cream); padding: 14px; border-radius: 8px; margin-bottom: 20px; font-size: 13px;">
+        <div style="font-weight: 700; margin-bottom: 6px; color: var(--sage-primary);">Payment Terms Breakdown:</div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span>60% Payable Now (Advance):</span>
+          <strong id="modal-pay-now" style="color: var(--teal-brand);">₹689</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+          <span>40% Payable After Relocation:</span>
+          <strong id="modal-pay-later">₹460</strong>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="confirmRelocationBooking()">Pay 60% Advance & Confirm Booking</button>
+    </div>
+  </div>
+
+  <!-- RETURN PRODUCT POPUP MODAL -->
+  <div class="modal-overlay" id="return-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('return-modal')">×</button>
+      <div class="verify-badge">📦 Easy Return Pickup</div>
+      <h3 class="serif-font" style="margin-top: 10px; margin-bottom: 4px;">Initiate Product Return</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;" id="return-item-title-display">Item Return Request</p>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Reason for Return</label>
+          <select id="return-reason" class="form-input-styled">
+            <option value="tenure_ended">Rental Tenure Completed</option>
+            <option value="moving_city">Moving Out of City</option>
+            <option value="upgrade">Upgrading to New Model</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Pickup Date</label>
+          <input type="date" id="return-date-input" class="form-input-styled">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Pickup Time Slot</label>
+          <input type="text" id="return-time-input" placeholder="e.g. 2:00 PM - 5:00 PM" class="form-input-styled">
+        </div>
+      </div>
+
+      <div style="background: var(--bg-cream); padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 12px; color: var(--text-muted);">
+        • Logistics pickup is FREE of charge.<br>
+        • Quality inspection will be performed by driver upon pickup.
+      </div>
+
+      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="confirmReturnBooking()">Confirm & Request Return Pickup</button>
+    </div>
+  </div>
+
+  <!-- VIEW 5: RETAILER HUB (50/50 SPLIT DASHBOARD) -->
+  <main id="retailer-view" class="page-view">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <div>
+        <h2 class="serif-font">Sharma Furnitures (Gachibowli) — Retailer Portal</h2>
+        <p style="color: var(--text-muted); font-size: 13px;">Partner Store Network Management & Logistics Operations Hub</p>
+      </div>
+      <button class="btn-primary" onclick="alert('Add New Stock Modal Triggered')">+ Add New Shop Stock</button>
     </div>
 
-    <!-- 3-Photo Inspection Verification Modal -->
-    <div id="photo-check-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 space-y-4">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-lg font-bold text-gray-900"><i class="fa-solid fa-camera text-indigo-600 mr-2"></i>3-Photo Physical Condition Check</h3>
-                <button onclick="closeModal('photo-check-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <p class="text-xs text-gray-500">Both retailer and logistics driver must register photo proof before pickup/drop to eliminate damage disputes.</p>
-            
-            <div class="grid grid-cols-3 gap-2">
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-indigo-500">
-                    <i class="fa-solid fa-image text-gray-400 text-2xl mb-1"></i>
-                    <span class="block text-[10px] font-semibold text-gray-600">Angle 1: Front</span>
-                </div>
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-indigo-500">
-                    <i class="fa-solid fa-image text-gray-400 text-2xl mb-1"></i>
-                    <span class="block text-[10px] font-semibold text-gray-600">Angle 2: Side/Back</span>
-                </div>
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-indigo-500">
-                    <i class="fa-solid fa-image text-gray-400 text-2xl mb-1"></i>
-                    <span class="block text-[10px] font-semibold text-gray-600">Angle 3: Joints/Fabric</span>
-                </div>
-            </div>
-
-            <button onclick="confirmPhotoVerification()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg text-sm shadow transition">
-                Confirm & Verify Condition
-            </button>
+    <!-- 50/50 DUAL SECTION GRID -->
+    <div class="retailer-dashboard-grid">
+      
+      <!-- LEFT HALF: RETAILER EARNINGS & STOCK -->
+      <div style="background: #FFF; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 20px;">
+        <h3 class="serif-font" style="font-size: 18px; margin-bottom: 16px; color: var(--sage-primary);">📊 Store Earnings & Idle Stock</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+          <div style="background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--text-muted);">Monthly Net Revenue</div>
+            <div style="font-size: 20px; font-weight: 800; color: var(--teal-brand);">₹42,350</div>
+          </div>
+          <div style="background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--text-muted);">Platform Comm. (15%)</div>
+            <div style="font-size: 20px; font-weight: 800; color: var(--amber-accent);">₹7,470</div>
+          </div>
+          <div style="background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--text-muted);">Idle Capacity Utilized</div>
+            <div style="font-size: 20px; font-weight: 800; color: var(--sage-primary);">92%</div>
+          </div>
+          <div style="background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--text-muted);">Idle Stock Units Available</div>
+            <div style="font-size: 20px; font-weight: 800; color: #137333;">4 Units</div>
+          </div>
         </div>
-    </div>
 
-    <!-- Help & Support Query Modal -->
-    <div id="support-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-lg font-bold text-gray-900"><i class="fa-solid fa-headset text-blue-600 mr-2"></i>Help & Support Ticket</h3>
-                <button onclick="closeModal('support-modal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <form onsubmit="handleSupportSubmit(event)" class="space-y-3">
-                <input type="hidden" id="support-user-role">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">Query Type</label>
-                    <select id="support-category" class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                        <option value="General Support">General Support</option>
-                        <option value="Report Scam/Fake Retailer">Report Scam / Fake Retailer</option>
-                        <option value="Damaged Item Claim">Damaged Item Claim</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">Describe your query/issue</label>
-                    <textarea id="support-message" required rows="3" placeholder="Provide full details..." class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg text-sm shadow transition">
-                    Submit Query to Admin
-                </button>
-            </form>
+        <h4 style="font-size: 14px; margin-bottom: 10px;">Store Inventory Status</h4>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Item</th>
+              <th>Monthly Rent</th>
+              <th>Net Payout</th>
+            </tr>
+          </thead>
+          <tbody id="retailer-left-table">
+            <tr>
+              <td><code>VC-RANI-SOFA</code></td>
+              <td>Living Sofa (Rani)</td>
+              <td>₹1,050</td>
+              <td style="color:green; font-weight:700;">₹892</td>
+            </tr>
+            <tr>
+              <td><code>VC-RANI-WASH</code></td>
+              <td>Washing Machine (Rani)</td>
+              <td>₹800</td>
+              <td style="color:green; font-weight:700;">₹680</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- RIGHT HALF: LOGISTICS & SHIFT MANAGEMENT -->
+      <div style="background: #FFF; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 20px;">
+        <h3 class="serif-font" style="font-size: 18px; margin-bottom: 16px; color: var(--sage-primary);">🚚 Logistics & Shifts (Customer Side & Retailer Side)</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+          <div style="background: var(--teal-light); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--teal-brand); font-weight: 700;">Active Relocation Shifts</div>
+            <div style="font-size: 20px; font-weight: 800; color: var(--teal-brand);" id="active-shifts-count">1 Pending</div>
+          </div>
+          <div style="background: #FFF8E7; padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--amber-hover); font-weight: 700;">Return Pickups</div>
+            <div style="font-size: 20px; font-weight: 800; color: var(--amber-hover);" id="return-pickups-count">0 Scheduled</div>
+          </div>
         </div>
+
+        <h4 style="font-size: 14px; margin-bottom: 10px;">Live Intra-City Relocation Queue</h4>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Route</th>
+              <th>Fee Paid</th>
+              <th>Action / Status</th>
+            </tr>
+          </thead>
+          <tbody id="retailer-right-table">
+            <tr>
+              <td><strong>Rani</strong></td>
+              <td>Gachibowli ➔ Hitech City</td>
+              <td>₹689 (60% Adv)</td>
+              <td><span class="verify-badge">Driver Assigned</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
+  </main>
 
-    <!-- JavaScript Application Logic -->
-    <script>
-        // State Management
-        let tickets = [];
+  <!-- VIEW 6: PLATFORM ADMIN -->
+  <main id="admin-view" class="page-view">
+    <h2 class="serif-font" style="margin-bottom: 8px;">VCollab Pan-India Operations & Revenue</h2>
+    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Monetization engine across Metropolitan City Clusters</p>
 
-        function switchRole(role) {
-            document.getElementById('view-retailer').classList.add('hidden');
-            document.getElementById('view-customer').classList.add('hidden');
-            document.getElementById('view-admin').classList.add('hidden');
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>City Hub</th>
+          <th>Active Retail Stores</th>
+          <th>Live Rented Units</th>
+          <th>Gross Monthly GMV</th>
+          <th>VCollab Commission (15%)</th>
+          <th>Relocation Margin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Delhi-NCR</strong></td>
+          <td>42 Stores</td>
+          <td>380 Units</td>
+          <td>₹4,56,000</td>
+          <td><strong style="color: var(--teal-brand);">₹68,400</strong></td>
+          <td>₹12,400</td>
+        </tr>
+        <tr>
+          <td><strong>Bengaluru</strong></td>
+          <td>58 Stores</td>
+          <td>510 Units</td>
+          <td>₹6,12,000</td>
+          <td><strong style="color: var(--teal-brand);">₹91,800</strong></td>
+          <td>₹18,200</td>
+        </tr>
+        <tr>
+          <td><strong>Hyderabad</strong></td>
+          <td>31 Stores</td>
+          <td>290 Units</td>
+          <td>₹3,48,000</td>
+          <td><strong style="color: var(--teal-brand);">₹52,200</strong></td>
+          <td>₹9,600</td>
+        </tr>
+        <tr>
+          <td><strong>Mumbai</strong></td>
+          <td>45 Stores</td>
+          <td>410 Units</td>
+          <td>₹5,10,000</td>
+          <td><strong style="color: var(--teal-brand);">₹76,500</strong></td>
+          <td>₹14,100</td>
+        </tr>
+        <tr>
+          <td><strong>Chennai</strong></td>
+          <td>28 Stores</td>
+          <td>240 Units</td>
+          <td>₹2,88,000</td>
+          <td><strong style="color: var(--teal-brand);">₹43,200</strong></td>
+          <td>₹8,100</td>
+        </tr>
+        <tr>
+          <td><strong>Kolkata</strong></td>
+          <td>25 Stores</td>
+          <td>210 Units</td>
+          <td>₹2,52,000</td>
+          <td><strong style="color: var(--teal-brand);">₹37,800</strong></td>
+          <td>₹7,400</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
 
-            document.getElementById('nav-retailer').className = "px-3 py-1.5 text-xs rounded-md text-gray-300 hover:text-white font-medium transition";
-            document.getElementById('nav-customer').className = "px-3 py-1.5 text-xs rounded-md text-gray-300 hover:text-white font-medium transition";
-            document.getElementById('nav-admin').className = "px-3 py-1.5 text-xs rounded-md text-gray-300 hover:text-white font-medium transition";
+  <!-- PAYMENT SIMULATION MODAL -->
+  <div class="modal-overlay" id="payment-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('payment-modal')">×</button>
+      <h3 class="serif-font" style="margin-bottom: 4px;">Complete Rental Booking</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">VCollab Escrow Payment Gateway</p>
 
-            document.getElementById(`view-${role}`).classList.remove('hidden');
-            document.getElementById(`nav-${role}`).className = "px-3 py-1.5 text-xs rounded-md bg-blue-600 text-white font-medium transition";
-        }
+      <div style="background: var(--bg-cream); padding: 14px; border-radius: 8px; margin-bottom: 20px;">
+        <div style="font-size: 12px; color: var(--text-muted);">Amount Payable Now</div>
+        <div style="font-size: 22px; font-weight: 800; color: var(--sage-primary);" id="pay-modal-amount">₹0</div>
+      </div>
 
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+        <button class="btn-secondary" style="text-align: left; padding: 12px; display: flex; justify-content: space-between; align-items: center;" onclick="executePayment('UPI GPay / PhonePe')">
+          <span>📱 Instant UPI (GPay / PhonePe / Paytm)</span>
+          <span style="font-weight: 700;">Fast ➔</span>
+        </button>
+        <button class="btn-secondary" style="text-align: left; padding: 12px; display: flex; justify-content: space-between; align-items: center;" onclick="executePayment('Credit / Debit Card')">
+          <span>💳 Credit / Debit Card / NetBanking</span>
+          <span style="font-weight: 700;">➔</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
+  <!-- ORDER SUCCESS & QR PASSPORT MODAL -->
+  <div class="modal-overlay" id="qr-success-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('qr-success-modal')">×</button>
+      <div class="verify-badge">✓ Payment Confirmed & Escrow Locked</div>
+      <h2 class="serif-font" style="margin-top: 12px; font-size: 22px;">Digital Unit Passport Generated</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Scan this QR code on physical delivery to verify asset quality and release escrow.</p>
 
-        function openSupportModal(userIdentifier) {
-            document.getElementById('support-user-role').value = userIdentifier;
-            openModal('support-modal');
-        }
+      <div class="qr-container">
+        <div id="qrcode"></div>
+        <div style="font-size: 12px; font-family: monospace; font-weight: 700; background: #F0F0F0; padding: 4px 8px; border-radius: 4px; display: inline-block;" id="qr-item-code">VC-ITEM-001</div>
+      </div>
 
-        function handleAddStock(e) {
-            e.preventDefault();
-            alert("New Idle Stock item submitted successfully for Admin review!");
-            closeModal('add-stock-modal');
-        }
+      <div style="background: var(--bg-cream); padding: 12px; border-radius: 8px; text-align: left; font-size: 12px; margin-bottom: 20px;">
+        <div><strong>Status:</strong> Order Placed via VCollab Local Hub</div>
+        <div><strong>Condition Log:</strong> Inspected & Tagged (100% Verified)</div>
+        <div><strong>Deposit Status:</strong> ₹0 Held Safely</div>
+      </div>
 
-        function triggerCustomerAction(actionType) {
-            document.getElementById('logistics-live-tracker').classList.remove('hidden');
-            alert(`${actionType} request initiated! Retailer (Sharma Furnishings) and Logistics Partners have been automatically alerted.`);
-        }
+      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="simulateScanVerification()">📱 Simulate Delivery Handover Scan</button>
+    </div>
+  </div>
 
-        function openConditionVerificationModal(customer, item) {
-            openModal('photo-check-modal');
-        }
+  <script>
+    // METROPOLITAN CATALOGUE DATABASE
+    const PRODUCTS = [
+      // HYDERABAD
+      {
+        id: 'VC-HYD-BED-1',
+        title: 'Teak Finish Queen Storage Bed',
+        category: 'bed',
+        city: 'Hyderabad',
+        shop: 'Sharma Furnitures',
+        locality: 'Gachibowli',
+        price: 1000,
+        originalPrice: 1300,
+        discount: '23% OFF',
+        image: 'https://images.unsplash.com/photo-1540518614846-7ede433c5172?auto=format&fit=crop&w=600&q=80',
+        description: 'Premium wooden finish queen bed featuring sturdy frame.'
+      },
+      {
+        id: 'VC-HYD-FUR-2',
+        title: 'Modern Living Room Sofa',
+        category: 'sofa',
+        city: 'Hyderabad',
+        shop: 'Sharma Furnitures',
+        locality: 'Gachibowli',
+        price: 1050,
+        originalPrice: 1350,
+        discount: '22% OFF',
+        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80',
+        description: 'Comfortable 3-seater sofa ideal for modern living rooms.'
+      },
+      {
+        id: 'VC-HYD-APP-2',
+        title: 'Fully Automatic Top Load Washer',
+        category: 'appliances',
+        city: 'Hyderabad',
+        shop: 'Sharma Furnitures',
+        locality: 'Gachibowli',
+        price: 800,
+        originalPrice: 1000,
+        discount: '20% OFF',
+        image: 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80',
+        description: 'Powerful laundry washer with smart agitation technology.'
+      },
+      {
+        id: 'VC-HYD-APP-1',
+        title: '1.5 Ton Split Air Conditioner',
+        category: 'appliances',
+        city: 'Hyderabad',
+        shop: 'Hitech Electronics',
+        locality: 'Hitech City',
+        price: 800,
+        originalPrice: 1100,
+        discount: '27% OFF',
+        image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=600&q=80',
+        description: 'Energy saving silent inverter split AC with copper condenser.'
+      },
 
-        function confirmPhotoVerification() {
-            alert("3-Photo Inspection Verified & Logged successfully! Digital handoff completed.");
-            closeModal('photo-check-modal');
-        }
+      // DELHI
+      {
+        id: 'VC-DEL-SOF-1',
+        title: 'Modern Fabric Living Sofa',
+        category: 'sofa',
+        city: 'Delhi-NCR',
+        shop: 'Delhi Furniture Mart',
+        locality: 'Janakpuri',
+        price: 1050,
+        originalPrice: 1350,
+        discount: '22% OFF',
+        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80',
+        description: 'Comfortable plush fabric sofa ideal for modern Delhi living rooms.'
+      },
+      {
+        id: 'VC-DEL-APP-1',
+        title: 'Fully Automatic Washing Machine',
+        category: 'appliances',
+        city: 'Delhi-NCR',
+        shop: 'Capital Electronics Hub',
+        locality: 'Janakpuri',
+        price: 800,
+        originalPrice: 1000,
+        discount: '20% OFF',
+        image: 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80',
+        description: 'Efficient top-load washing machine with rapid spin dry.'
+      },
 
-        function handleSupportSubmit(e) {
-            e.preventDefault();
-            const user = document.getElementById('support-user-role').value;
-            const category = document.getElementById('support-category').value;
-            const message = document.getElementById('support-message').value;
+      // MUMBAI
+      {
+        id: 'VC-MUM-SOF-1',
+        title: 'Luxury Fabric Lounge Sofa',
+        category: 'sofa',
+        city: 'Mumbai',
+        shop: 'Bandra Living Solutions',
+        locality: 'Bandra',
+        price: 1100,
+        originalPrice: 1400,
+        discount: '21% OFF',
+        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80',
+        description: 'Stylish sofa unit crafted for modern Mumbai apartments.'
+      },
 
-            const newTicket = {
-                id: 'TKT-' + Math.floor(1000 + Math.random() * 9000),
-                user: user,
-                category: category,
-                message: message,
-                status: 'Open'
-            };
+      // BENGALURU
+      {
+        id: 'VC-BLR-SOF-1',
+        title: 'Minimalist Modern Sofa',
+        category: 'sofa',
+        city: 'Bengaluru',
+        shop: 'Koramangala Decor',
+        locality: 'Koramangala',
+        price: 1000,
+        originalPrice: 1300,
+        discount: '23% OFF',
+        image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=600&q=80',
+        description: 'Elegantly proportioned sofa built for tech workspace homes.'
+      }
+    ];
 
-            tickets.push(newTicket);
-            renderAdminTickets();
-            closeModal('support-modal');
-            alert("Query submitted directly to Admin! Ticket ID: " + newTicket.id);
-        }
+    let currentCity = 'Hyderabad';
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let cart = [];
+    let isCouponApplied = false;
+    let isReinstallSelected = true;
+    let currentDemoMode = 'customer';
+    let selectedReturnItem = null;
 
-        function renderAdminTickets() {
-            const container = document.getElementById('admin-tickets-container');
-            if(tickets.length === 0) {
-                container.innerHTML = `<p class="text-sm text-gray-500 italic">No open queries reported yet.</p>`;
-                return;
-            }
+    // CAROUSEL LOGIC
+    let currentSlideIndex = 0;
+    const totalSlides = 3;
+    let autoSlideTimer = null;
 
-            container.innerHTML = tickets.map(t => `
-                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 flex justify-between items-start">
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs font-bold text-gray-500">${t.id}</span>
-                            <span class="bg-red-100 text-red-700 text-[10px] px-2 py-0.5 rounded font-bold uppercase">${t.category}</span>
-                            <span class="text-xs text-gray-600">by <b>${t.user}</b></span>
-                        </div>
-                        <p class="text-sm text-gray-800 mt-1">${t.message}</p>
-                    </div>
-                    ${t.category.includes('Scam') ? `
-                        <button onclick="blacklistRetailer()" class="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1.5 rounded font-bold shadow transition">
-                            <i class="fa-solid fa-ban mr-1"></i> Blacklist Retailer
-                        </button>
-                    ` : `
-                        <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">Under Review</span>
-                    `}
-                </div>
-            `).join('');
-        }
+    function updateCarousel() {
+      const track = document.getElementById('carouselTrack');
+      const dots = document.querySelectorAll('.carousel-dots .dot');
+      if(!track) return;
+      
+      track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+      
+      dots.forEach((dot, idx) => {
+        if(idx === currentSlideIndex) dot.classList.add('active');
+        else dot.classList.remove('active');
+      });
+    }
 
-        function blacklistRetailer() {
-            if(confirm("Are you sure you want to BLACKLIST Sharma Furnishings? This will ban their account and hide all listed idle stock from customers.")) {
-                document.getElementById('retailer-status-badge').className = "bg-red-100 text-red-800 text-xs px-2.5 py-0.5 rounded-full font-medium";
-                document.getElementById('retailer-status-badge').innerHTML = `<i class="fa-solid fa-ban text-[8px] mr-1"></i> Blacklisted & Banned`;
-                alert("Retailer has been blacklisted and deactivated by Admin.");
-            }
-        }
-    </script>
+    function moveSlide(direction) {
+      currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
+      updateCarousel();
+      resetAutoSlideTimer();
+    }
+
+    function goToSlide(index) {
+      currentSlideIndex = index;
+      updateCarousel();
+      resetAutoSlideTimer();
+    }
+
+    function startAutoSlideTimer() {
+      autoSlideTimer = setInterval(() => {
+        currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
+        updateCarousel();
+      }, 5000);
+    }
+
+    function resetAutoSlideTimer() {
+      clearInterval(autoSlideTimer);
+      startAutoSlideTimer();
+    }
+
+    const carouselElem = document.getElementById('heroCarousel');
+    if(carouselElem) {
+      carouselElem.addEventListener('mouseenter', () => clearInterval(autoSlideTimer));
+      carouselElem.addEventListener('mouseleave', () => startAutoSlideTimer());
+      startAutoSlideTimer();
+    }
+
+    function scrollToCatalogAndFilter(categoryKey) {
+      filterCategory(categoryKey);
+      document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // FILTER & SEARCH LOGIC
+    function getFilteredProducts() {
+      return PRODUCTS.filter(p => {
+        const matchesCity = (p.city === currentCity);
+        const matchesCat = (currentCategory === 'all' || p.category === currentCategory);
+        
+        const q = searchQuery.toLowerCase().trim();
+        const matchesSearch = q === '' || 
+          p.title.toLowerCase().includes(q) || 
+          p.shop.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q);
+
+        return matchesCity && matchesCat && matchesSearch;
+      });
+    }
+
+    // RENDER MARKETPLACE
+    function renderMarketplace() {
+      const grid = document.getElementById('marketplace-grid');
+      if(!grid) return;
+      const items = getFilteredProducts();
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #FFF; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <div style="font-size: 32px; margin-bottom: 8px;">🏬</div>
+            <h3 class="serif-font" style="font-size: 18px; margin-bottom: 4px;">No products match your current selection</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Try selecting another category or switching to a different city from the top bar.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = items.map(item => `
+        <div class="product-card">
+          <img src="${item.image}" class="product-thumb" alt="${item.title}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';">
+          <div class="product-info">
+            <div class="shop-tag">STORE: ${item.shop} (${item.locality})</div>
+            <div class="product-title">${item.title}</div>
+            <div class="pricing-row">
+              <span class="price-main">₹${item.price}/mo</span>
+              <span class="price-strike">₹${item.originalPrice}</span>
+              <span class="discount-badge">${item.discount}</span>
+            </div>
+            <div class="card-actions">
+              <button class="btn-primary" onclick="openProductDetail('${item.id}')">View Details</button>
+              <button class="btn-secondary" onclick="addToCartDirect('${item.id}')">+ Cart</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function handleCityChange(selectedCity) {
+      currentCity = selectedCity;
+      renderMarketplace();
+      populateRelocateProductDropdown();
+    }
+
+    function handleSearch(query) {
+      searchQuery = query;
+      renderMarketplace();
+    }
+
+    function filterCategory(cat, element) {
+      document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+      
+      if(element) {
+        element.classList.add('active');
+      } else {
+        const catTarget = document.getElementById('cat-' + cat);
+        if(catTarget) catTarget.classList.add('active');
+      }
+      
+      currentCategory = cat;
+      renderMarketplace();
+    }
+
+    // PRODUCT DETAIL VIEW
+    function openProductDetail(id) {
+      const item = PRODUCTS.find(p => p.id === id);
+      const container = document.getElementById('product-detail-container');
+      
+      container.innerHTML = `
+        <div>
+          <img src="${item.image}" class="main-detail-img" id="detail-main-img" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';">
+          <div class="gallery-thumbs">
+            <img src="${item.image}" class="gallery-thumb active" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';">
+          </div>
+        </div>
+        <div>
+          <div class="shop-tag" style="font-size: 13px;">FULFILLED BY: ${item.shop} (${item.locality}, ${item.city})</div>
+          <h1 class="serif-font" style="font-size: 26px; margin: 6px 0 12px;">${item.title}</h1>
+          <div class="pricing-row" style="font-size: 24px;">
+            <span class="price-main" style="font-size: 28px;">₹${item.price}/mo</span>
+            <span class="price-strike">₹${item.originalPrice}</span>
+            <span class="discount-badge">${item.discount}</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">${item.description}</p>
+          
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 12px; font-weight: 700;">TENURE OPTION</label>
+            <div class="variant-chips">
+              <div class="variant-chip active">6 Months (Best Rate)</div>
+              <div class="variant-chip">3 Months</div>
+              <div class="variant-chip">12 Months</div>
+            </div>
+          </div>
+
+          <button class="btn-primary" style="width: 100%; padding: 14px; font-size: 15px;" onclick="addToCartDirect('${item.id}'); switchView('cart-view');">Add to Cart & Proceed →</button>
+        </div>
+      `;
+      switchView('product-detail-view');
+    }
+
+    // CART OPERATIONS
+    function addToCartDirect(id) {
+      const item = PRODUCTS.find(p => p.id === id);
+      const existing = cart.find(c => c.id === id);
+      if(existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({...item, qty: 1});
+      }
+      updateCartUI();
+      populateRelocateProductDropdown();
+    }
+
+    function updateCartUI() {
+      document.getElementById('cart-count').innerText = cart.reduce((s, i) => s + i.qty, 0);
+      const list = document.getElementById('cart-items-list');
+      if(!list) return;
+
+      if(cart.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-muted);">Your Rent Basket is empty</div>`;
+      } else {
+        list.innerHTML = cart.map(i => `
+          <div class="cart-item">
+            <img src="${i.image}" class="cart-item-img" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';">
+            <div style="flex-grow:1;">
+              <div style="font-weight:700; font-size:14px;">${i.title}</div>
+              <div style="font-size:12px; color:var(--text-muted);">Store: ${i.shop} (${i.city})</div>
+              <div style="font-weight:800; color:var(--sage-primary); margin-top:4px;">₹${i.price}/mo</div>
+            </div>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty('${i.id}', -1)">-</button>
+              <span style="font-size:13px; font-weight:700;">${i.qty}</span>
+              <button class="qty-btn" onclick="changeQty('${i.id}', 1)">+</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const baseTotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      const discount = isCouponApplied ? Math.round(baseTotal * 0.18) : 0;
+      const finalTotal = baseTotal - discount;
+
+      document.getElementById('summary-base-rent').innerText = `₹${baseTotal}`;
+      document.getElementById('summary-discount').innerText = `-₹${discount}`;
+      document.getElementById('summary-final-total').innerText = `₹${finalTotal}`;
+      document.getElementById('pay-modal-amount').innerText = `₹${finalTotal}`;
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(c => c.id === id);
+      if(item) {
+        item.qty += delta;
+        if(item.qty <= 0) cart = cart.filter(c => c.id !== id);
+      }
+      updateCartUI();
+      populateRelocateProductDropdown();
+    }
+
+    function applyCoupon() {
+      isCouponApplied = true;
+      alert('Coupon FURMAX Applied! 18% Discount added.');
+      updateCartUI();
+    }
+
+    // RELOCATION LOGISTICS CALCULATIONS & LOGIC
+    function toggleReinstallationFee(isChecked) {
+      isReinstallSelected = isChecked;
+      document.getElementById('reinstall-fee-display').innerText = isChecked ? '₹350' : '₹0 (Skipped)';
+      updateRelocationTotalFee();
+    }
+
+    function updateRelocationTotalFee() {
+      const baseFee = 799;
+      const reinstallFee = isReinstallSelected ? 350 : 0;
+      const total = baseFee + reinstallFee;
+      
+      const advance = Math.round(total * 0.60);
+      const post = total - advance;
+
+      document.getElementById('relocate-total-fee').innerText = `₹${total}`;
+      document.getElementById('relocate-advance-fee').innerText = `₹${advance}`;
+      document.getElementById('relocate-post-fee').innerText = `₹${post}`;
+
+      document.getElementById('modal-pay-now').innerText = `₹${advance}`;
+      document.getElementById('modal-pay-later').innerText = `₹${post}`;
+    }
+
+    function populateRelocateProductDropdown() {
+      const select = document.getElementById('relocate-product-select');
+      if(!select) return;
+
+      if(currentDemoMode === 'rani') {
+        select.innerHTML = `
+          <option value="VC-RANI-SOFA">Luxury 3-Seater Living Sofa (Rented from Sharma Furnitures, Gachibowli)</option>
+          <option value="VC-RANI-WASH">Fully Automatic Washing Machine (Rented from Sharma Furnitures, Gachibowli)</option>
+        `;
+      } else {
+        const itemsAvailable = cart.length > 0 ? cart : PRODUCTS.filter(p => p.city === currentCity);
+        select.innerHTML = itemsAvailable.map(p => `
+          <option value="${p.id}">${p.title} (${p.city})</option>
+        `).join('');
+      }
+    }
+
+    function initiateRaniRelocate(id, name) {
+      switchView('relocate-view');
+      document.getElementById('relocate-current-addr').value = 'Gachibowli, Hyderabad';
+      document.getElementById('relocate-dest-addr').value = 'Hitech City, Hyderabad';
+      const select = document.getElementById('relocate-product-select');
+      if(select) select.value = id;
+    }
+
+    function openReturnModal(id, name, shop) {
+      selectedReturnItem = { id, name, shop };
+      document.getElementById('return-item-title-display').innerText = `Returning: ${name} (Rented from ${shop})`;
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById('return-date-input').value = tomorrow.toISOString().split('T')[0];
+      document.getElementById('return-modal').style.display = 'flex';
+    }
+
+    function confirmReturnBooking() {
+      const dateVal = document.getElementById('return-date-input').value;
+      const timeVal = document.getElementById('return-time-input').value || 'Flexible Hours';
+
+      if (!dateVal) {
+        alert('Please choose a return pickup date.');
+        return;
+      }
+
+      alert(`Return Pickup Scheduled Successfully!\n\nItem: ${selectedReturnItem.name}\nPickup Date: ${dateVal}\nTime Slot: ${timeVal}\n\nOur logistics partner will arrive to inspect and retrieve the item.`);
+      closeModal('return-modal');
+      
+      // Update Retailer Right Dashboard Queue
+      const rightTable = document.getElementById('retailer-right-table');
+      if(rightTable) {
+        rightTable.innerHTML += `
+          <tr>
+            <td><strong>Rani</strong></td>
+            <td>Return Pickup (${selectedReturnItem.name})</td>
+            <td>Free Return</td>
+            <td><span class="verify-badge" style="background:#FFF8E7; color:var(--amber-hover);">Pickup Scheduled</span></td>
+          </tr>
+        `;
+        document.getElementById('return-pickups-count').innerText = '1 Scheduled';
+      }
+    }
+
+    function openRelocationModal() {
+      const currentAddr = document.getElementById('relocate-current-addr').value;
+      const destAddr = document.getElementById('relocate-dest-addr').value;
+
+      if (!destAddr.trim()) {
+        alert('Please enter your Destination Relocation Locality address.');
+        return;
+      }
+
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById('relocate-date-input').value = tomorrow.toISOString().split('T')[0];
+
+      document.getElementById('relocation-modal').style.display = 'flex';
+    }
+
+    function confirmRelocationBooking() {
+      const dateVal = document.getElementById('relocate-date-input').value;
+      const timeVal = document.getElementById('relocate-time-input').value || 'Flexible Hours';
+
+      if (!dateVal) {
+        alert('Please choose a relocation date.');
+        return;
+      }
+
+      alert(`Your relocation request is submitted successfully!\n\nRelocation Scheduled on: ${dateVal}\nPreferred Time: ${timeVal}\n\n60% Advance Payment Received! Our partner driver will reach out shortly.`);
+      closeModal('relocation-modal');
+      
+      if(currentDemoMode === 'rani') {
+        switchView('rani-orders-view');
+      } else {
+        switchView('customer-view');
+      }
+    }
+
+    // VIEW & MODAL MANAGEMENT
+    function switchView(viewId) {
+      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      
+      document.getElementById(viewId).classList.add('active');
+      if(viewId === 'relocate-view') {
+        document.getElementById('nav-relocate').classList.add('active');
+        populateRelocateProductDropdown();
+      } else if(viewId === 'rani-orders-view') {
+        document.getElementById('nav-rani-orders').classList.add('active');
+      }
+    }
+
+    function openPaymentModal() {
+      if(cart.length === 0) return alert('Add items to cart first');
+      document.getElementById('payment-modal').style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function executePayment(method) {
+      closeModal('payment-modal');
+      const modal = document.getElementById('qr-success-modal');
+      modal.style.display = 'flex';
+
+      const qrTarget = document.getElementById('qrcode');
+      qrTarget.innerHTML = '';
+      const sampleItem = cart[0] || PRODUCTS[0];
+      document.getElementById('qr-item-code').innerText = sampleItem.id;
+
+      new QRCode(qrTarget, {
+        text: `https://vcollab.app/verify?id=${sampleItem.id}`,
+        width: 160,
+        height: 160
+      });
+    }
+
+    function simulateScanVerification() {
+      alert('QR Code Scanned Successfully!\n\nDigital Passport Verified:\n- Item Condition: 100% Intact\n- Escrow Released to Partner Store\n- Status: Active Handover Completed');
+      closeModal('qr-success-modal');
+      cart = [];
+      updateCartUI();
+      switchView('customer-view');
+    }
+
+    // DEMO MODE SWITCHER (CUSTOMER, RANI, RETAILER, ADMIN)
+    function setDemoMode(mode) {
+      currentDemoMode = mode;
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      
+      const raniLink = document.getElementById('nav-rani-orders-link');
+      
+      if(mode === 'customer') {
+        document.getElementById('mode-cust').classList.add('active');
+        if(raniLink) raniLink.style.display = 'none';
+        switchView('customer-view');
+      } else if(mode === 'rani') {
+        document.getElementById('mode-rani').classList.add('active');
+        if(raniLink) raniLink.style.display = 'inline-block';
+        // Rani gets the standard customer view first
+        switchView('customer-view');
+      } else if(mode === 'retailer') {
+        document.getElementById('mode-ret').classList.add('active');
+        if(raniLink) raniLink.style.display = 'none';
+        switchView('retailer-view');
+      } else {
+        document.getElementById('mode-adm').classList.add('active');
+        if(raniLink) raniLink.style.display = 'none';
+        switchView('admin-view');
+      }
+    }
+
+    // INITIALIZATION
+    renderMarketplace();
+    updateRelocationTotalFee();
+  </script>
 </body>
 </html>
