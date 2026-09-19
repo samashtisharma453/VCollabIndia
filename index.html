@@ -45,7 +45,7 @@
     .brand-group { display: flex; align-items: center; gap: 16px; }
     .brand-logo {
       font-size: 24px; font-weight: 800; color: var(--sage-primary);
-      text-decoration: none; display: flex; align-items: center; gap: 8px;
+      text-decoration: none; display: flex; align-items: center; gap: 8px; cursor: pointer;
     }
     .brand-logo span { color: var(--amber-accent); }
     
@@ -187,17 +187,17 @@
   <!-- Persistent Top Taskbar -->
   <header class="navbar">
     <div class="brand-group">
-      <a href="#" class="brand-logo" onclick="switchView('customer-view')">VCollab<span>.</span></a>
+      <a class="brand-logo" onclick="switchView('customer-view')">VCollab<span>.</span></a>
       <div class="location-pill" onclick="openLocationModal()">
         <span>📍</span> <span id="current-location-text">Janakpuri, New Delhi - 110058</span>
       </div>
     </div>
 
     <ul class="nav-links">
-      <li><a class="active" onclick="switchView('customer-view')">Browse Catalogue</a></li>
-      <li><a onclick="switchView('relocate-view')">Relocate with VCollab</a></li>
-      <li><a onclick="switchView('retailer-view')">Retailer Hub</a></li>
-      <li><a onclick="switchView('admin-view')">Platform Admin</a></li>
+      <li><a class="active" id="nav-browse" onclick="switchView('customer-view')">Browse Catalogue</a></li>
+      <li><a id="nav-relocate" onclick="switchView('relocate-view')">Relocate with VCollab</a></li>
+      <li><a id="nav-retailer" onclick="switchView('retailer-view')">Retailer Hub</a></li>
+      <li><a id="nav-admin" onclick="switchView('admin-view')">Platform Admin</a></li>
     </ul>
 
     <div class="nav-actions">
@@ -215,7 +215,6 @@
   <!-- VIEW 1: CUSTOMER MARKETPLACE -->
   <main id="customer-view" class="page-view active">
     
-    <!-- Dynamic Category Filter Scroll -->
     <div class="category-header">
       <h2 class="serif-font">Explore Furniture & Home Appliances</h2>
       <p style="color: var(--text-muted); font-size: 14px;">Directly sourced from verified local retail shops near your PIN code</p>
@@ -248,18 +247,13 @@
       </div>
     </div>
 
-    <!-- Product Grid -->
-    <div class="product-grid" id="marketplace-grid">
-      <!-- Injected via JS -->
-    </div>
+    <div class="product-grid" id="marketplace-grid"></div>
   </main>
 
   <!-- VIEW 2: PRODUCT DETAIL PAGE -->
   <main id="product-detail-view" class="page-view">
     <button class="btn-secondary" onclick="switchView('customer-view')" style="margin-bottom: 16px;">← Back to Catalogue</button>
-    <div class="product-detail-layout" id="product-detail-container">
-      <!-- Injected via JS -->
-    </div>
+    <div class="product-detail-layout" id="product-detail-container"></div>
   </main>
 
   <!-- VIEW 3: RENT CART / BASKET -->
@@ -270,9 +264,7 @@
         <div style="background: var(--teal-light); padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--teal-brand); margin-bottom: 16px;">
           🚚 Delivery Estimate: Free Express Handover to <span id="cart-pincode">110058</span> within 24 Hours
         </div>
-        <div id="cart-items-list">
-          <!-- Injected via JS -->
-        </div>
+        <div id="cart-items-list"></div>
       </div>
 
       <div>
@@ -392,9 +384,7 @@
           <th>QR Status</th>
         </tr>
       </thead>
-      <tbody id="retailer-table-body">
-        <!-- Injected via JS -->
-      </tbody>
+      <tbody id="retailer-table-body"></tbody>
     </table>
   </main>
 
@@ -577,7 +567,7 @@
     let cart = [];
     let isCouponApplied = false;
 
-    // INITIALIZE MARKETPLACE
+    // RENDER MARKETPLACE
     function renderMarketplace(items) {
       const grid = document.getElementById('marketplace-grid');
       grid.innerHTML = items.map(item => `
@@ -686,7 +676,6 @@
         `).join('');
       }
 
-      // Calculations
       const baseTotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
       const discount = isCouponApplied ? Math.round(baseTotal * 0.18) : 0;
       const finalTotal = baseTotal - discount;
@@ -712,10 +701,17 @@
       updateCartUI();
     }
 
-    // MODALS & PAYMENT
+    // VIEW & MODAL MANAGEMENT
     function switchView(viewId) {
       document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      
       document.getElementById(viewId).classList.add('active');
+
+      if(viewId === 'customer-view') document.getElementById('nav-browse').classList.add('active');
+      if(viewId === 'relocate-view') document.getElementById('nav-relocate').classList.add('active');
+      if(viewId === 'retailer-view') document.getElementById('nav-retailer').classList.add('active');
+      if(viewId === 'admin-view') document.getElementById('nav-admin').classList.add('active');
     }
 
     function openPaymentModal() {
@@ -732,7 +728,6 @@
       const modal = document.getElementById('qr-success-modal');
       modal.style.display = 'flex';
 
-      // Generate Real QR
       const qrTarget = document.getElementById('qrcode');
       qrTarget.innerHTML = '';
       const sampleItem = cart[0] || PRODUCTS[0];
@@ -753,7 +748,7 @@
       switchView('customer-view');
     }
 
-    // RETAILER DASHBOARD POPULATE
+    // RETAILER TABLE
     function renderRetailerTable() {
       const body = document.getElementById('retailer-table-body');
       body.innerHTML = PRODUCTS.map(p => {
@@ -787,7 +782,7 @@
       }
     }
 
-    // INIT ON LOAD
+    // INIT
     renderMarketplace(PRODUCTS);
     renderRetailerTable();
   </script>
