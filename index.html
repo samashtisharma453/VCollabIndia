@@ -117,7 +117,7 @@
       transition: transform 0.2s; display: flex; flex-direction: column;
     }
     .product-card:hover { transform: translateY(-4px); }
-    .product-thumb { width: 100%; height: 200px; object-fit: cover; background: #EEE; }
+    .product-thumb { width: 100%; height: 200px; object-fit: contain; background: #FFF; padding: 10px; }
     .product-info { padding: 16px; display: flex; flex-direction: column; flex-grow: 1; }
     .shop-tag { font-size: 11px; font-weight: 700; color: var(--teal-brand); text-transform: uppercase; margin-bottom: 4px; }
     .product-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text-charcoal); }
@@ -139,9 +139,9 @@
 
     /* Product Detail Modal View */
     .product-detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; background: #FFF; padding: 24px; border-radius: var(--radius-lg); }
-    .main-detail-img { width: 100%; height: 380px; object-fit: cover; border-radius: var(--radius-md); }
+    .main-detail-img { width: 100%; height: 380px; object-fit: contain; border-radius: var(--radius-md); background: #FAF7F2; }
     .gallery-thumbs { display: flex; gap: 10px; margin-top: 12px; }
-    .gallery-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; cursor: pointer; }
+    .gallery-thumb { width: 60px; height: 60px; object-fit: contain; border-radius: 6px; border: 2px solid transparent; cursor: pointer; }
     .gallery-thumb.active { border-color: var(--teal-brand); }
 
     .variant-chips { display: flex; gap: 10px; margin: 12px 0; }
@@ -152,7 +152,7 @@
     .cart-container { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 28px; }
     .cart-box { background: #FFF; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 20px; }
     .cart-item { display: flex; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border-light); margin-bottom: 16px; }
-    .cart-item-img { width: 90px; height: 90px; object-fit: cover; border-radius: var(--radius-sm); }
+    .cart-item-img { width: 90px; height: 90px; object-fit: contain; border-radius: var(--radius-sm); background: #FAF7F2; }
     .qty-counter { display: flex; align-items: center; border: 1px solid var(--border-light); border-radius: 50px; padding: 2px 8px; width: fit-content; margin-top: 8px; }
     .qty-btn { border: none; background: none; font-size: 16px; font-weight: 700; padding: 0 8px; cursor: pointer; }
 
@@ -188,7 +188,7 @@
   <header class="navbar">
     <div class="brand-group">
       <a class="brand-logo" onclick="switchView('customer-view')">VCollab<span>.</span></a>
-      <div class="location-pill" onclick="openLocationModal()">
+      <div class="location-pill">
         <span>📍</span> <span id="current-location-text">Janakpuri, New Delhi - 110058</span>
       </div>
     </div>
@@ -225,6 +225,10 @@
         <div class="category-icon">🏠</div>
         <div class="category-title">All Items</div>
       </div>
+      <div class="category-card" onclick="filterCategory('appliances', this)">
+        <div class="category-icon">🧊</div>
+        <div class="category-title">Appliances</div>
+      </div>
       <div class="category-card" onclick="filterCategory('sofa', this)">
         <div class="category-icon">🛋️</div>
         <div class="category-title">Sofas</div>
@@ -240,10 +244,6 @@
       <div class="category-card" onclick="filterCategory('bed', this)">
         <div class="category-icon">🛏️</div>
         <div class="category-title">Beds</div>
-      </div>
-      <div class="category-card" onclick="filterCategory('appliances', this)">
-        <div class="category-icon">🧊</div>
-        <div class="category-title">Appliances</div>
       </div>
     </div>
 
@@ -329,7 +329,7 @@
           <span>₹799</span>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
-          <span>Appliance Reinstallation (AC / Washing Machine - 40% Off Rate)</span>
+          <span>Appliance Reinstallation (AC / Washing Machine)</span>
           <span>₹350</span>
         </div>
         <hr style="border-top: 1px dashed var(--border-light); margin: 8px 0;">
@@ -356,15 +356,15 @@
     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
       <div style="background: #FFF; padding: 16px; border-radius: 12px; border: 1px solid var(--border-light);">
         <div style="font-size: 12px; color: var(--text-muted);">Active Rented Stock</div>
-        <div style="font-size: 24px; font-weight: 800; color: var(--sage-primary);">14 Units</div>
+        <div style="font-size: 24px; font-weight: 800; color: var(--sage-primary);">22 Units</div>
       </div>
       <div style="background: #FFF; padding: 16px; border-radius: 12px; border: 1px solid var(--border-light);">
         <div style="font-size: 12px; color: var(--text-muted);">Monthly Payout (Net)</div>
-        <div style="font-size: 24px; font-weight: 800; color: var(--teal-brand);">₹18,450</div>
+        <div style="font-size: 24px; font-weight: 800; color: var(--teal-brand);">₹24,850</div>
       </div>
       <div style="background: #FFF; padding: 16px; border-radius: 12px; border: 1px solid var(--border-light);">
         <div style="font-size: 12px; color: var(--text-muted);">Idle Capacity Utilized</div>
-        <div style="font-size: 24px; font-weight: 800; color: var(--amber-accent);">82%</div>
+        <div style="font-size: 24px; font-weight: 800; color: var(--amber-accent);">88%</div>
       </div>
       <div style="background: #FFF; padding: 16px; border-radius: 12px; border: 1px solid var(--border-light);">
         <div style="font-size: 12px; color: var(--text-muted);">Shop Service Rating</div>
@@ -482,8 +482,86 @@
   </div>
 
   <script>
-    // PRODUCT CATALOGUE DATA WITH EXACT USER IMAGE URLS
+    // COMPLETE PRODUCT CATALOGUE WITH ALL NEW APPLIANCES & ORIGINAL FURNITURE
     const PRODUCTS = [
+      {
+        id: 'VC-AC-001',
+        title: '1.5 Ton 3 Star Window AC',
+        category: 'appliances',
+        shop: 'Sharma Electronics & Furnishings',
+        locality: 'Janakpuri',
+        pincode: '110058',
+        price: 899,
+        originalPrice: 1199,
+        discount: '25% OFF',
+        image: 'https://media.cityfurnish.com/images/product/thumb/Windows%20AC%20%201-1775476050.webp',
+        description: 'High cooling capacity 1.5 Ton Window AC, perfect for medium to large rooms with fast cooling.'
+      },
+      {
+        id: 'VC-AC-002',
+        title: 'Hitachi 1.5 Ton 3 Star Inverter Split AC',
+        category: 'appliances',
+        shop: 'Metro Appliance Hub',
+        locality: 'Okhla',
+        pincode: '110020',
+        price: 1249,
+        originalPrice: 1599,
+        discount: '21% OFF',
+        image: 'https://5.imimg.com/data5/SELLER/Default/2024/11/464100755/GW/LW/DR/11108670/hitachi-split-ac-1-5-ton-3-500x500.jpg',
+        description: 'Energy efficient Hitachi Inverter Split AC with silent operation and rapid copper cooling.'
+      },
+      {
+        id: 'VC-WM-001',
+        title: 'Fully Automatic Top Load Washing Machine',
+        category: 'appliances',
+        shop: 'Janakpuri Home Store',
+        locality: 'Janakpuri',
+        pincode: '110058',
+        price: 649,
+        originalPrice: 899,
+        discount: '27% OFF',
+        image: 'https://images.guarented.com/product-images/prod/Washing%20Machine/washer-fa-small/lifestyle/high_res/1.webp',
+        description: '6.5 kg top loading automatic washer with multi-wash programs and quick spin dry.'
+      },
+      {
+        id: 'VC-WM-002',
+        title: 'Bosch Premium Front Load Washing Machine',
+        category: 'appliances',
+        shop: 'PC Electronics',
+        locality: 'Lajpat Nagar',
+        pincode: '110024',
+        price: 999,
+        originalPrice: 1399,
+        discount: '28% OFF',
+        image: 'https://media3.bsh-group.com/Product_Shots/22530740_WGA12208IN_PGA4_def.webp',
+        description: 'Advanced eco-silence drive Bosch front loading washing machine with heater wash.'
+      },
+      {
+        id: 'VC-REF-001',
+        title: 'Whirlpool Side-by-Side Double Door Refrigerator',
+        category: 'appliances',
+        shop: 'Sharma Electronics & Furnishings',
+        locality: 'Janakpuri',
+        pincode: '110058',
+        price: 1499,
+        originalPrice: 1999,
+        discount: '25% OFF',
+        image: 'https://www.whirlpool.com/is/image/content/dam/business-unit/whirlpool/en-us/pre-purchase/explore/evergreen/homepage/masthead/2026-ad-hoc/refer-s-x-s-masthead_mobile3.png?$atomic-mobile$&fit=constrain&fmt=webp-alpha&qlt=100&bfc=off',
+        description: 'Huge capacity side-by-side refrigerator with smart cooling controls and ice dispenser.'
+      },
+      {
+        id: 'VC-REF-002',
+        title: 'Compact Single Door Direct Cool Refrigerator',
+        category: 'appliances',
+        shop: 'HomeTown Outlet',
+        locality: 'Okhla',
+        pincode: '110020',
+        price: 549,
+        originalPrice: 749,
+        discount: '26% OFF',
+        image: 'https://images.guarented.com/product-images/prod/Fridges/fridge-sd/lifestyle/high_res/1.webp',
+        description: '190L direct cool single door fridge, highly energy efficient and ideal for small families.'
+      },
       {
         id: 'VC-SOFA-321',
         title: 'Premium 3+2 Wooden Frame Sofa Set',
@@ -498,32 +576,6 @@
         description: 'Spacious 5-seater fabric sofa set built with solid Sheesham wood structure and high-density foam cushions.'
       },
       {
-        id: 'VC-SOFA-202',
-        title: 'Modern Compact 2-Seater Fabric Sofa',
-        category: 'sofa',
-        shop: 'HomeTown Outlet',
-        locality: 'Okhla',
-        pincode: '110020',
-        price: 799,
-        originalPrice: 999,
-        discount: '20% OFF',
-        image: 'https://www.hometown.in/cdn/shop/files/6000439817_00.jpg?v=1778311655',
-        description: 'Minimalist 2-seater ideal for compact urban living rooms or study spaces.'
-      },
-      {
-        id: 'VC-SOFA-909',
-        title: 'Luxury Velvet Modular Corner Sofa',
-        category: 'sofa',
-        shop: 'PC Home Decor Studio',
-        locality: 'Lajpat Nagar',
-        pincode: '110024',
-        price: 1599,
-        originalPrice: 1899,
-        discount: '15% OFF',
-        image: 'https://pchomedecor.com/cdn/shop/files/IMG-20231124-WA0163.jpg?v=1700813742',
-        description: 'Plush velvet upholstery with ergonomic back support and modular layout configuration.'
-      },
-      {
         id: 'VC-DIN-404',
         title: 'Compact Solid Wood Dining Table + Bench & Chairs',
         category: 'dining',
@@ -535,19 +587,6 @@
         discount: '23% OFF',
         image: 'https://thetimberguy.com/cdn/shop/products/Buy-Compact-Wooden-Dining-table-with-1-Bench-3-chairs-furniture-set-for-modern-Home-8_1200x.jpg?v=1781201890',
         description: 'Modern dining set including 1 dining table, 1 long wooden bench, and 3 cushioned chairs.'
-      },
-      {
-        id: 'VC-KIT-505',
-        title: 'Modular Kitchen Storage & Appliance Console',
-        category: 'kitchen',
-        shop: 'Modular Craft Furniture',
-        locality: 'Okhla',
-        pincode: '110020',
-        price: 849,
-        originalPrice: 1099,
-        discount: '22% OFF',
-        image: 'https://m.media-amazon.com/images/I/719nv7NfA7L._AC_UF894,1000_QL80_.jpg',
-        description: 'Multi-utility modular kitchen cabinet with microwave slot, spice drawers, and water resistant top.'
       },
       {
         id: 'VC-BED-606',
@@ -741,7 +780,7 @@
     }
 
     function simulateScanVerification() {
-      alert('QR Code Scanned Successfully!\n\nDigital Passport Verified:\n- Item Condition: 100% Intact\n- Escrow Released to Store: Sharma Furnishings\n- Status: Active Handover Completed');
+      alert('QR Code Scanned Successfully!\n\nDigital Passport Verified:\n- Item Condition: 100% Intact\n- Escrow Released to Store: Sharma Electronics\n- Status: Active Handover Completed');
       closeModal('qr-success-modal');
       cart = [];
       updateCartUI();
