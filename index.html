@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VCollab — Hyperlocal Furniture & Appliance Rentals</title>
+  <title>VCollab India — Hyperlocal Furniture & Appliance Rentals</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -36,31 +36,44 @@
     /* Top Navigation Bar */
     .navbar {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(250, 247, 242, 0.95);
+      background: rgba(250, 247, 242, 0.98);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border-light);
       padding: 12px 24px;
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
     }
     .brand-group { display: flex; align-items: center; gap: 16px; }
     .brand-logo {
-      font-size: 24px; font-weight: 800; color: var(--sage-primary);
-      text-decoration: none; display: flex; align-items: center; gap: 8px; cursor: pointer;
+      font-size: 22px; font-weight: 800; color: var(--sage-primary);
+      text-decoration: none; display: flex; align-items: center; gap: 4px; cursor: pointer; white-space: nowrap;
     }
     .brand-logo span { color: var(--amber-accent); }
-    
-    .location-pill {
+
+    .location-dropdown-wrapper {
+      display: flex; align-items: center; gap: 6px;
       background: #FFFFFF; border: 1px solid var(--border-light);
-      padding: 6px 14px; border-radius: 50px; font-size: 13px; font-weight: 500;
-      display: flex; align-items: center; gap: 6px; cursor: pointer;
+      padding: 6px 12px; border-radius: 50px; font-size: 13px; font-weight: 500;
       box-shadow: 0 2px 6px rgba(0,0,0,0.03); transition: all 0.2s;
     }
-    .location-pill:hover { border-color: var(--sage-primary); }
+    .location-dropdown-wrapper:hover { border-color: var(--sage-primary); }
+    .location-select {
+      border: none; outline: none; background: transparent;
+      font-size: 13px; font-weight: 600; color: var(--text-charcoal); cursor: pointer;
+    }
 
-    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-search-bar {
+      display: flex; align-items: center; background: #FFFFFF;
+      border: 1px solid var(--border-light); border-radius: 50px;
+      padding: 6px 14px; flex-grow: 1; max-width: 320px; gap: 8px;
+    }
+    .nav-search-bar input {
+      border: none; outline: none; width: 100%; font-size: 13px; background: transparent;
+    }
+
+    .nav-links { display: flex; gap: 20px; list-style: none; align-items: center; }
     .nav-links a {
       text-decoration: none; color: var(--text-charcoal); font-weight: 500; font-size: 14px;
-      transition: color 0.2s; cursor: pointer;
+      transition: color 0.2s; cursor: pointer; white-space: nowrap;
     }
     .nav-links a.active, .nav-links a:hover { color: var(--sage-primary); font-weight: 600; }
 
@@ -93,8 +106,7 @@
     /* Category Navigation Grid */
     .category-header { margin: 20px 0 16px; }
     .category-scroll {
-      display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px;
-      scrollbar-width: thin;
+      display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: thin;
     }
     .category-card {
       min-width: 110px; background: var(--card-white); border: 1px solid var(--border-light);
@@ -156,7 +168,7 @@
     .qty-counter { display: flex; align-items: center; border: 1px solid var(--border-light); border-radius: 50px; padding: 2px 8px; width: fit-content; margin-top: 8px; }
     .qty-btn { border: none; background: none; font-size: 16px; font-weight: 700; padding: 0 8px; cursor: pointer; }
 
-    .coupon-box { background: #FFF8E7; border: 1px dashed var(--amber-accent); padding: 12px 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .coupon-box { background: #FFF8E7; border: 1px dashed var(--amber-accent); padding: 12px 16px; border-radius: var(--radius-sm); display: flex; justify-between: space-between; align-items: center; margin-bottom: 16px; }
 
     /* Modals */
     .modal-overlay {
@@ -184,20 +196,41 @@
 </head>
 <body>
 
-  <!-- Persistent Top Taskbar -->
+  <!-- Top Taskbar -->
   <header class="navbar">
     <div class="brand-group">
-      <a class="brand-logo" onclick="switchView('customer-view')">VCollab<span>.</span></a>
-      <div class="location-pill">
-        <span>📍</span> <span id="current-location-text">Janakpuri, New Delhi - 110058</span>
+      <a class="brand-logo" onclick="switchView('customer-view')">VCollab India<span>.</span></a>
+      <div class="location-dropdown-wrapper">
+        <span>📍</span>
+        <select class="location-select" id="city-selector" onchange="handleCityChange(this.value)">
+          <optgroup label="Metropolitan Cities">
+            <option value="Delhi-NCR">Delhi-NCR (Janakpuri / Okhla)</option>
+            <option value="Mumbai">Mumbai (Andheri / Bandra)</option>
+
+            <option value="Bengaluru">Bengaluru (Koramangala / Indiranagar)</option>
+            <option value="Hyderabad">Hyderabad (Gachibowli / Hitech City)</option>
+            <option value="Chennai">Chennai (T. Nagar / Velachery)</option>
+            <option value="Kolkata">Kolkata (Salt Lake / Park Street)</option>
+          </optgroup>
+          <optgroup label="Tier-2 Cities">
+            <option value="Pune">Pune (Kothrud / Viman Nagar)</option>
+            <option value="Ahmedabad">Ahmedabad (Navrangpura)</option>
+            <option value="Jaipur">Jaipur (Malviya Nagar)</option>
+            <option value="Chandigarh">Chandigarh (Sector 17)</option>
+            <option value="Lucknow">Lucknow (Hazratganj)</option>
+            <option value="Kochi">Kochi (MG Road)</option>
+          </optgroup>
+        </select>
       </div>
     </div>
 
+    <div class="nav-search-bar">
+      <span>🔍</span>
+      <input type="text" id="catalog-search" placeholder="Search furniture, appliances..." oninput="handleSearch(this.value)">
+    </div>
+
     <ul class="nav-links">
-      <li><a class="active" id="nav-browse" onclick="switchView('customer-view')">Browse Catalogue</a></li>
       <li><a id="nav-relocate" onclick="switchView('relocate-view')">Relocate with VCollab</a></li>
-      <li><a id="nav-retailer" onclick="switchView('retailer-view')">Retailer Hub</a></li>
-      <li><a id="nav-admin" onclick="switchView('admin-view')">Platform Admin</a></li>
     </ul>
 
     <div class="nav-actions">
@@ -212,12 +245,12 @@
     </div>
   </header>
 
-  <!-- VIEW 1: CUSTOMER MARKETPLACE -->
+  <!-- VIEW 1: CUSTOMER MARKETPLACE (Default Catalogue Page) -->
   <main id="customer-view" class="page-view active">
     
     <div class="category-header">
-      <h2 class="serif-font">Explore Furniture & Home Appliances</h2>
-      <p style="color: var(--text-muted); font-size: 14px;">Directly sourced from verified local retail shops near your PIN code</p>
+      <h2 class="serif-font">Explore furniture and home appliances directly sourced from verified local retail shops near your pin code</h2>
+      <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Showing nearby local stores in: <strong id="current-location-text" style="color: var(--sage-primary);">Delhi-NCR</strong></p>
     </div>
 
     <div class="category-scroll">
@@ -262,7 +295,7 @@
     <div class="cart-container">
       <div class="cart-box">
         <div style="background: var(--teal-light); padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--teal-brand); margin-bottom: 16px;">
-          🚚 Delivery Estimate: Free Express Handover to <span id="cart-pincode">110058</span> within 24 Hours
+          🚚 Delivery Estimate: Free Express Handover to your location within 24 Hours
         </div>
         <div id="cart-items-list"></div>
       </div>
@@ -348,7 +381,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
       <div>
         <h2 class="serif-font">Retailer Earnings & Stock Dashboard</h2>
-        <p style="color: var(--text-muted); font-size: 13px;">Partner: Sharma Furnishings & Appliances (Janakpuri Hub)</p>
+        <p style="color: var(--text-muted); font-size: 13px;">Partner Store Network Management Hub</p>
       </div>
       <button class="btn-primary" onclick="alert('Add New Stock Modal Triggered')">+ Add New Shop Stock</button>
     </div>
@@ -378,6 +411,7 @@
         <tr>
           <th>Asset Code</th>
           <th>Item Title</th>
+          <th>City Location</th>
           <th>Monthly Rent</th>
           <th>Platform Commission (15%)</th>
           <th>Net Store Payout</th>
@@ -406,7 +440,7 @@
       </thead>
       <tbody>
         <tr>
-          <td><strong>Delhi-NCR (Janakpuri/Okhla/Gurgaon)</strong></td>
+          <td><strong>Delhi-NCR (Janakpuri/Okhla)</strong></td>
           <td>42 Stores</td>
           <td>380 Units</td>
           <td>₹4,56,000</td>
@@ -428,6 +462,14 @@
           <td>₹3,48,000</td>
           <td><strong style="color: var(--teal-brand);">₹52,200</strong></td>
           <td>₹9,600</td>
+        </tr>
+        <tr>
+          <td><strong>Mumbai (Andheri/Bandra)</strong></td>
+          <td>45 Stores</td>
+          <td>410 Units</td>
+          <td>₹5,10,000</td>
+          <td><strong style="color: var(--teal-brand);">₹76,500</strong></td>
+          <td>₹14,100</td>
         </tr>
       </tbody>
     </table>
@@ -468,11 +510,11 @@
 
       <div class="qr-container">
         <div id="qrcode"></div>
-        <div style="font-size: 12px; font-family: monospace; font-weight: 700; background: #F0F0F0; padding: 4px 8px; border-radius: 4px; display: inline-block;" id="qr-item-code">VC-SOFA-8892</div>
+        <div style="font-size: 12px; font-family: monospace; font-weight: 700; background: #F0F0F0; padding: 4px 8px; border-radius: 4px; display: inline-block;" id="qr-item-code">VC-ITEM-001</div>
       </div>
 
       <div style="background: var(--bg-cream); padding: 12px; border-radius: 8px; text-align: left; font-size: 12px; margin-bottom: 20px;">
-        <div><strong>Retail Shop:</strong> Sharma Furnishings, Janakpuri</div>
+        <div><strong>Status:</strong> Order Placed via VCollab Local Hub</div>
         <div><strong>Condition Log:</strong> Inspected & Tagged (100% Verified)</div>
         <div><strong>Deposit Status:</strong> ₹0 Held Safely</div>
       </div>
@@ -482,15 +524,70 @@
   </div>
 
   <script>
-    // COMPLETE PRODUCT CATALOGUE WITH ALL NEW APPLIANCES & ORIGINAL FURNITURE
+    // FULL CATALOGUE DATABASE EXPANDED WITH MULTI-CITY STORES AND MODULAR KITCHEN APPLIANCES
     const PRODUCTS = [
+      // --- MODULAR KITCHEN ITEMS ---
+      {
+        id: 'VC-KIT-001',
+        title: 'Modern 3-Burner Auto Ignition Glass Top Gas Stove',
+        category: 'kitchen',
+        city: 'Delhi-NCR',
+        shop: 'Janakpuri Kitchen World',
+        locality: 'Janakpuri',
+        price: 299,
+        originalPrice: 499,
+        discount: '40% OFF',
+        image: 'https://images.unsplash.com/photo-1588854337221-4cf9fa96059c?w=500&auto=format&fit=crop&q=60',
+        description: 'Sleek black toughened glass 3-burner gas stove, ideal for contemporary modular kitchens.'
+      },
+      {
+        id: 'VC-KIT-002',
+        title: 'Stainless Steel Modular Microwave & Utility Kitchen Rack',
+        category: 'kitchen',
+        city: 'Delhi-NCR',
+        shop: 'Capital Home Decor',
+        locality: 'Okhla',
+        price: 349,
+        originalPrice: 549,
+        discount: '36% OFF',
+        image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=500&auto=format&fit=crop&q=60',
+        description: 'Multi-layer modular kitchen organizer trolley rack for microwave, spices, and utensils.'
+      },
+      {
+        id: 'VC-KIT-003',
+        title: 'Digital Countertop Convection Microwave Oven',
+        category: 'kitchen',
+        city: 'Bengaluru',
+        shop: 'Koramangala Appliance Mart',
+        locality: 'Koramangala',
+        price: 499,
+        originalPrice: 699,
+        discount: '28% OFF',
+        image: 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=500&auto=format&fit=crop&q=60',
+        description: '28L convection microwave oven with auto-cook menu and modular kitchen styling.'
+      },
+      {
+        id: 'VC-KIT-004',
+        title: 'Smart Modular Dishwasher Unit',
+        category: 'kitchen',
+        city: 'Mumbai',
+        shop: 'Andheri Electricals',
+        locality: 'Andheri',
+        price: 899,
+        originalPrice: 1199,
+        discount: '25% OFF',
+        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=500&auto=format&fit=crop&q=60',
+        description: 'Freestanding 12-place setting modular dishwasher with hygienic wash feature.'
+      },
+
+      // --- APPLIANCES ---
       {
         id: 'VC-AC-001',
         title: '1.5 Ton 3 Star Window AC',
         category: 'appliances',
+        city: 'Delhi-NCR',
         shop: 'Sharma Electronics & Furnishings',
         locality: 'Janakpuri',
-        pincode: '110058',
         price: 899,
         originalPrice: 1199,
         discount: '25% OFF',
@@ -501,9 +598,9 @@
         id: 'VC-AC-002',
         title: 'Hitachi 1.5 Ton 3 Star Inverter Split AC',
         category: 'appliances',
+        city: 'Delhi-NCR',
         shop: 'Metro Appliance Hub',
         locality: 'Okhla',
-        pincode: '110020',
         price: 1249,
         originalPrice: 1599,
         discount: '21% OFF',
@@ -514,9 +611,9 @@
         id: 'VC-WM-001',
         title: 'Fully Automatic Top Load Washing Machine',
         category: 'appliances',
-        shop: 'Janakpuri Home Store',
-        locality: 'Janakpuri',
-        pincode: '110058',
+        city: 'Bengaluru',
+        shop: 'Indiranagar Home Solutions',
+        locality: 'Indiranagar',
         price: 649,
         originalPrice: 899,
         discount: '27% OFF',
@@ -527,9 +624,9 @@
         id: 'VC-WM-002',
         title: 'Bosch Premium Front Load Washing Machine',
         category: 'appliances',
-        shop: 'PC Electronics',
-        locality: 'Lajpat Nagar',
-        pincode: '110024',
+        city: 'Mumbai',
+        shop: 'Bandra Tech & Home Mart',
+        locality: 'Bandra',
         price: 999,
         originalPrice: 1399,
         discount: '28% OFF',
@@ -540,9 +637,9 @@
         id: 'VC-REF-001',
         title: 'Whirlpool Side-by-Side Double Door Refrigerator',
         category: 'appliances',
-        shop: 'Sharma Electronics & Furnishings',
-        locality: 'Janakpuri',
-        pincode: '110058',
+        city: 'Hyderabad',
+        shop: 'Gachibowli Appliance World',
+        locality: 'Gachibowli',
         price: 1499,
         originalPrice: 1999,
         discount: '25% OFF',
@@ -553,22 +650,24 @@
         id: 'VC-REF-002',
         title: 'Compact Single Door Direct Cool Refrigerator',
         category: 'appliances',
-        shop: 'HomeTown Outlet',
-        locality: 'Okhla',
-        pincode: '110020',
+        city: 'Chennai',
+        shop: 'T. Nagar Cool Retails',
+        locality: 'T. Nagar',
         price: 549,
         originalPrice: 749,
         discount: '26% OFF',
         image: 'https://images.guarented.com/product-images/prod/Fridges/fridge-sd/lifestyle/high_res/1.webp',
         description: '190L direct cool single door fridge, highly energy efficient and ideal for small families.'
       },
+
+      // --- SOFAS ---
       {
         id: 'VC-SOFA-321',
         title: 'Premium 3+2 Wooden Frame Sofa Set',
         category: 'sofa',
+        city: 'Delhi-NCR',
         shop: 'Sharma Furnishings',
         locality: 'Janakpuri',
-        pincode: '110058',
         price: 1299,
         originalPrice: 1599,
         discount: '18% OFF',
@@ -576,12 +675,27 @@
         description: 'Spacious 5-seater fabric sofa set built with solid Sheesham wood structure and high-density foam cushions.'
       },
       {
+        id: 'VC-SOFA-322',
+        title: 'Modern L-Shaped Fabric Recliner Sofa',
+        category: 'sofa',
+        city: 'Bengaluru',
+        shop: 'Silicon Valley Living',
+        locality: 'Koramangala',
+        price: 1599,
+        originalPrice: 1999,
+        discount: '20% OFF',
+        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&auto=format&fit=crop&q=60',
+        description: 'Plush L-shape corner sofa set designed for maximum living room comfort and style.'
+      },
+
+      // --- DINING TABLES ---
+      {
         id: 'VC-DIN-404',
         title: 'Compact Solid Wood Dining Table + Bench & Chairs',
         category: 'dining',
+        city: 'Delhi-NCR',
         shop: 'The Timber Guy Store',
         locality: 'Janakpuri',
-        pincode: '110058',
         price: 999,
         originalPrice: 1299,
         discount: '23% OFF',
@@ -589,31 +703,89 @@
         description: 'Modern dining set including 1 dining table, 1 long wooden bench, and 3 cushioned chairs.'
       },
       {
+        id: 'VC-DIN-405',
+        title: '4-Seater Glass Top Modern Dining Table',
+        category: 'dining',
+        city: 'Hyderabad',
+        shop: 'Hitech Furniture Mart',
+        locality: 'Hitech City',
+        price: 849,
+        originalPrice: 1099,
+        discount: '22% OFF',
+        image: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=500&auto=format&fit=crop&q=60',
+        description: 'Contemporary 4-seater dining set with tempered glass top and metal legs.'
+      },
+
+      // --- BEDS ---
+      {
         id: 'VC-BED-606',
         title: 'Carper Walnut Solid Wood Queen Size Bed',
         category: 'bed',
+        city: 'Delhi-NCR',
         shop: 'Ganpati Arts Experience Center',
         locality: 'Kirti Nagar',
-        pincode: '110015',
         price: 1199,
         originalPrice: 1499,
         discount: '20% OFF',
         image: 'https://ganpatiarts.com/cdn/shop/files/Carper_Walnut.png?v=1777484034&width=1214',
         description: 'Queen size bed made with rich walnut finish wood, engineered headboard, and under-bed storage.'
+      },
+      {
+        id: 'VC-BED-607',
+        title: 'King Size Upholstered Bed with Hydraulic Storage',
+        category: 'bed',
+        city: 'Pune',
+        shop: 'Kothrud Furniture World',
+        locality: 'Kothrud',
+        price: 1399,
+        originalPrice: 1799,
+        discount: '22% OFF',
+        image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=500&auto=format&fit=crop&q=60',
+        description: 'Luxurious king size bed with padded headboard and easy hydraulic storage access.'
       }
     ];
 
+    let currentCity = 'Delhi-NCR';
+    let currentCategory = 'all';
+    let searchQuery = '';
     let cart = [];
     let isCouponApplied = false;
 
+    // FILTER & SEARCH LOGIC
+    function getFilteredProducts() {
+      return PRODUCTS.filter(p => {
+        const matchesCity = (p.city === currentCity);
+        const matchesCat = (currentCategory === 'all' || p.category === currentCategory);
+        const matchesSearch = searchQuery === '' || 
+          p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          p.shop.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.category.toLowerCase().includes(searchQuery.toLowerCase());
+
+        return matchesCity && matchesCat && matchesSearch;
+      });
+    }
+
     // RENDER MARKETPLACE
-    function renderMarketplace(items) {
+    function renderMarketplace() {
       const grid = document.getElementById('marketplace-grid');
+      const items = getFilteredProducts();
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #FFF; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <div style="font-size: 32px; margin-bottom: 8px;">🏬</div>
+            <h3 class="serif-font" style="font-size: 18px; margin-bottom: 4px;">No products match your current selection</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Try switching categories, clearing search query, or choosing another city location like Delhi-NCR or Bengaluru.</p>
+          </div>
+        `;
+        return;
+      }
+
       grid.innerHTML = items.map(item => `
         <div class="product-card">
-          <img src="${item.image}" class="product-thumb" alt="${item.title}">
+          <img src="${item.image}" class="product-thumb" alt="${item.title}" onerror="this.src='https://via.placeholder.com/300x200?text=Product+Image'">
           <div class="product-info">
-            <div class="shop-tag">STORE: ${item.shop} (${item.locality})</div>
+            <div class="shop-tag">STORE: ${item.shop} (${item.locality}, ${item.city})</div>
             <div class="product-title">${item.title}</div>
             <div class="pricing-row">
               <span class="price-main">₹${item.price}/mo</span>
@@ -629,17 +801,23 @@
       `).join('');
     }
 
-    // FILTER CATEGORY
+    // EVENT HANDLERS FOR CITY & SEARCH
+    function handleCityChange(selectedCity) {
+      currentCity = selectedCity;
+      document.getElementById('current-location-text').innerText = selectedCity;
+      renderMarketplace();
+    }
+
+    function handleSearch(query) {
+      searchQuery = query;
+      renderMarketplace();
+    }
+
     function filterCategory(cat, element) {
       document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
       if(element) element.classList.add('active');
-
-      if (cat === 'all') {
-        renderMarketplace(PRODUCTS);
-      } else {
-        const filtered = PRODUCTS.filter(p => p.category === cat);
-        renderMarketplace(filtered);
-      }
+      currentCategory = cat;
+      renderMarketplace();
     }
 
     // PRODUCT DETAIL VIEW
@@ -649,13 +827,13 @@
       
       container.innerHTML = `
         <div>
-          <img src="${item.image}" class="main-detail-img" id="detail-main-img">
+          <img src="${item.image}" class="main-detail-img" id="detail-main-img" onerror="this.src='https://via.placeholder.com/400x300?text=Product+Image'">
           <div class="gallery-thumbs">
             <img src="${item.image}" class="gallery-thumb active">
           </div>
         </div>
         <div>
-          <div class="shop-tag" style="font-size: 13px;">FULFILLED BY: ${item.shop}</div>
+          <div class="shop-tag" style="font-size: 13px;">FULFILLED BY: ${item.shop} (${item.locality}, ${item.city})</div>
           <h1 class="serif-font" style="font-size: 26px; margin: 6px 0 12px;">${item.title}</h1>
           <div class="pricing-row" style="font-size: 24px;">
             <span class="price-main" style="font-size: 28px;">₹${item.price}/mo</span>
@@ -703,7 +881,7 @@
             <img src="${i.image}" class="cart-item-img">
             <div style="flex-grow:1;">
               <div style="font-weight:700; font-size:14px;">${i.title}</div>
-              <div style="font-size:12px; color:var(--text-muted);">Store: ${i.shop}</div>
+              <div style="font-size:12px; color:var(--text-muted);">Store: ${i.shop} (${i.city})</div>
               <div style="font-weight:800; color:var(--sage-primary); margin-top:4px;">₹${i.price}/mo</div>
             </div>
             <div class="qty-counter">
@@ -746,11 +924,7 @@
       document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
       
       document.getElementById(viewId).classList.add('active');
-
-      if(viewId === 'customer-view') document.getElementById('nav-browse').classList.add('active');
       if(viewId === 'relocate-view') document.getElementById('nav-relocate').classList.add('active');
-      if(viewId === 'retailer-view') document.getElementById('nav-retailer').classList.add('active');
-      if(viewId === 'admin-view') document.getElementById('nav-admin').classList.add('active');
     }
 
     function openPaymentModal() {
@@ -780,7 +954,7 @@
     }
 
     function simulateScanVerification() {
-      alert('QR Code Scanned Successfully!\n\nDigital Passport Verified:\n- Item Condition: 100% Intact\n- Escrow Released to Store: Sharma Electronics\n- Status: Active Handover Completed');
+      alert('QR Code Scanned Successfully!\n\nDigital Passport Verified:\n- Item Condition: 100% Intact\n- Escrow Released to Partner Store\n- Status: Active Handover Completed');
       closeModal('qr-success-modal');
       cart = [];
       updateCartUI();
@@ -797,6 +971,7 @@
           <tr>
             <td><code>${p.id}</code></td>
             <td>${p.title}</td>
+            <td>${p.city}</td>
             <td>₹${p.price}</td>
             <td style="color:red;">-₹${comm}</td>
             <td style="color:green; font-weight:700;">₹${net}</td>
@@ -806,7 +981,7 @@
       }).join('');
     }
 
-    // DEMO MODE SWITCHER
+    // DEMO MODE SWITCHER (Top Right)
     function setDemoMode(mode) {
       document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
       if(mode === 'customer') {
@@ -821,8 +996,8 @@
       }
     }
 
-    // INIT
-    renderMarketplace(PRODUCTS);
+    // INITIALIZATION
+    renderMarketplace();
     renderRetailerTable();
   </script>
 </body>
