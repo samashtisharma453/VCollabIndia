@@ -99,14 +99,127 @@
     }
     .view-btn.active { background: var(--sage-primary); color: #FFF; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
 
+    /* FULL-WIDTH HERO CAROUSEL */
+    .hero-carousel {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      overflow: hidden;
+      background: var(--sage-dark);
+    }
+    .carousel-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+    }
+    .slide-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%);
+    }
+    .slide-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 8%;
+      max-width: 650px;
+      color: #FFFFFF;
+    }
+    .slide-headline {
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .slide-subheadline {
+      font-size: 16px;
+      margin-bottom: 24px;
+      color: #E2DDD5;
+      font-weight: 400;
+    }
+    .cta-pill-btn {
+      display: inline-block;
+      background: #FFFFFF;
+      color: var(--sage-primary);
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .cta-pill-btn:hover {
+      background: var(--amber-accent);
+      color: var(--text-charcoal);
+      transform: translateY(-2px);
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #FFF;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .carousel-arrow:hover {
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--sage-primary);
+    }
+    .carousel-arrow.prev { left: 20px; }
+    .carousel-arrow.next { right: 20px; }
+    .carousel-dots {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .dot.active {
+      background: #FFFFFF;
+      width: 28px;
+      border-radius: 10px;
+    }
+
     /* Page Views Container */
     .page-view { display: none; padding: 24px 5%; max-width: 1280px; margin: 0 auto; }
     .page-view.active { display: block; }
 
     /* Category Navigation Grid */
-    .category-header { margin: 20px 0 16px; }
     .category-scroll {
-      display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: thin;
+      display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: thin; margin-top: 24px;
     }
     .category-card {
       min-width: 110px; background: var(--card-white); border: 1px solid var(--border-light);
@@ -206,7 +319,6 @@
           <optgroup label="Metropolitan Cities">
             <option value="Delhi-NCR">Delhi-NCR (Janakpuri / Okhla)</option>
             <option value="Mumbai">Mumbai (Andheri / Bandra)</option>
-
             <option value="Bengaluru">Bengaluru (Koramangala / Indiranagar)</option>
             <option value="Hyderabad">Hyderabad (Gachibowli / Hitech City)</option>
             <option value="Chennai">Chennai (T. Nagar / Velachery)</option>
@@ -246,41 +358,91 @@
   </header>
 
   <!-- VIEW 1: CUSTOMER MARKETPLACE (Default Catalogue Page) -->
-  <main id="customer-view" class="page-view active">
+  <main id="customer-view" style="padding: 0; max-width: 100%;" class="page-view active">
     
-    <div class="category-header">
-      <h2 class="serif-font">Explore furniture and home appliances directly sourced from verified local retail shops near your pin code</h2>
-      <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Showing nearby local stores in: <strong id="current-location-text" style="color: var(--sage-primary);">Delhi-NCR</strong></p>
-    </div>
+    <!-- FULL-WIDTH HERO CAROUSEL -->
+    <section class="hero-carousel" id="heroCarousel">
+      <div class="carousel-track" id="carouselTrack">
+        
+        <!-- Slide 1: Sofas -->
+        <div class="carousel-slide" style="background-image: url('assets/hero/slide1.jpg'), url('https://mir-s3-cdn-cf.behance.net/project_modules/hd_webp/d712ad173298245.648dc2797a5eb.jpg');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="serif-font slide-headline">Dead Gorgeous Furniture & Living</h1>
+            <p class="slide-subheadline">Upgrade your living room with zero deposit & free 72hr setup near your pin code.</p>
+            <a class="cta-pill-btn" onclick="filterCategory('sofa')">Rent Sofas Now</a>
+          </div>
+        </div>
 
-    <div class="category-scroll">
-      <div class="category-card active" onclick="filterCategory('all', this)">
-        <div class="category-icon">🏠</div>
-        <div class="category-title">All Items</div>
-      </div>
-      <div class="category-card" onclick="filterCategory('appliances', this)">
-        <div class="category-icon">🧊</div>
-        <div class="category-title">Appliances</div>
-      </div>
-      <div class="category-card" onclick="filterCategory('sofa', this)">
-        <div class="category-icon">🛋️</div>
-        <div class="category-title">Sofas</div>
-      </div>
-      <div class="category-card" onclick="filterCategory('dining', this)">
-        <div class="category-icon">🍽️</div>
-        <div class="category-title">Dining Tables</div>
-      </div>
-      <div class="category-card" onclick="filterCategory('kitchen', this)">
-        <div class="category-icon">🍳</div>
-        <div class="category-title">Modular Kitchen</div>
-      </div>
-      <div class="category-card" onclick="filterCategory('bed', this)">
-        <div class="category-icon">🛏️</div>
-        <div class="category-title">Beds</div>
-      </div>
-    </div>
+        <!-- Slide 2: Appliances -->
+        <div class="carousel-slide" style="background-image: url('assets/hero/slide2.jpg'), url('https://www.shutterstock.com/image-photo/different-household-appliances-kitchen-260nw-2192966337.jpg');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="serif-font slide-headline">Smart Kitchen & Home Appliances</h1>
+            <p class="slide-subheadline">Top rated ACs, refrigerators, and washing machines straight from local stores.</p>
+            <a class="cta-pill-btn" onclick="filterCategory('appliances')">Explore Appliances</a>
+          </div>
+        </div>
 
-    <div class="product-grid" id="marketplace-grid"></div>
+        <!-- Slide 3: Study & Kids / Beds -->
+        <div class="carousel-slide" style="background-image: url('assets/hero/slide3.jpg'), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWT2X8LBdTtqq6kzPrfkwR9BmRAbYgwfJVNaTynZ1lUA&s=10');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="serif-font slide-headline">Premium Beds & Modular Comfort</h1>
+            <p class="slide-subheadline">Transform your bedroom and study spaces with verified local seller inventory.</p>
+            <a class="cta-pill-btn" onclick="filterCategory('bed')">Browse Beds</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation Arrows -->
+      <button class="carousel-arrow prev" onclick="moveSlide(-1)">&#10094;</button>
+      <button class="carousel-arrow next" onclick="moveSlide(1)">&#10095;</button>
+
+      <!-- Dot Indicators -->
+      <div class="carousel-dots" id="carouselDots">
+        <span class="dot active" onclick="goToSlide(0)"></span>
+        <span class="dot" onclick="goToSlide(1)"></span>
+        <span class="dot" onclick="goToSlide(2)"></span>
+      </div>
+    </section>
+
+    <!-- CONTENT BODY CONTAINER -->
+    <div style="padding: 24px 5%; max-width: 1280px; margin: 0 auto;">
+      <div style="margin-top: 10px;">
+        <p style="color: var(--text-muted); font-size: 14px;">Showing nearby local stores in: <strong id="current-location-text" style="color: var(--sage-primary);">Delhi-NCR</strong></p>
+      </div>
+
+      <div class="category-scroll">
+        <div class="category-card active" onclick="filterCategory('all', this)">
+          <div class="category-icon">🏠</div>
+          <div class="category-title">All Items</div>
+        </div>
+        <div class="category-card" id="cat-appliances" onclick="filterCategory('appliances', this)">
+          <div class="category-icon">🧊</div>
+          <div class="category-title">Appliances</div>
+        </div>
+        <div class="category-card" id="cat-sofa" onclick="filterCategory('sofa', this)">
+          <div class="category-icon">🛋️</div>
+          <div class="category-title">Sofas</div>
+        </div>
+        <div class="category-card" onclick="filterCategory('dining', this)">
+          <div class="category-icon">🍽️</div>
+          <div class="category-title">Dining Tables</div>
+        </div>
+        <div class="category-card" onclick="filterCategory('kitchen', this)">
+          <div class="category-icon">🍳</div>
+          <div class="category-title">Modular Kitchen</div>
+        </div>
+        <div class="category-card" id="cat-bed" onclick="filterCategory('bed', this)">
+          <div class="category-icon">🛏️</div>
+          <div class="category-title">Beds</div>
+        </div>
+      </div>
+
+      <div class="product-grid" id="marketplace-grid"></div>
+    </div>
   </main>
 
   <!-- VIEW 2: PRODUCT DETAIL PAGE -->
@@ -524,7 +686,7 @@
   </div>
 
   <script>
-    // FULL CATALOGUE DATABASE EXPANDED WITH MULTI-CITY STORES AND MODULAR KITCHEN APPLIANCES
+    // FULL CATALOGUE DATABASE
     const PRODUCTS = [
       // --- MODULAR KITCHEN ITEMS ---
       {
@@ -751,6 +913,53 @@
     let cart = [];
     let isCouponApplied = false;
 
+    // CAROUSEL LOGIC
+    let currentSlideIndex = 0;
+    const totalSlides = 3;
+    let autoSlideTimer = null;
+
+    function updateCarousel() {
+      const track = document.getElementById('carouselTrack');
+      const dots = document.querySelectorAll('.carousel-dots .dot');
+      
+      track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+      
+      dots.forEach((dot, idx) => {
+        if(idx === currentSlideIndex) dot.classList.add('active');
+        else dot.classList.remove('active');
+      });
+    }
+
+    function moveSlide(direction) {
+      currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
+      updateCarousel();
+      resetAutoSlideTimer();
+    }
+
+    function goToSlide(index) {
+      currentSlideIndex = index;
+      updateCarousel();
+      resetAutoSlideTimer();
+    }
+
+    function startAutoSlideTimer() {
+      autoSlideTimer = setInterval(() => {
+        currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
+        updateCarousel();
+      }, 5000);
+    }
+
+    function resetAutoSlideTimer() {
+      clearInterval(autoSlideTimer);
+      startAutoSlideTimer();
+    }
+
+    // Carousel Hover Pause Events
+    const carouselElem = document.getElementById('heroCarousel');
+    carouselElem.addEventListener('mouseenter', () => clearInterval(autoSlideTimer));
+    carouselElem.addEventListener('mouseleave', () => startAutoSlideTimer());
+    startAutoSlideTimer();
+
     // FILTER & SEARCH LOGIC
     function getFilteredProducts() {
       return PRODUCTS.filter(p => {
@@ -815,7 +1024,14 @@
 
     function filterCategory(cat, element) {
       document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
-      if(element) element.classList.add('active');
+      
+      if(element) {
+        element.classList.add('active');
+      } else {
+        const catTarget = document.getElementById('cat-' + cat);
+        if(catTarget) catTarget.classList.add('active');
+      }
+      
       currentCategory = cat;
       renderMarketplace();
     }
