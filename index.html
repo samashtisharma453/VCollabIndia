@@ -102,158 +102,66 @@
 
     /* HERO CAROUSEL */
     .hero-carousel {
-      position: relative;
-      width: 100%;
-      height: 520px;
-      overflow: hidden;
-      background: var(--sage-dark);
+      position: relative; width: 100%; height: 520px; overflow: hidden; background: var(--sage-dark);
     }
     .carousel-track {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      display: flex; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     }
     .carousel-slide {
-      min-width: 100%;
-      height: 100%;
-      position: relative;
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      align-items: center;
+      min-width: 100%; height: 100%; position: relative; background-size: cover; background-position: center; display: flex; align-items: center;
     }
     .slide-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.05) 100%);
+      position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.05) 100%);
     }
     .slide-content {
-      position: relative;
-      z-index: 2;
-      padding: 0 8%;
-      max-width: 680px;
-      color: #FFFFFF;
+      position: relative; z-index: 2; padding: 0 8%; max-width: 680px; color: #FFFFFF;
     }
     .slide-headline {
-      font-size: 46px;
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 14px;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      font-size: 46px; font-weight: 800; line-height: 1.15; margin-bottom: 14px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
-    .slide-subheadline {
-      font-size: 18px;
-      margin-bottom: 28px;
-      color: #E2DDD5;
-      font-weight: 400;
-    }
+    .slide-subheadline { font-size: 18px; margin-bottom: 28px; color: #E2DDD5; font-weight: 400; }
     .cta-pill-btn {
-      display: inline-block;
-      background: #FFFFFF;
-      color: var(--sage-primary);
-      padding: 14px 32px;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 15px;
-      text-decoration: none;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-      transition: all 0.2s;
-      cursor: pointer;
+      display: inline-block; background: #FFFFFF; color: var(--sage-primary); padding: 14px 32px;
+      border-radius: 50px; font-weight: 700; font-size: 15px; text-decoration: none; box-shadow: 0 4px 14px rgba(0,0,0,0.2); transition: all 0.2s; cursor: pointer;
     }
-    .cta-pill-btn:hover {
-      background: var(--amber-accent);
-      color: var(--text-charcoal);
-      transform: translateY(-2px);
-    }
+    .cta-pill-btn:hover { background: var(--amber-accent); color: var(--text-charcoal); transform: translateY(-2px); }
     .carousel-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 10;
-      background: rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      color: #FFF;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      cursor: pointer;
-      transition: all 0.2s;
+      position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+      background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #FFF; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; transition: all 0.2s;
     }
-    .carousel-arrow:hover {
-      background: rgba(255, 255, 255, 0.8);
-      color: var(--sage-primary);
-    }
+    .carousel-arrow:hover { background: rgba(255, 255, 255, 0.8); color: var(--sage-primary); }
     .carousel-arrow.prev { left: 24px; }
     .carousel-arrow.next { right: 24px; }
     .carousel-dots {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      display: flex;
-      gap: 10px;
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 10px;
     }
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .dot.active {
-      background: #FFFFFF;
-      width: 32px;
-      border-radius: 10px;
-    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255, 255, 255, 0.4); cursor: pointer; transition: all 0.3s; }
+    .dot.active { background: #FFFFFF; width: 32px; border-radius: 10px; }
 
-    /* Section Sub-heading */
-    .section-subheading {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-charcoal);
-      margin-top: 24px;
-      margin-bottom: 8px;
-      letter-spacing: -0.2px;
-    }
+    .section-subheading { font-size: 16px; font-weight: 600; color: var(--text-charcoal); margin-top: 24px; margin-bottom: 8px; letter-spacing: -0.2px; }
 
-    /* Page Views Container */
+    /* Page Views */
     .page-view { display: none; padding: 24px 5%; max-width: 1280px; margin: 0 auto; }
     .page-view.active { display: block; }
 
-    /* Category Navigation Grid */
-    .category-scroll {
-      display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: thin; margin-top: 12px;
-    }
+    /* Categories & Product Grid */
+    .category-scroll { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: thin; margin-top: 12px; }
     .category-card {
       min-width: 110px; background: var(--card-white); border: 1px solid var(--border-light);
-      border-radius: var(--radius-md); padding: 14px 10px; text-align: center;
-      cursor: pointer; transition: all 0.2s;
+      border-radius: var(--radius-md); padding: 14px 10px; text-align: center; cursor: pointer; transition: all 0.2s;
     }
-    .category-card:hover, .category-card.active {
-      border-color: var(--teal-brand); background: var(--teal-light); transform: translateY(-2px);
-    }
+    .category-card:hover, .category-card.active { border-color: var(--teal-brand); background: var(--teal-light); transform: translateY(-2px); }
     .category-icon { font-size: 28px; margin-bottom: 6px; }
     .category-title { font-size: 13px; font-weight: 600; }
 
-    /* Marketplace Layout */
-    .product-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 20px;
-    }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 20px; }
     .product-card {
       background: var(--card-white); border: 1px solid var(--border-light);
-      border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);
-      transition: transform 0.2s; display: flex; flex-direction: column;
+      border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card); transition: transform 0.2s; display: flex; flex-direction: column;
     }
     .product-card:hover { transform: translateY(-4px); }
-    .product-thumb { width: 100%; height: 210px; object-fit: cover; background: #FFF; padding: 0; }
+    .product-thumb { width: 100%; height: 210px; object-fit: cover; background: #FFF; }
     .product-info { padding: 16px; display: flex; flex-direction: column; flex-grow: 1; }
     .shop-tag { font-size: 11px; font-weight: 700; color: var(--teal-brand); text-transform: uppercase; margin-bottom: 4px; }
     .product-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text-charcoal); line-height: 1.3; }
@@ -276,10 +184,6 @@
     /* Product Detail View */
     .product-detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; background: #FFF; padding: 24px; border-radius: var(--radius-lg); }
     .main-detail-img { width: 100%; height: 380px; object-fit: cover; border-radius: var(--radius-md); background: #FAF7F2; }
-    .gallery-thumbs { display: flex; gap: 10px; margin-top: 12px; }
-    .gallery-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; cursor: pointer; }
-    .gallery-thumb.active { border-color: var(--teal-brand); }
-
     .variant-chips { display: flex; gap: 10px; margin: 12px 0; }
     .variant-chip { border: 1px solid var(--border-light); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; }
     .variant-chip.active { border-color: var(--teal-brand); background: var(--teal-light); color: var(--teal-brand); }
@@ -291,10 +195,9 @@
     .cart-item-img { width: 90px; height: 90px; object-fit: cover; border-radius: var(--radius-sm); background: #FAF7F2; }
     .qty-counter { display: flex; align-items: center; border: 1px solid var(--border-light); border-radius: 50px; padding: 2px 8px; width: fit-content; margin-top: 8px; }
     .qty-btn { border: none; background: none; font-size: 16px; font-weight: 700; padding: 0 8px; cursor: pointer; }
-
     .coupon-box { background: #FFF8E7; border: 1px dashed var(--amber-accent); padding: 12px 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 
-    /* Universal Modal Design */
+    /* Modal Overlay & Styling */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000;
@@ -302,46 +205,43 @@
     }
     .modal-card {
       background: #FFF; border-radius: var(--radius-lg); padding: 28px;
-      max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;
+      max-width: 540px; width: 90%; max-height: 90vh; overflow-y: auto;
       box-shadow: var(--shadow-soft); position: relative;
     }
-    .modal-close { position: absolute; top: 16px; right: 20px; font-size: 24px; border: none; background: none; cursor: pointer; color: #888; }
+    .modal-close { position: absolute; top: 16px; right: 20px; font-size: 24px; border: none; background: none; cursor: pointer; }
 
-    /* Form Input Styles */
-    .form-group { margin-bottom: 14px; text-align: left; }
-    .form-group label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--text-charcoal); }
-    .form-input-styled {
-      width: 100%; padding: 10px 12px; border: 1px solid var(--border-light);
-      border-radius: var(--radius-sm); font-size: 13px; outline: none; margin-top: 2px; background: #FFF;
-    }
-    .form-input-styled:focus { border-color: var(--teal-brand); }
-
-    /* Universal Payment Options Matrix */
+    /* Payment Radio Selection Box */
     .payment-options-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 6px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 8px; margin-bottom: 16px;
     }
     .payment-option-card { position: relative; }
     .payment-option-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
     .payment-option-card label {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 12px 6px; border: 1px solid var(--border-light); border-radius: var(--radius-sm);
-      cursor: pointer; font-size: 12px; font-weight: 700; color: var(--text-muted); transition: all 0.2s;
+      padding: 12px 8px; border: 2px solid var(--border-light); border-radius: var(--radius-sm);
+      cursor: pointer; font-weight: 600; font-size: 13px; color: var(--text-charcoal); transition: all 0.2s; text-align: center; background: #FFF;
     }
     .payment-option-card input[type="radio"]:checked + label {
       border-color: var(--teal-brand); background-color: var(--teal-light); color: var(--teal-brand);
     }
-    .payment-dynamic-details { display: none; margin-top: 10px; }
-    .payment-dynamic-details.active { display: block; }
 
-    /* QR Display */
-    .qr-container { text-align: center; padding: 20px 0; }
-    #qrcode { display: flex; justify-content: center; margin: 16px 0; }
+    .payment-subfield { display: none; margin-bottom: 16px; background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm); }
+    .payment-subfield.active { display: block; }
+
+    .qr-container { text-align: center; padding: 16px 0; }
+    #qrcode { display: flex; justify-content: center; margin: 12px 0; }
     .verify-badge { background: #E6F4EA; color: #137333; padding: 6px 12px; border-radius: 50px; font-weight: 700; font-size: 12px; display: inline-block; }
 
-    /* Admin / Retailer Tables */
+    /* Admin / Retailer Tables & Form Elements */
     .data-table { width: 100%; border-collapse: collapse; margin-top: 16px; background: #FFF; border-radius: var(--radius-sm); overflow: hidden; }
     .data-table th, .data-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-light); font-size: 13px; }
     .data-table th { background: #F4F1EA; font-weight: 700; }
+
+    .form-input-styled {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm); font-size: 13px; outline: none; margin-top: 4px; background: #FFF;
+    }
+    .form-input-styled:focus { border-color: var(--teal-brand); }
 
     .retailer-dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   </style>
@@ -396,6 +296,8 @@
     <!-- HERO CAROUSEL -->
     <section class="hero-carousel" id="heroCarousel">
       <div class="carousel-track" id="carouselTrack">
+        
+        <!-- Slide 1 -->
         <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80');">
           <div class="slide-overlay"></div>
           <div class="slide-content">
@@ -405,6 +307,7 @@
           </div>
         </div>
 
+        <!-- Slide 2 -->
         <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80');">
           <div class="slide-overlay"></div>
           <div class="slide-content">
@@ -414,6 +317,7 @@
           </div>
         </div>
 
+        <!-- Slide 3 -->
         <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80');">
           <div class="slide-overlay"></div>
           <div class="slide-content">
@@ -422,6 +326,7 @@
             <a class="cta-pill-btn" onclick="scrollToCatalogAndFilter('bed')">Browse Beds</a>
           </div>
         </div>
+
       </div>
 
       <button class="carousel-arrow prev" onclick="moveSlide(-1)">&#10094;</button>
@@ -437,6 +342,7 @@
     <div style="padding: 24px 5%; max-width: 1280px; margin: 0 auto;" id="catalog-section">
       <h2 class="section-subheading">Rent Furniture and Home Appliances</h2>
 
+      <!-- CATEGORY NAV -->
       <div class="category-scroll">
         <div class="category-card active" id="cat-all" onclick="filterCategory('all', this)">
           <div class="category-icon">🏠</div>
@@ -471,7 +377,7 @@
         <div>
           <span class="verify-badge">👤 Verified Account: Rani</span>
           <h2 class="serif-font" style="margin-top: 6px; font-size: 24px;">My Active Rented Items</h2>
-          <p style="color: var(--text-muted); font-size: 13px;">Manage active rentals, initiate intra-city relocation, or schedule return pickup.</p>
+          <p style="color: var(--text-muted); font-size: 13px;">Manage active local shop rentals, initiate relocation, or request a return pickup.</p>
         </div>
         <div style="text-align: right;">
           <div style="font-size: 12px; color: var(--text-muted);">Current Address</div>
@@ -481,6 +387,8 @@
     </div>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+      
+      <!-- Rani Item 1 -->
       <div class="product-card" style="flex-direction: row; align-items: center; padding: 16px; gap: 16px;">
         <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80" style="width: 130px; height: 130px; border-radius: var(--radius-sm); object-fit: cover;">
         <div style="flex-grow: 1;">
@@ -490,11 +398,12 @@
           <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Active Location: Gachibowli, Hyderabad</div>
           <div style="display: flex; gap: 8px;">
             <button class="btn-primary" style="padding: 8px 12px; font-size: 12px;" onclick="initiateRaniRelocate('VC-RANI-SOFA', 'Luxury 3-Seater Living Sofa')">🚚 Relocate</button>
-            <button class="btn-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="openUniversalPaymentModal('Return Pickup Fee', 150, 'Sharma Furnitures (Gachibowli)', 'Gachibowli, Hyderabad', 'return')">🔄 Return</button>
+            <button class="btn-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="openReturnModal('VC-RANI-SOFA', 'Luxury 3-Seater Living Sofa', 'Sharma Furnitures')">🔄 Return</button>
           </div>
         </div>
       </div>
 
+      <!-- Rani Item 2 -->
       <div class="product-card" style="flex-direction: row; align-items: center; padding: 16px; gap: 16px;">
         <img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80" style="width: 130px; height: 130px; border-radius: var(--radius-sm); object-fit: cover;">
         <div style="flex-grow: 1;">
@@ -504,10 +413,11 @@
           <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Active Location: Gachibowli, Hyderabad</div>
           <div style="display: flex; gap: 8px;">
             <button class="btn-primary" style="padding: 8px 12px; font-size: 12px;" onclick="initiateRaniRelocate('VC-RANI-WASH', 'Fully Automatic Washing Machine')">🚚 Relocate</button>
-            <button class="btn-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="openUniversalPaymentModal('Return Pickup Fee', 150, 'Sharma Furnitures (Gachibowli)', 'Gachibowli, Hyderabad', 'return')">🔄 Return</button>
+            <button class="btn-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="openReturnModal('VC-RANI-WASH', 'Fully Automatic Washing Machine', 'Sharma Furnitures')">🔄 Return</button>
           </div>
         </div>
       </div>
+
     </div>
   </main>
 
@@ -560,7 +470,7 @@
             <span>First Month Payable</span>
             <span id="summary-final-total" style="color: var(--sage-primary);">₹0</span>
           </div>
-          <button class="btn-primary" style="width: 100%; padding: 14px; font-size: 15px;" onclick="triggerCartCheckoutPayment()">Proceed to Pay & Place Order →</button>
+          <button class="btn-primary" style="width: 100%; padding: 14px; font-size: 15px;" onclick="triggerCheckoutPayment()">Proceed to Pay & Place Order →</button>
         </div>
       </div>
     </div>
@@ -617,13 +527,138 @@
           <span>• 60% Advance Payment Required</span>
           <span id="relocate-advance-fee">₹689</span>
         </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+          <span>• 40% Balance Payable After Relocation</span>
+          <span id="relocate-post-fee">₹460</span>
+        </div>
       </div>
 
-      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="triggerRelocationPayment()">Schedule Relocation Shift & Proceed</button>
+      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="openRelocationModal()">Schedule Relocation Shift</button>
     </div>
   </main>
 
-  <!-- VIEW 5: RETAILER HUB -->
+  <!-- RELOCATION SCHEDULING POPUP MODAL -->
+  <div class="modal-overlay" id="relocation-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('relocation-modal')">×</button>
+      <div class="verify-badge">📋 Request Details</div>
+      <h3 class="serif-font" style="margin-top: 10px; margin-bottom: 4px;">Schedule Relocation Slot</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Select your preferred date & slot for relocation.</p>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Choose Relocation Date</label>
+          <input type="date" id="relocate-date-input" class="form-input-styled">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Preferred Time Slot</label>
+          <input type="text" id="relocate-time-input" placeholder="e.g. 10:00 AM - 1:00 PM" class="form-input-styled">
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="proceedToRelocationPayment()">Proceed to Payment Details →</button>
+    </div>
+  </div>
+
+  <!-- RETURN PRODUCT POPUP MODAL -->
+  <div class="modal-overlay" id="return-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('return-modal')">×</button>
+      <div class="verify-badge">📦 Easy Return Pickup</div>
+      <h3 class="serif-font" style="margin-top: 10px; margin-bottom: 4px;">Initiate Product Return</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;" id="return-item-title-display">Item Return Request</p>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Reason for Return</label>
+          <select id="return-reason" class="form-input-styled">
+            <option value="tenure_ended">Rental Tenure Completed</option>
+            <option value="moving_city">Moving Out of City</option>
+            <option value="upgrade">Upgrading to New Model</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Pickup Date</label>
+          <input type="date" id="return-date-input" class="form-input-styled">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Pickup Time Slot</label>
+          <input type="text" id="return-time-input" placeholder="e.g. 2:00 PM - 5:00 PM" class="form-input-styled">
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="proceedToReturnPayment()">Proceed & Confirm Return Pickup →</button>
+    </div>
+  </div>
+
+  <!-- UNIFIED REUSABLE PAYMENT & ADDRESS POPUP MODAL -->
+  <div class="modal-overlay" id="unified-payment-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('unified-payment-modal')">×</button>
+      <div class="verify-badge">💳 Checkout & Address</div>
+      <h3 class="serif-font" style="margin-top: 8px; margin-bottom: 4px;" id="unified-modal-title">Complete Payment</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;" id="unified-modal-subtitle">Provide delivery location & select payment option</p>
+
+      <form id="unified-payment-form" onsubmit="handleUnifiedPaymentSubmit(event)">
+        
+        <!-- Total Amount Display -->
+        <div style="background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <span style="font-size: 13px; font-weight: 600; color: var(--text-muted);">Amount Payable:</span>
+          <span style="font-size: 20px; font-weight: 800; color: var(--sage-primary);" id="unified-modal-amount">₹0</span>
+        </div>
+
+        <!-- Full Delivery / Service Address Field -->
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 12px; font-weight: 700; color: var(--text-charcoal);">Full Delivery / Pickup Address *</label>
+          <textarea id="unified-address-input" rows="3" class="form-input-styled" placeholder="Flat / House No., Building, Street, Area, City & Pincode" required></textarea>
+        </div>
+
+        <!-- Payment Method Selection Interface -->
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 700; color: var(--text-charcoal);">Select Payment Method *</label>
+          <div class="payment-options-grid">
+            <div class="payment-option-card">
+              <input type="radio" id="method-upi" name="paymentMethod" value="UPI" required onchange="togglePaymentSubfields()">
+              <label for="method-upi">📱 UPI<br><span style="font-size:10px; font-weight:normal;">GPay/PhonePe</span></label>
+            </div>
+            <div class="payment-option-card">
+              <input type="radio" id="method-card" name="paymentMethod" value="Card" onchange="togglePaymentSubfields()">
+              <label for="method-card">💳 Card<br><span style="font-size:10px; font-weight:normal;">Debit/Credit</span></label>
+            </div>
+            <div class="payment-option-card">
+              <input type="radio" id="method-cash" name="paymentMethod" value="Cash" onchange="togglePaymentSubfields()">
+              <label for="method-cash">💵 Cash<br><span style="font-size:10px; font-weight:normal;">Pay on Handover</span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- UPI Subfield -->
+        <div class="payment-subfield" id="subfield-upi">
+          <label style="font-size: 11px; font-weight: 700;">Enter UPI ID / VPA</label>
+          <input type="text" id="upi-id-input" placeholder="e.g. mobile@upi / username@okhdfcbank" class="form-input-styled">
+        </div>
+
+        <!-- Card Subfield -->
+        <div class="payment-subfield" id="subfield-card">
+          <label style="font-size: 11px; font-weight: 700;">Card Details</label>
+          <input type="text" placeholder="Card Number (16 Digits)" class="form-input-styled" style="margin-bottom: 8px;" maxlength="19">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <input type="text" placeholder="MM/YY" class="form-input-styled">
+            <input type="password" placeholder="CVV" class="form-input-styled" maxlength="4">
+          </div>
+        </div>
+
+        <!-- Cash Subfield -->
+        <div class="payment-subfield" id="subfield-cash">
+          <p style="font-size: 12px; color: var(--text-muted);">Pay directly to driver / delivery agent during product verification or pickup.</p>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; padding: 12px; font-size: 15px; margin-top: 8px;">Confirm & Pay Now →</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- VIEW 5: RETAILER HUB (50/50 SPLIT DASHBOARD) -->
   <main id="retailer-view" class="page-view">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <div>
@@ -634,6 +669,8 @@
     </div>
 
     <div class="retailer-dashboard-grid">
+      
+      <!-- LEFT HALF: RETAILER EARNINGS & STOCK -->
       <div style="background: #FFF; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 20px;">
         <h3 class="serif-font" style="font-size: 18px; margin-bottom: 16px; color: var(--sage-primary);">📊 Store Earnings & Idle Stock</h3>
         
@@ -646,38 +683,79 @@
             <div style="font-size: 11px; color: var(--text-muted);">Platform Comm. (15%)</div>
             <div style="font-size: 20px; font-weight: 800; color: var(--amber-accent);">₹7,470</div>
           </div>
+          <div style="background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--text-muted);">Idle Capacity Utilized</div>
+            <div style="font-size: 20px; font-weight: 800; color: var(--sage-primary);">92%</div>
+          </div>
+          <div style="background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--text-muted);">Idle Stock Units Available</div>
+            <div style="font-size: 20px; font-weight: 800; color: #137333;">4 Units</div>
+          </div>
         </div>
 
         <h4 style="font-size: 14px; margin-bottom: 10px;">Store Inventory Status</h4>
         <table class="data-table">
           <thead>
-            <tr><th>Asset</th><th>Item</th><th>Monthly Rent</th><th>Net Payout</th></tr>
+            <tr>
+              <th>Asset</th>
+              <th>Item</th>
+              <th>Monthly Rent</th>
+              <th>Net Payout</th>
+            </tr>
           </thead>
-          <tbody>
-            <tr><td><code>VC-RANI-SOFA</code></td><td>Living Sofa (Rani)</td><td>₹1,050</td><td style="color:green; font-weight:700;">₹892</td></tr>
-            <tr><td><code>VC-RANI-WASH</code></td><td>Washing Machine (Rani)</td><td>₹800</td><td style="color:green; font-weight:700;">₹680</td></tr>
+          <tbody id="retailer-left-table">
+            <tr>
+              <td><code>VC-RANI-SOFA</code></td>
+              <td>Living Sofa (Rani)</td>
+              <td>₹1,050</td>
+              <td style="color:green; font-weight:700;">₹892</td>
+            </tr>
+            <tr>
+              <td><code>VC-RANI-WASH</code></td>
+              <td>Washing Machine (Rani)</td>
+              <td>₹800</td>
+              <td style="color:green; font-weight:700;">₹680</td>
+            </tr>
           </tbody>
         </table>
       </div>
 
+      <!-- RIGHT HALF: LOGISTICS & SHIFT MANAGEMENT -->
       <div style="background: #FFF; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 20px;">
-        <h3 class="serif-font" style="font-size: 18px; margin-bottom: 16px; color: var(--sage-primary);">🚚 Logistics & Shifts</h3>
+        <h3 class="serif-font" style="font-size: 18px; margin-bottom: 16px; color: var(--sage-primary);">🚚 Logistics & Shifts (Customer Side & Retailer Side)</h3>
         
-        <h4 style="font-size: 14px; margin-bottom: 10px;">Live Operations Queue</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+          <div style="background: var(--teal-light); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--teal-brand); font-weight: 700;">Active Relocation Shifts</div>
+            <div style="font-size: 20px; font-weight: 800; color: var(--teal-brand);" id="active-shifts-count">1 Pending</div>
+          </div>
+          <div style="background: #FFF8E7; padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--amber-hover); font-weight: 700;">Return Pickups</div>
+            <div style="font-size: 20px; font-weight: 800; color: var(--amber-hover);" id="return-pickups-count">0 Scheduled</div>
+          </div>
+        </div>
+
+        <h4 style="font-size: 14px; margin-bottom: 10px;">Live Intra-City Relocation Queue</h4>
         <table class="data-table">
           <thead>
-            <tr><th>Customer</th><th>Action / Route</th><th>Fee Status</th><th>Status</th></tr>
+            <tr>
+              <th>Customer</th>
+              <th>Route</th>
+              <th>Fee Paid</th>
+              <th>Action / Status</th>
+            </tr>
           </thead>
           <tbody id="retailer-right-table">
             <tr>
               <td><strong>Rani</strong></td>
               <td>Gachibowli ➔ Hitech City</td>
-              <td>₹689 (60% Paid)</td>
+              <td>₹689 (60% Adv)</td>
               <td><span class="verify-badge">Driver Assigned</span></td>
             </tr>
           </tbody>
         </table>
       </div>
+
     </div>
   </main>
 
@@ -688,87 +766,73 @@
 
     <table class="data-table">
       <thead>
-        <tr><th>City Hub</th><th>Active Stores</th><th>Live Units</th><th>Monthly GMV</th><th>VCollab Commission (15%)</th></tr>
+        <tr>
+          <th>City Hub</th>
+          <th>Active Retail Stores</th>
+          <th>Live Rented Units</th>
+          <th>Gross Monthly GMV</th>
+          <th>VCollab Commission (15%)</th>
+          <th>Relocation Margin</th>
+        </tr>
       </thead>
       <tbody>
-        <tr><td><strong>Delhi-NCR</strong></td><td>42 Stores</td><td>380 Units</td><td>₹4,56,000</td><td><strong style="color: var(--teal-brand);">₹68,400</strong></td></tr>
-        <tr><td><strong>Hyderabad</strong></td><td>31 Stores</td><td>290 Units</td><td>₹3,48,000</td><td><strong style="color: var(--teal-brand);">₹52,200</strong></td></tr>
+        <tr>
+          <td><strong>Delhi-NCR</strong></td>
+          <td>42 Stores</td>
+          <td>380 Units</td>
+          <td>₹4,56,000</td>
+          <td><strong style="color: var(--teal-brand);">₹68,400</strong></td>
+          <td>₹12,400</td>
+        </tr>
+        <tr>
+          <td><strong>Bengaluru</strong></td>
+          <td>58 Stores</td>
+          <td>510 Units</td>
+          <td>₹6,12,000</td>
+          <td><strong style="color: var(--teal-brand);">₹91,800</strong></td>
+          <td>₹18,200</td>
+        </tr>
+        <tr>
+          <td><strong>Hyderabad</strong></td>
+          <td>31 Stores</td>
+          <td>290 Units</td>
+          <td>₹3,48,000</td>
+          <td><strong style="color: var(--teal-brand);">₹52,200</strong></td>
+          <td>₹9,600</td>
+        </tr>
+        <tr>
+          <td><strong>Mumbai</strong></td>
+          <td>45 Stores</td>
+          <td>410 Units</td>
+          <td>₹5,10,000</td>
+          <td><strong style="color: var(--teal-brand);">₹76,500</strong></td>
+          <td>₹14,100</td>
+        </tr>
+        <tr>
+          <td><strong>Chennai</strong></td>
+          <td>28 Stores</td>
+          <td>240 Units</td>
+          <td>₹2,88,000</td>
+          <td><strong style="color: var(--teal-brand);">₹43,200</strong></td>
+          <td>₹8,100</td>
+        </tr>
+        <tr>
+          <td><strong>Kolkata</strong></td>
+          <td>25 Stores</td>
+          <td>210 Units</td>
+          <td>₹2,52,000</td>
+          <td><strong style="color: var(--teal-brand);">₹37,800</strong></td>
+          <td>₹7,400</td>
+        </tr>
       </tbody>
     </table>
   </main>
 
-  <!-- REUSABLE UNIVERSAL PAYMENT & DELIVERY POPUP MODAL -->
-  <div class="modal-overlay" id="universal-payment-modal">
-    <div class="modal-card">
-      <button class="modal-close" onclick="closeModal('universal-payment-modal')">&times;</button>
-      <div class="verify-badge" id="modal-badge-title">🔒 Secure Gateway</div>
-      <h3 class="serif-font" style="margin-top: 8px; margin-bottom: 4px;" id="payment-modal-title">Complete Checkout</h3>
-      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Provide address details and choose payment method to authorize escrow.</p>
-
-      <form id="universalPaymentForm" onsubmit="handleUniversalPaymentSubmit(event)">
-        
-        <!-- Amount Summary -->
-        <div class="form-group">
-          <label>Payable Amount</label>
-          <input type="text" id="pay-display-amount" readonly class="form-input-styled" style="background: #F4F1EA; font-weight: 800; color: var(--sage-primary); font-size: 16px;">
-        </div>
-
-        <!-- Full Address Area -->
-        <div class="form-group">
-          <label for="fullDeliveryAddress">Full Delivery / Pickup Address *</label>
-          <textarea id="fullDeliveryAddress" rows="3" class="form-input-styled" placeholder="House/Flat No., Building, Street, Area, Pin code" required></textarea>
-        </div>
-
-        <!-- Payment Method Choice -->
-        <div class="form-group">
-          <label>Select Payment Interface *</label>
-          <div class="payment-options-grid">
-            <div class="payment-option-card">
-              <input type="radio" id="payMethodUPI" name="paymentMethodChoice" value="UPI" required onchange="togglePaymentDetailsDisplay()">
-              <label for="payMethodUPI">📱 UPI</label>
-            </div>
-            <div class="payment-option-card">
-              <input type="radio" id="payMethodCard" name="paymentMethodChoice" value="Card" onchange="togglePaymentDetailsDisplay()">
-              <label for="payMethodCard">💳 Card</label>
-            </div>
-            <div class="payment-option-card">
-              <input type="radio" id="payMethodCash" name="paymentMethodChoice" value="Cash" onchange="togglePaymentDetailsDisplay()">
-              <label for="payMethodCash">💵 Cash</label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Dynamic Inputs -->
-        <div class="payment-dynamic-details" id="upiInputBox">
-          <div class="form-group">
-            <label for="upiIdInput">UPI ID / VPA</label>
-            <input type="text" id="upiIdInput" placeholder="username@upi" class="form-input-styled">
-          </div>
-        </div>
-
-        <div class="payment-dynamic-details" id="cardInputBox">
-          <div class="form-group">
-            <label for="cardNumberInput">Card Number</label>
-            <input type="text" id="cardNumberInput" placeholder="4532 •••• •••• 8921" class="form-input-styled">
-          </div>
-        </div>
-
-        <div class="payment-dynamic-details" id="cashInputBox">
-          <div style="font-size: 12px; color: var(--text-muted); background: var(--bg-cream); padding: 10px; border-radius: 6px;">
-            💵 Cash payment will be collected by the logistics partner during delivery or inspection.
-          </div>
-        </div>
-
-        <button type="submit" class="btn-primary" style="width: 100%; padding: 12px; margin-top: 16px; font-size: 14px;">Confirm & Process Order →</button>
-      </form>
-    </div>
-  </div>
-
   <!-- ORDER SUCCESS & QR PASSPORT MODAL -->
   <div class="modal-overlay" id="qr-success-modal">
     <div class="modal-card">
-      <button class="modal-close" onclick="closeModal('qr-success-modal')">&times;</button>
-      <div class="verify-badge">✓ Payment Confirmed & Escrow Locked</div>
+      <button class="modal-close" onclick="closeModal('qr-success-modal')">×</button>
+      <div class="verify-badge">✓ Order Confirmed & Escrow Locked</div>
       <h2 class="serif-font" style="margin-top: 12px; font-size: 22px;">Digital Unit Passport Generated</h2>
       <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Scan this QR code on physical delivery to verify asset quality and release escrow.</p>
 
@@ -779,8 +843,8 @@
 
       <div style="background: var(--bg-cream); padding: 12px; border-radius: 8px; text-align: left; font-size: 12px; margin-bottom: 20px;">
         <div><strong>Status:</strong> Order Placed via VCollab Local Hub</div>
-        <div><strong>Address Registered:</strong> <span id="qr-address-display">-</span></div>
-        <div><strong>Payment Type:</strong> <span id="qr-paymethod-display">-</span></div>
+        <div><strong>Condition Log:</strong> Inspected & Tagged (100% Verified)</div>
+        <div><strong>Deposit Status:</strong> ₹0 Held Safely</div>
       </div>
 
       <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="simulateScanVerification()">📱 Simulate Delivery Handover Scan</button>
@@ -790,58 +854,14 @@
   <script>
     // METROPOLITAN CATALOGUE DATABASE
     const PRODUCTS = [
-      {
-        id: 'VC-HYD-BED-1',
-        title: 'Teak Finish Queen Storage Bed',
-        category: 'bed',
-        city: 'Hyderabad',
-        shop: 'Sharma Furnitures',
-        locality: 'Gachibowli',
-        price: 1000,
-        originalPrice: 1300,
-        discount: '23% OFF',
-        image: 'https://images.unsplash.com/photo-1540518614846-7ede433c5172?auto=format&fit=crop&w=600&q=80',
-        description: 'Premium wooden finish queen bed featuring sturdy frame.'
-      },
-      {
-        id: 'VC-HYD-FUR-2',
-        title: 'Modern Living Room Sofa',
-        category: 'sofa',
-        city: 'Hyderabad',
-        shop: 'Sharma Furnitures',
-        locality: 'Gachibowli',
-        price: 1050,
-        originalPrice: 1350,
-        discount: '22% OFF',
-        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80',
-        description: 'Comfortable 3-seater sofa ideal for modern living rooms.'
-      },
-      {
-        id: 'VC-HYD-APP-2',
-        title: 'Fully Automatic Top Load Washer',
-        category: 'appliances',
-        city: 'Hyderabad',
-        shop: 'Sharma Furnitures',
-        locality: 'Gachibowli',
-        price: 800,
-        originalPrice: 1000,
-        discount: '20% OFF',
-        image: 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80',
-        description: 'Powerful laundry washer with smart agitation technology.'
-      },
-      {
-        id: 'VC-HYD-APP-1',
-        title: '1.5 Ton Split Air Conditioner',
-        category: 'appliances',
-        city: 'Hyderabad',
-        shop: 'Hitech Electronics',
-        locality: 'Hitech City',
-        price: 800,
-        originalPrice: 1100,
-        discount: '27% OFF',
-        image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=600&q=80',
-        description: 'Energy saving silent inverter split AC with copper condenser.'
-      }
+      { id: 'VC-HYD-BED-1', title: 'Teak Finish Queen Storage Bed', category: 'bed', city: 'Hyderabad', shop: 'Sharma Furnitures', locality: 'Gachibowli', price: 1000, originalPrice: 1300, discount: '23% OFF', image: 'https://images.unsplash.com/photo-1540518614846-7ede433c5172?auto=format&fit=crop&w=600&q=80', description: 'Premium wooden finish queen bed featuring sturdy frame.' },
+      { id: 'VC-HYD-FUR-2', title: 'Modern Living Room Sofa', category: 'sofa', city: 'Hyderabad', shop: 'Sharma Furnitures', locality: 'Gachibowli', price: 1050, originalPrice: 1350, discount: '22% OFF', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80', description: 'Comfortable 3-seater sofa ideal for modern living rooms.' },
+      { id: 'VC-HYD-APP-2', title: 'Fully Automatic Top Load Washer', category: 'appliances', city: 'Hyderabad', shop: 'Sharma Furnitures', locality: 'Gachibowli', price: 800, originalPrice: 1000, discount: '20% OFF', image: 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80', description: 'Powerful laundry washer with smart agitation technology.' },
+      { id: 'VC-HYD-APP-1', title: '1.5 Ton Split Air Conditioner', category: 'appliances', city: 'Hyderabad', shop: 'Hitech Electronics', locality: 'Hitech City', price: 800, originalPrice: 1100, discount: '27% OFF', image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=600&q=80', description: 'Energy saving silent inverter split AC with copper condenser.' },
+      { id: 'VC-DEL-SOF-1', title: 'Modern Fabric Living Sofa', category: 'sofa', city: 'Delhi-NCR', shop: 'Delhi Furniture Mart', locality: 'Janakpuri', price: 1050, originalPrice: 1350, discount: '22% OFF', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80', description: 'Comfortable plush fabric sofa ideal for modern Delhi living rooms.' },
+      { id: 'VC-DEL-APP-1', title: 'Fully Automatic Washing Machine', category: 'appliances', city: 'Delhi-NCR', shop: 'Capital Electronics Hub', locality: 'Janakpuri', price: 800, originalPrice: 1000, discount: '20% OFF', image: 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80', description: 'Efficient top-load washing machine with rapid spin dry.' },
+      { id: 'VC-MUM-SOF-1', title: 'Luxury Fabric Lounge Sofa', category: 'sofa', city: 'Mumbai', shop: 'Bandra Living Solutions', locality: 'Bandra', price: 1100, originalPrice: 1400, discount: '21% OFF', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80', description: 'Stylish sofa unit crafted for modern Mumbai apartments.' },
+      { id: 'VC-BLR-SOF-1', title: 'Minimalist Modern Sofa', category: 'sofa', city: 'Bengaluru', shop: 'Koramangala Decor', locality: 'Koramangala', price: 1000, originalPrice: 1300, discount: '23% OFF', image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=600&q=80', description: 'Elegantly proportioned sofa built for tech workspace homes.' }
     ];
 
     let currentCity = 'Hyderabad';
@@ -851,36 +871,58 @@
     let isCouponApplied = false;
     let isReinstallSelected = true;
     let currentDemoMode = 'customer';
-    
-    // Active Payment Transaction State
-    let activePaymentContext = {
-      title: 'Checkout',
+    let selectedReturnItem = null;
+
+    // ACTIVE TRANSACTION STATE FOR REUSABLE PAYMENT MODAL
+    let currentPaymentContext = {
+      type: 'cart', // 'cart' | 'relocation' | 'return'
+      title: 'Checkout Cart',
       amount: 0,
-      type: 'cart'
+      metadata: {}
     };
 
     // CAROUSEL LOGIC
     let currentSlideIndex = 0;
     const totalSlides = 3;
+    let autoSlideTimer = null;
 
     function updateCarousel() {
       const track = document.getElementById('carouselTrack');
       const dots = document.querySelectorAll('.carousel-dots .dot');
       if(!track) return;
       track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
-      dots.forEach((dot, idx) => {
-        dot.classList.toggle('active', idx === currentSlideIndex);
-      });
+      dots.forEach((dot, idx) => dot.classList.toggle('active', idx === currentSlideIndex));
     }
 
     function moveSlide(direction) {
       currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
       updateCarousel();
+      resetAutoSlideTimer();
     }
 
     function goToSlide(index) {
       currentSlideIndex = index;
       updateCarousel();
+      resetAutoSlideTimer();
+    }
+
+    function startAutoSlideTimer() {
+      autoSlideTimer = setInterval(() => {
+        currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
+        updateCarousel();
+      }, 5000);
+    }
+
+    function resetAutoSlideTimer() {
+      clearInterval(autoSlideTimer);
+      startAutoSlideTimer();
+    }
+
+    const carouselElem = document.getElementById('heroCarousel');
+    if(carouselElem) {
+      carouselElem.addEventListener('mouseenter', () => clearInterval(autoSlideTimer));
+      carouselElem.addEventListener('mouseleave', () => startAutoSlideTimer());
+      startAutoSlideTimer();
     }
 
     function scrollToCatalogAndFilter(categoryKey) {
@@ -888,13 +930,13 @@
       document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // MARKETPLACE RENDER
+    // FILTER & SEARCH LOGIC
     function getFilteredProducts() {
       return PRODUCTS.filter(p => {
         const matchesCity = (p.city === currentCity);
         const matchesCat = (currentCategory === 'all' || p.category === currentCategory);
         const q = searchQuery.toLowerCase().trim();
-        const matchesSearch = q === '' || p.title.toLowerCase().includes(q) || p.shop.toLowerCase().includes(q);
+        const matchesSearch = q === '' || p.title.toLowerCase().includes(q) || p.shop.toLowerCase().includes(q) || p.category.toLowerCase().includes(q) || p.description.toLowerCase().includes(q);
         return matchesCity && matchesCat && matchesSearch;
       });
     }
@@ -905,13 +947,19 @@
       const items = getFilteredProducts();
 
       if (items.length === 0) {
-        grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; background:#FFF;">No products match current selection.</div>`;
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #FFF; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <div style="font-size: 32px; margin-bottom: 8px;">🏬</div>
+            <h3 class="serif-font" style="font-size: 18px; margin-bottom: 4px;">No products match your current selection</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Try selecting another category or switching to a different city from the top bar.</p>
+          </div>
+        `;
         return;
       }
 
       grid.innerHTML = items.map(item => `
         <div class="product-card">
-          <img src="${item.image}" class="product-thumb">
+          <img src="${item.image}" class="product-thumb" alt="${item.title}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';">
           <div class="product-info">
             <div class="shop-tag">STORE: ${item.shop} (${item.locality})</div>
             <div class="product-title">${item.title}</div>
@@ -929,11 +977,24 @@
       `).join('');
     }
 
-    function handleCityChange(city) { currentCity = city; renderMarketplace(); populateRelocateProductDropdown(); }
-    function handleSearch(q) { searchQuery = q; renderMarketplace(); }
-    function filterCategory(cat, elem) {
+    function handleCityChange(selectedCity) {
+      currentCity = selectedCity;
+      renderMarketplace();
+      populateRelocateProductDropdown();
+    }
+
+    function handleSearch(query) {
+      searchQuery = query;
+      renderMarketplace();
+    }
+
+    function filterCategory(cat, element) {
       document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
-      if(elem) elem.classList.add('active');
+      if(element) element.classList.add('active');
+      else {
+        const catTarget = document.getElementById('cat-' + cat);
+        if(catTarget) catTarget.classList.add('active');
+      }
       currentCategory = cat;
       renderMarketplace();
     }
@@ -941,22 +1002,34 @@
     function openProductDetail(id) {
       const item = PRODUCTS.find(p => p.id === id);
       const container = document.getElementById('product-detail-container');
+      
       container.innerHTML = `
         <div>
-          <img src="${item.image}" class="main-detail-img">
+          <img src="${item.image}" class="main-detail-img" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';">
         </div>
         <div>
-          <div class="shop-tag">${item.shop} (${item.city})</div>
-          <h1 class="serif-font" style="font-size: 26px;">${item.title}</h1>
-          <div class="price-main" style="font-size: 28px; margin: 10px 0;">₹${item.price}/mo</div>
+          <div class="shop-tag" style="font-size: 13px;">FULFILLED BY: ${item.shop} (${item.locality}, ${item.city})</div>
+          <h1 class="serif-font" style="font-size: 26px; margin: 6px 0 12px;">${item.title}</h1>
+          <div class="pricing-row" style="font-size: 24px;">
+            <span class="price-main" style="font-size: 28px;">₹${item.price}/mo</span>
+            <span class="price-strike">₹${item.originalPrice}</span>
+            <span class="discount-badge">${item.discount}</span>
+          </div>
           <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">${item.description}</p>
-          <button class="btn-primary" style="width: 100%; padding: 14px;" onclick="addToCartDirect('${item.id}'); switchView('cart-view');">Add to Cart & Checkout →</button>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 12px; font-weight: 700;">TENURE OPTION</label>
+            <div class="variant-chips">
+              <div class="variant-chip active">6 Months (Best Rate)</div>
+              <div class="variant-chip">3 Months</div>
+              <div class="variant-chip">12 Months</div>
+            </div>
+          </div>
+          <button class="btn-primary" style="width: 100%; padding: 14px; font-size: 15px;" onclick="addToCartDirect('${item.id}'); switchView('cart-view');">Add to Cart & Proceed →</button>
         </div>
       `;
       switchView('product-detail-view');
     }
 
-    // CART
     function addToCartDirect(id) {
       const item = PRODUCTS.find(p => p.id === id);
       const existing = cart.find(c => c.id === id);
@@ -976,11 +1049,11 @@
       } else {
         list.innerHTML = cart.map(i => `
           <div class="cart-item">
-            <img src="${i.image}" class="cart-item-img">
+            <img src="${i.image}" class="cart-item-img" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';">
             <div style="flex-grow:1;">
               <div style="font-weight:700; font-size:14px;">${i.title}</div>
-              <div style="font-size:12px; color:var(--text-muted);">Store: ${i.shop}</div>
-              <div style="font-weight:800; color:var(--sage-primary);">₹${i.price}/mo</div>
+              <div style="font-size:12px; color:var(--text-muted);">Store: ${i.shop} (${i.city})</div>
+              <div style="font-weight:800; color:var(--sage-primary); margin-top:4px;">₹${i.price}/mo</div>
             </div>
             <div class="qty-counter">
               <button class="qty-btn" onclick="changeQty('${i.id}', -1)">-</button>
@@ -1007,35 +1080,46 @@
         if(item.qty <= 0) cart = cart.filter(c => c.id !== id);
       }
       updateCartUI();
+      populateRelocateProductDropdown();
     }
 
-    function applyCoupon() { isCouponApplied = true; alert('Coupon FURMAX Applied!'); updateCartUI(); }
+    function applyCoupon() {
+      isCouponApplied = true;
+      alert('Coupon FURMAX Applied! 18% Discount added.');
+      updateCartUI();
+    }
 
-    // RELOCATION LOGISTICS
+    // RELOCATION FEE CALCULATION
     function toggleReinstallationFee(isChecked) {
       isReinstallSelected = isChecked;
-      document.getElementById('reinstall-fee-display').innerText = isChecked ? '₹350' : '₹0';
+      document.getElementById('reinstall-fee-display').innerText = isChecked ? '₹350' : '₹0 (Skipped)';
       updateRelocationTotalFee();
     }
 
     function updateRelocationTotalFee() {
-      const total = 799 + (isReinstallSelected ? 350 : 0);
+      const baseFee = 799;
+      const reinstallFee = isReinstallSelected ? 350 : 0;
+      const total = baseFee + reinstallFee;
       const advance = Math.round(total * 0.60);
+      const post = total - advance;
+
       document.getElementById('relocate-total-fee').innerText = `₹${total}`;
       document.getElementById('relocate-advance-fee').innerText = `₹${advance}`;
+      document.getElementById('relocate-post-fee').innerText = `₹${post}`;
     }
 
     function populateRelocateProductDropdown() {
       const select = document.getElementById('relocate-product-select');
       if(!select) return;
+
       if(currentDemoMode === 'rani') {
         select.innerHTML = `
-          <option value="VC-RANI-SOFA">Luxury 3-Seater Living Sofa (Sharma Furnitures)</option>
-          <option value="VC-RANI-WASH">Fully Automatic Washing Machine (Sharma Furnitures)</option>
+          <option value="VC-RANI-SOFA">Luxury 3-Seater Living Sofa (Sharma Furnitures, Gachibowli)</option>
+          <option value="VC-RANI-WASH">Fully Automatic Washing Machine (Sharma Furnitures, Gachibowli)</option>
         `;
       } else {
-        const items = cart.length > 0 ? cart : PRODUCTS;
-        select.innerHTML = items.map(p => `<option value="${p.id}">${p.title} (${p.city})</option>`).join('');
+        const itemsAvailable = cart.length > 0 ? cart : PRODUCTS.filter(p => p.city === currentCity);
+        select.innerHTML = itemsAvailable.map(p => `<option value="${p.id}">${p.title} (${p.city})</option>`).join('');
       }
     }
 
@@ -1043,96 +1127,191 @@
       switchView('relocate-view');
       document.getElementById('relocate-current-addr').value = 'Gachibowli, Hyderabad';
       document.getElementById('relocate-dest-addr').value = 'Hitech City, Hyderabad';
+      const select = document.getElementById('relocate-product-select');
+      if(select) select.value = id;
     }
 
-    // UNIVERSAL PAYMENT POPUP SYSTEM
-    function openUniversalPaymentModal(title, amount, sellerShop, defaultAddr = '', type = 'generic') {
-      activePaymentContext = { title, amount, sellerShop, type };
-      document.getElementById('payment-modal-title').innerText = title;
-      document.getElementById('pay-display-amount').value = `₹${amount}`;
-      document.getElementById('fullDeliveryAddress').value = defaultAddr || (currentDemoMode === 'rani' ? 'Gachibowli, Hyderabad' : '');
+    function openReturnModal(id, name, shop) {
+      selectedReturnItem = { id, name, shop };
+      document.getElementById('return-item-title-display').innerText = `Returning: ${name} (Rented from ${shop})`;
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById('return-date-input').value = tomorrow.toISOString().split('T')[0];
+      document.getElementById('return-modal').style.display = 'flex';
+    }
+
+    function openRelocationModal() {
+      const currentAddr = document.getElementById('relocate-current-addr').value;
+      const destAddr = document.getElementById('relocate-dest-addr').value;
+      if (!destAddr.trim()) return alert('Please enter your Destination Relocation Locality address.');
+
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById('relocate-date-input').value = tomorrow.toISOString().split('T')[0];
+      document.getElementById('relocation-modal').style.display = 'flex';
+    }
+
+    // UNIFIED PAYMENT & ADDRESS MODAL TRIGGERS
+    function togglePaymentSubfields() {
+      document.querySelectorAll('.payment-subfield').forEach(el => el.classList.remove('active'));
+      const selected = document.querySelector('input[name="paymentMethod"]:checked');
+      if(selected) {
+        const target = document.getElementById(`subfield-${selected.value.toLowerCase()}`);
+        if(target) target.classList.add('active');
+      }
+    }
+
+    function openUnifiedPaymentModal(title, subtitle, amount, defaultAddr, contextType, metadata = {}) {
+      currentPaymentContext = { type: contextType, title, amount, metadata };
+      document.getElementById('unified-modal-title').innerText = title;
+      document.getElementById('unified-modal-subtitle').innerText = subtitle;
+      document.getElementById('unified-modal-amount').innerText = `₹${amount}`;
+      document.getElementById('unified-address-input').value = defaultAddr || '';
+      document.getElementById('unified-payment-form').reset();
+      document.querySelectorAll('.payment-subfield').forEach(el => el.classList.remove('active'));
       
-      document.getElementById('universal-payment-modal').style.display = 'flex';
+      document.getElementById('unified-payment-modal').style.display = 'flex';
     }
 
-    function triggerCartCheckoutPayment() {
-      if(cart.length === 0) return alert('Your Cart is empty!');
+    function triggerCheckoutPayment() {
+      if(cart.length === 0) return alert('Your cart is empty!');
       const baseTotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
-      const finalTotal = baseTotal - (isCouponApplied ? Math.round(baseTotal * 0.18) : 0);
-      openUniversalPaymentModal('Cart Order Payment', finalTotal, 'VCollab Partner Network', '', 'cart');
+      const discount = isCouponApplied ? Math.round(baseTotal * 0.18) : 0;
+      const finalTotal = baseTotal - discount;
+
+      openUnifiedPaymentModal(
+        'Complete Rental Checkout',
+        'Enter delivery address and select payment method',
+        finalTotal,
+        currentDemoMode === 'rani' ? 'Gachibowli, Hyderabad' : '',
+        'cart'
+      );
     }
 
-    function triggerRelocationPayment() {
-      const total = 799 + (isReinstallSelected ? 350 : 0);
+    function proceedToRelocationPayment() {
+      const dateVal = document.getElementById('relocate-date-input').value;
+      if (!dateVal) return alert('Please choose a relocation date.');
+      
+      closeModal('relocation-modal');
+      const destAddr = document.getElementById('relocate-dest-addr').value;
+      const baseFee = 799;
+      const reinstallFee = isReinstallSelected ? 350 : 0;
+      const total = baseFee + reinstallFee;
       const advance = Math.round(total * 0.60);
-      const dest = document.getElementById('relocate-dest-addr').value;
-      openUniversalPaymentModal('Relocation Advance (60%)', advance, 'Logistics Hub', dest, 'relocate');
+
+      openUnifiedPaymentModal(
+        'Relocation 60% Advance Payment',
+        `Scheduled Date: ${dateVal} | Destination: ${destAddr}`,
+        advance,
+        destAddr,
+        'relocation',
+        { date: dateVal, dest: destAddr, totalFee: total }
+      );
     }
 
-    function togglePaymentDetailsDisplay() {
-      document.querySelectorAll('.payment-dynamic-details').forEach(d => d.classList.remove('active'));
-      const selected = document.querySelector('input[name="paymentMethodChoice"]:checked').value;
-      if(selected === 'UPI') document.getElementById('upiInputBox').classList.add('active');
-      if(selected === 'Card') document.getElementById('cardInputBox').classList.add('active');
-      if(selected === 'Cash') document.getElementById('cashInputBox').classList.add('active');
+    function proceedToReturnPayment() {
+      const dateVal = document.getElementById('return-date-input').value;
+      if (!dateVal) return alert('Please choose a return pickup date.');
+
+      closeModal('return-modal');
+      openUnifiedPaymentModal(
+        'Confirm Return Pickup (Free)',
+        `Returning: ${selectedReturnItem.name} on ${dateVal}`,
+        0,
+        currentDemoMode === 'rani' ? 'Gachibowli, Hyderabad' : '',
+        'return',
+        { date: dateVal, item: selectedReturnItem }
+      );
     }
 
-    function handleUniversalPaymentSubmit(event) {
-      event.preventDefault();
-      const addr = document.getElementById('fullDeliveryAddress').value;
-      const method = document.querySelector('input[name="paymentMethodChoice"]:checked').value;
+    function handleUnifiedPaymentSubmit(e) {
+      e.preventDefault();
+      const address = document.getElementById('unified-address-input').value;
+      const method = document.querySelector('input[name="paymentMethod"]:checked').value;
 
-      closeModal('universal-payment-modal');
+      closeModal('unified-payment-modal');
 
-      // Update QR Passport Info
-      document.getElementById('qr-address-display').innerText = addr;
-      document.getElementById('qr-paymethod-display').innerText = method;
+      if(currentPaymentContext.type === 'cart') {
+        const modal = document.getElementById('qr-success-modal');
+        modal.style.display = 'flex';
+        const qrTarget = document.getElementById('qrcode');
+        qrTarget.innerHTML = '';
+        const sampleItem = cart[0] || PRODUCTS[0];
+        document.getElementById('qr-item-code').innerText = sampleItem.id;
 
-      const qrTarget = document.getElementById('qrcode');
-      qrTarget.innerHTML = '';
-      new QRCode(qrTarget, { text: `https://vcollab.app/order?ref=${Date.now()}`, width: 150, height: 150 });
-
-      document.getElementById('qr-success-modal').style.display = 'flex';
-
-      // Update Retailer Shift Queue live
-      if(activePaymentContext.type === 'relocate') {
+        new QRCode(qrTarget, {
+          text: `https://vcollab.app/verify?id=${sampleItem.id}`,
+          width: 160,
+          height: 160
+        });
+      } else if(currentPaymentContext.type === 'relocation') {
+        alert(`Relocation Shift Booked Successfully!\n\nAddress: ${address}\nPayment Method: ${method}\nAdvance Paid: ₹${currentPaymentContext.amount}\n\nOur relocation driver will reach out shortly.`);
+        
+        // Update Retailer Dashboard Table
         const rightTable = document.getElementById('retailer-right-table');
         if(rightTable) {
           rightTable.innerHTML += `
             <tr>
               <td><strong>${currentDemoMode === 'rani' ? 'Rani' : 'Customer'}</strong></td>
-              <td>Shift to ${addr}</td>
-              <td>₹${activePaymentContext.amount} (${method})</td>
-              <td><span class="verify-badge">Scheduled</span></td>
+              <td>Shift to ${currentPaymentContext.metadata.dest}</td>
+              <td>₹${currentPaymentContext.amount} (${method})</td>
+              <td><span class="verify-badge">Driver Assigned</span></td>
             </tr>
           `;
         }
+        if(currentDemoMode === 'rani') switchView('rani-orders-view');
+        else switchView('customer-view');
+
+      } else if(currentPaymentContext.type === 'return') {
+        alert(`Return Pickup Confirmed!\n\nPickup Address: ${address}\nItem: ${currentPaymentContext.metadata.item.name}\nScheduled Date: ${currentPaymentContext.metadata.date}`);
+        
+        const rightTable = document.getElementById('retailer-right-table');
+        if(rightTable) {
+          rightTable.innerHTML += `
+            <tr>
+              <td><strong>${currentDemoMode === 'rani' ? 'Rani' : 'Customer'}</strong></td>
+              <td>Return Pickup (${currentPaymentContext.metadata.item.name})</td>
+              <td>Free</td>
+              <td><span class="verify-badge" style="background:#FFF8E7; color:var(--amber-hover);">Pickup Scheduled</span></td>
+            </tr>
+          `;
+          document.getElementById('return-pickups-count').innerText = '1 Scheduled';
+        }
+        if(currentDemoMode === 'rani') switchView('rani-orders-view');
+        else switchView('customer-view');
       }
     }
 
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
 
     function simulateScanVerification() {
-      alert('QR Verification Successful! Asset Handover Completed.');
+      alert('QR Code Scanned Successfully!\n\nDigital Passport Verified:\n- Item Condition: 100% Intact\n- Escrow Released to Partner Store\n- Status: Active Handover Completed');
       closeModal('qr-success-modal');
-      if(activePaymentContext.type === 'cart') cart = [];
+      cart = [];
       updateCartUI();
       switchView('customer-view');
     }
 
-    // VIEW & MODE SWITCHING
     function switchView(viewId) {
       document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
       document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      
       document.getElementById(viewId).classList.add('active');
-      if(viewId === 'relocate-view') populateRelocateProductDropdown();
+      if(viewId === 'relocate-view') {
+        document.getElementById('nav-relocate').classList.add('active');
+        populateRelocateProductDropdown();
+      } else if(viewId === 'rani-orders-view') {
+        document.getElementById('nav-rani-orders').classList.add('active');
+      }
     }
 
     function setDemoMode(mode) {
       currentDemoMode = mode;
       document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
       const raniLink = document.getElementById('nav-rani-orders-link');
-
+      
       if(mode === 'customer') {
         document.getElementById('mode-cust').classList.add('active');
         if(raniLink) raniLink.style.display = 'none';
@@ -1152,6 +1331,7 @@
       }
     }
 
+    // INITIAL SETUP
     renderMarketplace();
     updateRelocationTotalFee();
   </script>
