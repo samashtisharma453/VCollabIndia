@@ -1,343 +1,1159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Payment Interface Demo</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>VCollab India — Hyperlocal Furniture & Appliance Rentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-    /* Reset & Base Styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    :root {
+      --sage-primary: #2D4A3E;
+      --sage-dark: #1E332A;
+      --sage-light: #4A6E5E;
+      --amber-accent: #E8A33D;
+      --amber-hover: #D4912D;
+      --bg-cream: #FAF7F2;
+      --card-white: #FFFFFF;
+      --text-charcoal: #1F2320;
+      --text-muted: #626863;
+      --border-light: #E2DDD5;
+      --teal-brand: #008080;
+      --teal-light: #E6F2F2;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-soft: 0 10px 30px rgba(0,0,0,0.05);
+      --shadow-card: 0 4px 16px rgba(0,0,0,0.06);
     }
 
-    body {
-      background-color: #f4f6f9;
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--bg-cream); color: var(--text-charcoal); line-height: 1.5; }
+    h1, h2, h3, .serif-font { font-family: 'Fraunces', serif; }
 
-    .btn {
+    /* Top Navigation Bar */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250, 247, 242, 0.98);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-light);
       padding: 12px 24px;
-      border: none;
-      border-radius: 6px;
-      background-color: #0066cc;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s ease;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .brand-group { display: flex; align-items: center; gap: 16px; }
+    .brand-logo {
+      font-size: 22px; font-weight: 800; color: var(--sage-primary);
+      text-decoration: none; display: flex; align-items: center; gap: 4px; cursor: pointer; white-space: nowrap;
+    }
+    .brand-logo span { color: var(--amber-accent); }
+
+    .location-dropdown-wrapper {
+      display: flex; align-items: center; gap: 6px;
+      background: #FFFFFF; border: 1px solid var(--border-light);
+      padding: 6px 12px; border-radius: 50px; font-size: 13px; font-weight: 500;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03); transition: all 0.2s;
+    }
+    .location-dropdown-wrapper:hover { border-color: var(--sage-primary); }
+    .location-select {
+      border: none; outline: none; background: transparent;
+      font-size: 13px; font-weight: 600; color: var(--text-charcoal); cursor: pointer;
     }
 
-    .btn:hover {
-      background-color: #0052a3;
+    .nav-search-bar {
+      display: flex; align-items: center; background: #FFFFFF;
+      border: 1px solid var(--border-light); border-radius: 50px;
+      padding: 6px 14px; flex-grow: 1; max-width: 320px; gap: 8px;
+    }
+    .nav-search-bar input {
+      border: none; outline: none; width: 100%; font-size: 13px; background: transparent;
     }
 
-    /* Modal Overlay */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
+    .nav-links { display: flex; gap: 20px; list-style: none; align-items: center; }
+    .nav-links a {
+      text-decoration: none; color: var(--text-charcoal); font-weight: 500; font-size: 14px;
+      transition: color 0.2s; cursor: pointer; white-space: nowrap;
+    }
+    .nav-links a.active, .nav-links a:hover { color: var(--sage-primary); font-weight: 600; }
+
+    .nav-actions { display: flex; align-items: center; gap: 14px; }
+    
+    .cart-btn-nav {
+      position: relative; background: var(--teal-brand); color: #FFF;
+      border: none; padding: 8px 16px; border-radius: 50px; font-weight: 600;
+      font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+    }
+    .cart-badge {
+      background: var(--amber-accent); color: var(--text-charcoal);
+      border-radius: 50%; width: 20px; height: 20px; font-size: 11px;
+      display: flex; align-items: center; justify-content: center; font-weight: 700;
+    }
+
+    .view-switcher {
+      background: #EAE5DC; padding: 3px; border-radius: 50px; display: flex; gap: 2px;
+    }
+    .view-btn {
+      border: none; background: transparent; padding: 6px 14px; border-radius: 50px;
+      font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+    }
+    .view-btn.active { background: var(--sage-primary); color: #FFF; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+
+    /* HERO CAROUSEL */
+    .hero-carousel {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      overflow: hidden;
+      background: var(--sage-dark);
+    }
+    .carousel-track {
+      display: flex;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      z-index: 1000;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     }
-
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* Modal Container */
-    .modal-container {
-      background: #ffffff;
-      width: 100%;
-      max-width: 480px;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      transform: translateY(-20px);
-      transition: transform 0.3s ease;
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
       position: relative;
-    }
-
-    .modal-overlay.active .modal-container {
-      transform: translateY(0);
-    }
-
-    .modal-header {
+      background-size: cover;
+      background-position: center;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #eef0f3;
-      padding-bottom: 12px;
-      margin-bottom: 20px;
     }
-
-    .modal-header h3 {
-      font-size: 18px;
-      color: #1a1a1a;
-    }
-
-    .close-btn {
-      background: none;
-      border: none;
-      font-size: 22px;
-      color: #888;
-      cursor: pointer;
-    }
-
-    .close-btn:hover {
-      color: #333;
-    }
-
-    /* Form Styles */
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #444;
-      margin-bottom: 6px;
-    }
-
-    .form-group textarea,
-    .form-group input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .form-group textarea:focus,
-    .form-group input:focus {
-      border-color: #0066cc;
-    }
-
-    /* Payment Option Selectors */
-    .payment-options {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 8px;
-    }
-
-    .payment-option {
-      position: relative;
-    }
-
-    .payment-option input[type="radio"] {
+    .slide-overlay {
       position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.05) 100%);
     }
-
-    .payment-option label {
+    .slide-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 8%;
+      max-width: 680px;
+      color: #FFFFFF;
+    }
+    .slide-headline {
+      font-size: 46px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .slide-subheadline {
+      font-size: 18px;
+      margin-bottom: 28px;
+      color: #E2DDD5;
+      font-weight: 400;
+    }
+    .cta-pill-btn {
+      display: inline-block;
+      background: #FFFFFF;
+      color: var(--sage-primary);
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .cta-pill-btn:hover {
+      background: var(--amber-accent);
+      color: var(--text-charcoal);
+      transform: translateY(-2px);
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #FFF;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 12px 8px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
+      font-size: 22px;
       cursor: pointer;
-      font-weight: 500;
-      color: #555;
-      transition: all 0.2s ease;
-      text-align: center;
+      transition: all 0.2s;
+    }
+    .carousel-arrow:hover {
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--sage-primary);
+    }
+    .carousel-arrow.prev { left: 24px; }
+    .carousel-arrow.next { right: 24px; }
+    .carousel-dots {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .dot.active {
+      background: #FFFFFF;
+      width: 32px;
+      border-radius: 10px;
     }
 
-    .payment-option input[type="radio"]:checked + label {
-      border-color: #0066cc;
-      background-color: #f0f7ff;
-      color: #0066cc;
-    }
-
-    /* Dynamic Payment Method Input Fields */
-    .payment-details {
-      margin-top: 14px;
-      display: none;
-    }
-
-    .payment-details.active {
-      display: block;
-    }
-
-    .submit-btn {
-      width: 100%;
-      margin-top: 20px;
-      padding: 12px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 6px;
+    /* Section Sub-heading */
+    .section-subheading {
       font-size: 16px;
       font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
+      color: var(--text-charcoal);
+      margin-top: 24px;
+      margin-bottom: 8px;
+      letter-spacing: -0.2px;
     }
 
-    .submit-btn:hover {
-      background-color: #218838;
+    /* Page Views Container */
+    .page-view { display: none; padding: 24px 5%; max-width: 1280px; margin: 0 auto; }
+    .page-view.active { display: block; }
+
+    /* Category Navigation Grid */
+    .category-scroll {
+      display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: thin; margin-top: 12px;
     }
+    .category-card {
+      min-width: 110px; background: var(--card-white); border: 1px solid var(--border-light);
+      border-radius: var(--radius-md); padding: 14px 10px; text-align: center;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .category-card:hover, .category-card.active {
+      border-color: var(--teal-brand); background: var(--teal-light); transform: translateY(-2px);
+    }
+    .category-icon { font-size: 28px; margin-bottom: 6px; }
+    .category-title { font-size: 13px; font-weight: 600; }
+
+    /* Marketplace Layout */
+    .product-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 20px;
+    }
+    .product-card {
+      background: var(--card-white); border: 1px solid var(--border-light);
+      border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);
+      transition: transform 0.2s; display: flex; flex-direction: column;
+    }
+    .product-card:hover { transform: translateY(-4px); }
+    .product-thumb { width: 100%; height: 210px; object-fit: cover; background: #FFF; padding: 0; }
+    .product-info { padding: 16px; display: flex; flex-direction: column; flex-grow: 1; }
+    .shop-tag { font-size: 11px; font-weight: 700; color: var(--teal-brand); text-transform: uppercase; margin-bottom: 4px; }
+    .product-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text-charcoal); line-height: 1.3; }
+    .pricing-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px; }
+    .price-main { font-size: 20px; font-weight: 800; color: var(--sage-primary); }
+    .price-strike { text-decoration: line-through; color: var(--text-muted); font-size: 13px; }
+    .discount-badge { background: #E6F4EA; color: #137333; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; }
+
+    .card-actions { margin-top: auto; display: flex; gap: 8px; }
+    .btn-primary {
+      flex: 1; background: var(--teal-brand); color: #FFF; border: none; padding: 10px;
+      border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #006666; }
+    .btn-secondary {
+      background: transparent; border: 1px solid var(--border-light); color: var(--text-charcoal);
+      padding: 10px 14px; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer;
+    }
+
+    /* Product Detail View */
+    .product-detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; background: #FFF; padding: 24px; border-radius: var(--radius-lg); }
+    .main-detail-img { width: 100%; height: 380px; object-fit: cover; border-radius: var(--radius-md); background: #FAF7F2; }
+    .gallery-thumbs { display: flex; gap: 10px; margin-top: 12px; }
+    .gallery-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; cursor: pointer; }
+    .gallery-thumb.active { border-color: var(--teal-brand); }
+
+    .variant-chips { display: flex; gap: 10px; margin: 12px 0; }
+    .variant-chip { border: 1px solid var(--border-light); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; }
+    .variant-chip.active { border-color: var(--teal-brand); background: var(--teal-light); color: var(--teal-brand); }
+
+    /* Cart Page */
+    .cart-container { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 28px; }
+    .cart-box { background: #FFF; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 20px; }
+    .cart-item { display: flex; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border-light); margin-bottom: 16px; }
+    .cart-item-img { width: 90px; height: 90px; object-fit: cover; border-radius: var(--radius-sm); background: #FAF7F2; }
+    .qty-counter { display: flex; align-items: center; border: 1px solid var(--border-light); border-radius: 50px; padding: 2px 8px; width: fit-content; margin-top: 8px; }
+    .qty-btn { border: none; background: none; font-size: 16px; font-weight: 700; padding: 0 8px; cursor: pointer; }
+
+    .coupon-box { background: #FFF8E7; border: 1px dashed var(--amber-accent); padding: 12px 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+
+    /* Universal Modal Design */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000;
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-card {
+      background: #FFF; border-radius: var(--radius-lg); padding: 28px;
+      max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;
+      box-shadow: var(--shadow-soft); position: relative;
+    }
+    .modal-close { position: absolute; top: 16px; right: 20px; font-size: 24px; border: none; background: none; cursor: pointer; color: #888; }
+
+    /* Form Input Styles */
+    .form-group { margin-bottom: 14px; text-align: left; }
+    .form-group label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--text-charcoal); }
+    .form-input-styled {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm); font-size: 13px; outline: none; margin-top: 2px; background: #FFF;
+    }
+    .form-input-styled:focus { border-color: var(--teal-brand); }
+
+    /* Universal Payment Options Matrix */
+    .payment-options-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 6px;
+    }
+    .payment-option-card { position: relative; }
+    .payment-option-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .payment-option-card label {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 12px 6px; border: 1px solid var(--border-light); border-radius: var(--radius-sm);
+      cursor: pointer; font-size: 12px; font-weight: 700; color: var(--text-muted); transition: all 0.2s;
+    }
+    .payment-option-card input[type="radio"]:checked + label {
+      border-color: var(--teal-brand); background-color: var(--teal-light); color: var(--teal-brand);
+    }
+    .payment-dynamic-details { display: none; margin-top: 10px; }
+    .payment-dynamic-details.active { display: block; }
+
+    /* QR Display */
+    .qr-container { text-align: center; padding: 20px 0; }
+    #qrcode { display: flex; justify-content: center; margin: 16px 0; }
+    .verify-badge { background: #E6F4EA; color: #137333; padding: 6px 12px; border-radius: 50px; font-weight: 700; font-size: 12px; display: inline-block; }
+
+    /* Admin / Retailer Tables */
+    .data-table { width: 100%; border-collapse: collapse; margin-top: 16px; background: #FFF; border-radius: var(--radius-sm); overflow: hidden; }
+    .data-table th, .data-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-light); font-size: 13px; }
+    .data-table th { background: #F4F1EA; font-weight: 700; }
+
+    .retailer-dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   </style>
 </head>
 <body>
 
-  <!-- Triggers for different site actions -->
-  <button class="btn" onclick="openPaymentModal('Cart Checkout', 1250)">Checkout Cart</button>
-  <button class="btn" onclick="openPaymentModal('Scheduled Relocation', 3500)">Schedule Relocation</button>
-  <button class="btn" onclick="openPaymentModal('Return Processing Fee', 150)">Initiate Return</button>
+  <!-- Top Taskbar -->
+  <header class="navbar">
+    <div class="brand-group">
+      <a class="brand-logo" onclick="switchView('customer-view')">VCollab India<span>.</span></a>
+      <div class="location-dropdown-wrapper">
+        <span>📍</span>
+        <select class="location-select" id="city-selector" onchange="handleCityChange(this.value)">
+          <option value="Delhi-NCR">Delhi-NCR</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Bengaluru">Bengaluru</option>
+          <option value="Hyderabad" selected>Hyderabad</option>
+          <option value="Chennai">Chennai</option>
+          <option value="Kolkata">Kolkata</option>
+        </select>
+      </div>
+    </div>
 
-  <!-- Reusable Payment Modal UI -->
-  <div class="modal-overlay" id="paymentModal">
-    <div class="modal-container">
-      <div class="modal-header">
-        <h3 id="modalTitle">Complete Payment</h3>
-        <button class="close-btn" onclick="closePaymentModal()">&times;</button>
+    <div class="nav-search-bar">
+      <span>🔍</span>
+      <input type="text" id="catalog-search" placeholder="Search furniture, appliances..." oninput="handleSearch(this.value)">
+    </div>
+
+    <ul class="nav-links">
+      <li><a id="nav-relocate" onclick="switchView('relocate-view')">Relocate with VCollab</a></li>
+      <li id="nav-rani-orders-link" style="display: none;">
+        <a id="nav-rani-orders" onclick="switchView('rani-orders-view')" style="color: var(--teal-brand); font-weight: 700;">📦 My Rented Items (2)</a>
+      </li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="cart-btn-nav" onclick="switchView('cart-view')">
+        🛒 Cart <div class="cart-badge" id="cart-count">0</div>
+      </button>
+      <div class="view-switcher">
+        <button class="view-btn active" id="mode-cust" onclick="setDemoMode('customer')">Customer</button>
+        <button class="view-btn" id="mode-rani" onclick="setDemoMode('rani')">Rani</button>
+        <button class="view-btn" id="mode-ret" onclick="setDemoMode('retailer')">Retailer</button>
+        <button class="view-btn" id="mode-adm" onclick="setDemoMode('admin')">Admin</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- VIEW 1: CUSTOMER MARKETPLACE -->
+  <main id="customer-view" style="padding: 0; max-width: 100%;" class="page-view active">
+    
+    <!-- HERO CAROUSEL -->
+    <section class="hero-carousel" id="heroCarousel">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="serif-font slide-headline">Gorgeous Furniture & Living</h1>
+            <p class="slide-subheadline">Upgrade your living room with zero deposit & free 72hr setup near your pin code.</p>
+            <a class="cta-pill-btn" onclick="scrollToCatalogAndFilter('sofa')">Rent Sofas Now</a>
+          </div>
+        </div>
+
+        <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="serif-font slide-headline">Smart Kitchen & Home Appliances</h1>
+            <p class="slide-subheadline">Top rated ACs, refrigerators, and washing machines straight from local stores.</p>
+            <a class="cta-pill-btn" onclick="scrollToCatalogAndFilter('appliances')">Explore Appliances</a>
+          </div>
+        </div>
+
+        <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="serif-font slide-headline">Premium Beds & Solid Wood Comfort</h1>
+            <p class="slide-subheadline">Transform your bedroom and study spaces with verified local seller inventory.</p>
+            <a class="cta-pill-btn" onclick="scrollToCatalogAndFilter('bed')">Browse Beds</a>
+          </div>
+        </div>
       </div>
 
-      <form id="paymentForm" onsubmit="handlePaymentSubmit(event)">
-        <!-- Service/Item Context -->
-        <div class="form-group">
-          <label>Amount Due</label>
-          <input type="text" id="displayAmount" readonly style="background-color: #f8f9fa; font-weight: bold;">
+      <button class="carousel-arrow prev" onclick="moveSlide(-1)">&#10094;</button>
+      <button class="carousel-arrow next" onclick="moveSlide(1)">&#10095;</button>
+
+      <div class="carousel-dots" id="carouselDots">
+        <span class="dot active" onclick="goToSlide(0)"></span>
+        <span class="dot" onclick="goToSlide(1)"></span>
+        <span class="dot" onclick="goToSlide(2)"></span>
+      </div>
+    </section>
+
+    <div style="padding: 24px 5%; max-width: 1280px; margin: 0 auto;" id="catalog-section">
+      <h2 class="section-subheading">Rent Furniture and Home Appliances</h2>
+
+      <div class="category-scroll">
+        <div class="category-card active" id="cat-all" onclick="filterCategory('all', this)">
+          <div class="category-icon">🏠</div>
+          <div class="category-title">All Items</div>
+        </div>
+        <div class="category-card" id="cat-appliances" onclick="filterCategory('appliances', this)">
+          <div class="category-icon">🧊</div>
+          <div class="category-title">Appliances</div>
+        </div>
+        <div class="category-card" id="cat-sofa" onclick="filterCategory('sofa', this)">
+          <div class="category-icon">🛋️</div>
+          <div class="category-title">Sofas</div>
+        </div>
+        <div class="category-card" id="cat-kitchen" onclick="filterCategory('kitchen', this)">
+          <div class="category-icon">🍳</div>
+          <div class="category-title">Modular Kitchen</div>
+        </div>
+        <div class="category-card" id="cat-bed" onclick="filterCategory('bed', this)">
+          <div class="category-icon">🛏️</div>
+          <div class="category-title">Beds</div>
+        </div>
+      </div>
+
+      <div class="product-grid" id="marketplace-grid"></div>
+    </div>
+  </main>
+
+  <!-- RANI'S MY ORDERS VIEW -->
+  <main id="rani-orders-view" class="page-view">
+    <div style="background: #FFF; padding: 24px; border-radius: var(--radius-lg); border: 1px solid var(--border-light); margin-bottom: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <span class="verify-badge">👤 Verified Account: Rani</span>
+          <h2 class="serif-font" style="margin-top: 6px; font-size: 24px;">My Active Rented Items</h2>
+          <p style="color: var(--text-muted); font-size: 13px;">Manage active rentals, initiate intra-city relocation, or schedule return pickup.</p>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 12px; color: var(--text-muted);">Current Address</div>
+          <div style="font-weight: 700; font-size: 14px; color: var(--sage-primary);">Gachibowli, Hyderabad</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+      <div class="product-card" style="flex-direction: row; align-items: center; padding: 16px; gap: 16px;">
+        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80" style="width: 130px; height: 130px; border-radius: var(--radius-sm); object-fit: cover;">
+        <div style="flex-grow: 1;">
+          <div class="shop-tag">STORE: Sharma Furnitures (Gachibowli)</div>
+          <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Luxury 3-Seater Living Sofa</h3>
+          <div style="font-size: 13px; font-weight: 800; color: var(--sage-primary); margin-bottom: 8px;">₹1,050/month</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Active Location: Gachibowli, Hyderabad</div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-primary" style="padding: 8px 12px; font-size: 12px;" onclick="initiateRaniRelocate('VC-RANI-SOFA', 'Luxury 3-Seater Living Sofa')">🚚 Relocate</button>
+            <button class="btn-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="openUniversalPaymentModal('Return Pickup Fee', 150, 'Sharma Furnitures (Gachibowli)', 'Gachibowli, Hyderabad', 'return')">🔄 Return</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" style="flex-direction: row; align-items: center; padding: 16px; gap: 16px;">
+        <img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80" style="width: 130px; height: 130px; border-radius: var(--radius-sm); object-fit: cover;">
+        <div style="flex-grow: 1;">
+          <div class="shop-tag">STORE: Sharma Furnitures (Gachibowli)</div>
+          <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Fully Automatic Washing Machine</h3>
+          <div style="font-size: 13px; font-weight: 800; color: var(--sage-primary); margin-bottom: 8px;">₹800/month</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Active Location: Gachibowli, Hyderabad</div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-primary" style="padding: 8px 12px; font-size: 12px;" onclick="initiateRaniRelocate('VC-RANI-WASH', 'Fully Automatic Washing Machine')">🚚 Relocate</button>
+            <button class="btn-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="openUniversalPaymentModal('Return Pickup Fee', 150, 'Sharma Furnitures (Gachibowli)', 'Gachibowli, Hyderabad', 'return')">🔄 Return</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- VIEW 2: PRODUCT DETAIL PAGE -->
+  <main id="product-detail-view" class="page-view">
+    <button class="btn-secondary" onclick="switchView('customer-view')" style="margin-bottom: 16px;">← Back to Catalogue</button>
+    <div class="product-detail-layout" id="product-detail-container"></div>
+  </main>
+
+  <!-- VIEW 3: RENT CART / BASKET -->
+  <main id="cart-view" class="page-view">
+    <h2 class="serif-font" style="margin-bottom: 20px;">Your Rent Cart</h2>
+    <div class="cart-container">
+      <div class="cart-box">
+        <div style="background: var(--teal-light); padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--teal-brand); margin-bottom: 16px;">
+          🚚 Delivery Estimate: Free Express Handover to your location within 24 Hours
+        </div>
+        <div id="cart-items-list"></div>
+      </div>
+
+      <div>
+        <div class="coupon-box">
+          <div>
+            <div style="font-weight: 700; font-size: 13px;">Apply Offer: FURMAX</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Get 18% OFF on monthly rent</div>
+          </div>
+          <button class="btn-secondary" onclick="applyCoupon()" style="padding: 6px 12px; font-size: 12px;">Apply</button>
         </div>
 
-        <!-- Full Delivery/Service Address -->
-        <div class="form-group">
-          <label for="fullAddress">Full Delivery Address *</label>
-          <textarea id="fullAddress" rows="3" placeholder="House/Flat No., Street, Area, City, Pincode" required></textarea>
+        <div class="cart-box">
+          <h3 style="font-size: 16px; margin-bottom: 16px;">Rent Cost Breakup</h3>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
+            <span>Monthly Rent Total</span>
+            <span id="summary-base-rent">₹0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
+            <span>Refundable Deposit</span>
+            <span style="color: #137333; font-weight: 700;">₹0 (Zero Deposit)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
+            <span>Delivery & Installation</span>
+            <span style="color: #137333; font-weight: 700;">FREE</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #137333;" id="discount-row">
+            <span>Coupon Discount (FURMAX)</span>
+            <span id="summary-discount">-₹0</span>
+          </div>
+          <hr style="border: none; border-top: 1px solid var(--border-light); margin: 12px 0;">
+          <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; margin-bottom: 20px;">
+            <span>First Month Payable</span>
+            <span id="summary-final-total" style="color: var(--sage-primary);">₹0</span>
+          </div>
+          <button class="btn-primary" style="width: 100%; padding: 14px; font-size: 15px;" onclick="triggerCartCheckoutPayment()">Proceed to Pay & Place Order →</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- VIEW 4: RELOCATION LOGISTICS -->
+  <main id="relocate-view" class="page-view">
+    <div style="max-width: 700px; margin: 0 auto; background: #FFF; padding: 32px; border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
+      <h2 class="serif-font" style="color: var(--sage-primary); margin-bottom: 8px;">Relocate with VCollab</h2>
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Moving houses in the same city? Shift your rented furniture & appliances seamlessly without penalty.</p>
+      
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 12px; font-weight: 700;">Select Product to Relocate</label>
+        <select id="relocate-product-select" class="form-input-styled">
+          <!-- Dynamically populated -->
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Current Address Locality</label>
+          <input type="text" id="relocate-current-addr" placeholder="House No., Locality, City" value="Gachibowli, Hyderabad" class="form-input-styled">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Destination Relocation Locality</label>
+          <input type="text" id="relocate-dest-addr" placeholder="House No., Locality, City" value="Hitech City, Hyderabad" class="form-input-styled">
+        </div>
+      </div>
+
+      <div style="background: var(--bg-cream); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 20px;">
+        <h4 style="font-size: 14px; margin-bottom: 10px;">Transparent Logistics Fee Breakup:</h4>
+        
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; align-items: center;">
+          <span>Base Transit & Packing Fee (Compulsory)</span>
+          <span>₹799</span>
         </div>
 
-        <!-- Payment Method Selection -->
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; align-items: center;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="reinstall-checkbox" onchange="toggleReinstallationFee(this.checked)" checked style="accent-color: var(--teal-brand); width: 16px; height: 16px;">
+            <span>Appliance Reinstallation (AC / Washing Machine)</span>
+          </label>
+          <span id="reinstall-fee-display">₹350</span>
+        </div>
+
+        <hr style="border-top: 1px dashed var(--border-light); margin: 10px 0;">
+
+        <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: var(--sage-primary); margin-bottom: 6px;">
+          <span>Total Relocation Service Fee</span>
+          <span id="relocate-total-fee">₹1,149</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--teal-brand); font-weight: 600;">
+          <span>• 60% Advance Payment Required</span>
+          <span id="relocate-advance-fee">₹689</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="triggerRelocationPayment()">Schedule Relocation Shift & Proceed</button>
+    </div>
+  </main>
+
+  <!-- VIEW 5: RETAILER HUB -->
+  <main id="retailer-view" class="page-view">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <div>
+        <h2 class="serif-font">Sharma Furnitures (Gachibowli) — Retailer Portal</h2>
+        <p style="color: var(--text-muted); font-size: 13px;">Partner Store Network Management & Logistics Operations Hub</p>
+      </div>
+      <button class="btn-primary" onclick="alert('Add New Stock Modal Triggered')">+ Add New Shop Stock</button>
+    </div>
+
+    <div class="retailer-dashboard-grid">
+      <div style="background: #FFF; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 20px;">
+        <h3 class="serif-font" style="font-size: 18px; margin-bottom: 16px; color: var(--sage-primary);">📊 Store Earnings & Idle Stock</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+          <div style="background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--text-muted);">Monthly Net Revenue</div>
+            <div style="font-size: 20px; font-weight: 800; color: var(--teal-brand);">₹42,350</div>
+          </div>
+          <div style="background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--text-muted);">Platform Comm. (15%)</div>
+            <div style="font-size: 20px; font-weight: 800; color: var(--amber-accent);">₹7,470</div>
+          </div>
+        </div>
+
+        <h4 style="font-size: 14px; margin-bottom: 10px;">Store Inventory Status</h4>
+        <table class="data-table">
+          <thead>
+            <tr><th>Asset</th><th>Item</th><th>Monthly Rent</th><th>Net Payout</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>VC-RANI-SOFA</code></td><td>Living Sofa (Rani)</td><td>₹1,050</td><td style="color:green; font-weight:700;">₹892</td></tr>
+            <tr><td><code>VC-RANI-WASH</code></td><td>Washing Machine (Rani)</td><td>₹800</td><td style="color:green; font-weight:700;">₹680</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="background: #FFF; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 20px;">
+        <h3 class="serif-font" style="font-size: 18px; margin-bottom: 16px; color: var(--sage-primary);">🚚 Logistics & Shifts</h3>
+        
+        <h4 style="font-size: 14px; margin-bottom: 10px;">Live Operations Queue</h4>
+        <table class="data-table">
+          <thead>
+            <tr><th>Customer</th><th>Action / Route</th><th>Fee Status</th><th>Status</th></tr>
+          </thead>
+          <tbody id="retailer-right-table">
+            <tr>
+              <td><strong>Rani</strong></td>
+              <td>Gachibowli ➔ Hitech City</td>
+              <td>₹689 (60% Paid)</td>
+              <td><span class="verify-badge">Driver Assigned</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- VIEW 6: PLATFORM ADMIN -->
+  <main id="admin-view" class="page-view">
+    <h2 class="serif-font" style="margin-bottom: 8px;">VCollab Pan-India Operations & Revenue</h2>
+    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Monetization engine across Metropolitan City Clusters</p>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>City Hub</th><th>Active Stores</th><th>Live Units</th><th>Monthly GMV</th><th>VCollab Commission (15%)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Delhi-NCR</strong></td><td>42 Stores</td><td>380 Units</td><td>₹4,56,000</td><td><strong style="color: var(--teal-brand);">₹68,400</strong></td></tr>
+        <tr><td><strong>Hyderabad</strong></td><td>31 Stores</td><td>290 Units</td><td>₹3,48,000</td><td><strong style="color: var(--teal-brand);">₹52,200</strong></td></tr>
+      </tbody>
+    </table>
+  </main>
+
+  <!-- REUSABLE UNIVERSAL PAYMENT & DELIVERY POPUP MODAL -->
+  <div class="modal-overlay" id="universal-payment-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('universal-payment-modal')">&times;</button>
+      <div class="verify-badge" id="modal-badge-title">🔒 Secure Gateway</div>
+      <h3 class="serif-font" style="margin-top: 8px; margin-bottom: 4px;" id="payment-modal-title">Complete Checkout</h3>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Provide address details and choose payment method to authorize escrow.</p>
+
+      <form id="universalPaymentForm" onsubmit="handleUniversalPaymentSubmit(event)">
+        
+        <!-- Amount Summary -->
         <div class="form-group">
-          <label>Select Payment Method *</label>
-          <div class="payment-options">
-            <div class="payment-option">
-              <input type="radio" id="payUpi" name="paymentMethod" value="UPI" required onchange="togglePaymentFields()">
-              <label for="payUpi">UPI</label>
+          <label>Payable Amount</label>
+          <input type="text" id="pay-display-amount" readonly class="form-input-styled" style="background: #F4F1EA; font-weight: 800; color: var(--sage-primary); font-size: 16px;">
+        </div>
+
+        <!-- Full Address Area -->
+        <div class="form-group">
+          <label for="fullDeliveryAddress">Full Delivery / Pickup Address *</label>
+          <textarea id="fullDeliveryAddress" rows="3" class="form-input-styled" placeholder="House/Flat No., Building, Street, Area, Pin code" required></textarea>
+        </div>
+
+        <!-- Payment Method Choice -->
+        <div class="form-group">
+          <label>Select Payment Interface *</label>
+          <div class="payment-options-grid">
+            <div class="payment-option-card">
+              <input type="radio" id="payMethodUPI" name="paymentMethodChoice" value="UPI" required onchange="togglePaymentDetailsDisplay()">
+              <label for="payMethodUPI">📱 UPI</label>
             </div>
-            <div class="payment-option">
-              <input type="radio" id="payCard" name="paymentMethod" value="Card" onchange="togglePaymentFields()">
-              <label for="payCard">Card</label>
+            <div class="payment-option-card">
+              <input type="radio" id="payMethodCard" name="paymentMethodChoice" value="Card" onchange="togglePaymentDetailsDisplay()">
+              <label for="payMethodCard">💳 Card</label>
             </div>
-            <div class="payment-option">
-              <input type="radio" id="payCash" name="paymentMethod" value="Cash" onchange="togglePaymentFields()">
-              <label for="payCash">Cash</label>
+            <div class="payment-option-card">
+              <input type="radio" id="payMethodCash" name="paymentMethodChoice" value="Cash" onchange="togglePaymentDetailsDisplay()">
+              <label for="payMethodCash">💵 Cash</label>
             </div>
           </div>
         </div>
 
-        <!-- Dynamic Fields for UPI -->
-        <div class="payment-details" id="upiDetails">
+        <!-- Dynamic Inputs -->
+        <div class="payment-dynamic-details" id="upiInputBox">
           <div class="form-group">
-            <label for="upiId">Enter UPI ID (e.g., username@upi)</label>
-            <input type="text" id="upiId" placeholder="example@okhdfcbank">
+            <label for="upiIdInput">UPI ID / VPA</label>
+            <input type="text" id="upiIdInput" placeholder="username@upi" class="form-input-styled">
           </div>
         </div>
 
-        <!-- Dynamic Fields for Card -->
-        <div class="payment-details" id="cardDetails">
+        <div class="payment-dynamic-details" id="cardInputBox">
           <div class="form-group">
-            <label for="cardNumber">Card Number</label>
-            <input type="text" id="cardNumber" placeholder="1234 5678 9101 1121" maxlength="19">
+            <label for="cardNumberInput">Card Number</label>
+            <input type="text" id="cardNumberInput" placeholder="4532 •••• •••• 8921" class="form-input-styled">
           </div>
         </div>
 
-        <!-- Dynamic Fields for Cash -->
-        <div class="payment-details" id="cashDetails">
-          <p style="font-size: 13px; color: #666;">Pay with cash upon delivery or service completion.</p>
+        <div class="payment-dynamic-details" id="cashInputBox">
+          <div style="font-size: 12px; color: var(--text-muted); background: var(--bg-cream); padding: 10px; border-radius: 6px;">
+            💵 Cash payment will be collected by the logistics partner during delivery or inspection.
+          </div>
         </div>
 
-        <button type="submit" class="submit-btn">Confirm & Pay</button>
+        <button type="submit" class="btn-primary" style="width: 100%; padding: 12px; margin-top: 16px; font-size: 14px;">Confirm & Process Order →</button>
       </form>
     </div>
   </div>
 
+  <!-- ORDER SUCCESS & QR PASSPORT MODAL -->
+  <div class="modal-overlay" id="qr-success-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('qr-success-modal')">&times;</button>
+      <div class="verify-badge">✓ Payment Confirmed & Escrow Locked</div>
+      <h2 class="serif-font" style="margin-top: 12px; font-size: 22px;">Digital Unit Passport Generated</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Scan this QR code on physical delivery to verify asset quality and release escrow.</p>
+
+      <div class="qr-container">
+        <div id="qrcode"></div>
+        <div style="font-size: 12px; font-family: monospace; font-weight: 700; background: #F0F0F0; padding: 4px 8px; border-radius: 4px; display: inline-block;" id="qr-item-code">VC-ITEM-001</div>
+      </div>
+
+      <div style="background: var(--bg-cream); padding: 12px; border-radius: 8px; text-align: left; font-size: 12px; margin-bottom: 20px;">
+        <div><strong>Status:</strong> Order Placed via VCollab Local Hub</div>
+        <div><strong>Address Registered:</strong> <span id="qr-address-display">-</span></div>
+        <div><strong>Payment Type:</strong> <span id="qr-paymethod-display">-</span></div>
+      </div>
+
+      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="simulateScanVerification()">📱 Simulate Delivery Handover Scan</button>
+    </div>
+  </div>
+
   <script>
-    let activeContext = '';
+    // METROPOLITAN CATALOGUE DATABASE
+    const PRODUCTS = [
+      {
+        id: 'VC-HYD-BED-1',
+        title: 'Teak Finish Queen Storage Bed',
+        category: 'bed',
+        city: 'Hyderabad',
+        shop: 'Sharma Furnitures',
+        locality: 'Gachibowli',
+        price: 1000,
+        originalPrice: 1300,
+        discount: '23% OFF',
+        image: 'https://images.unsplash.com/photo-1540518614846-7ede433c5172?auto=format&fit=crop&w=600&q=80',
+        description: 'Premium wooden finish queen bed featuring sturdy frame.'
+      },
+      {
+        id: 'VC-HYD-FUR-2',
+        title: 'Modern Living Room Sofa',
+        category: 'sofa',
+        city: 'Hyderabad',
+        shop: 'Sharma Furnitures',
+        locality: 'Gachibowli',
+        price: 1050,
+        originalPrice: 1350,
+        discount: '22% OFF',
+        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80',
+        description: 'Comfortable 3-seater sofa ideal for modern living rooms.'
+      },
+      {
+        id: 'VC-HYD-APP-2',
+        title: 'Fully Automatic Top Load Washer',
+        category: 'appliances',
+        city: 'Hyderabad',
+        shop: 'Sharma Furnitures',
+        locality: 'Gachibowli',
+        price: 800,
+        originalPrice: 1000,
+        discount: '20% OFF',
+        image: 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80',
+        description: 'Powerful laundry washer with smart agitation technology.'
+      },
+      {
+        id: 'VC-HYD-APP-1',
+        title: '1.5 Ton Split Air Conditioner',
+        category: 'appliances',
+        city: 'Hyderabad',
+        shop: 'Hitech Electronics',
+        locality: 'Hitech City',
+        price: 800,
+        originalPrice: 1100,
+        discount: '27% OFF',
+        image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=600&q=80',
+        description: 'Energy saving silent inverter split AC with copper condenser.'
+      }
+    ];
 
-    // Function to open modal from anywhere on your site
-    function openPaymentModal(title, amount) {
-      document.getElementById('modalTitle').innerText = title;
-      document.getElementById('displayAmount').value = `₹${amount}`;
-      activeContext = title;
+    let currentCity = 'Hyderabad';
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let cart = [];
+    let isCouponApplied = false;
+    let isReinstallSelected = true;
+    let currentDemoMode = 'customer';
+    
+    // Active Payment Transaction State
+    let activePaymentContext = {
+      title: 'Checkout',
+      amount: 0,
+      type: 'cart'
+    };
+
+    // CAROUSEL LOGIC
+    let currentSlideIndex = 0;
+    const totalSlides = 3;
+
+    function updateCarousel() {
+      const track = document.getElementById('carouselTrack');
+      const dots = document.querySelectorAll('.carousel-dots .dot');
+      if(!track) return;
+      track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentSlideIndex);
+      });
+    }
+
+    function moveSlide(direction) {
+      currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
+      updateCarousel();
+    }
+
+    function goToSlide(index) {
+      currentSlideIndex = index;
+      updateCarousel();
+    }
+
+    function scrollToCatalogAndFilter(categoryKey) {
+      filterCategory(categoryKey);
+      document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // MARKETPLACE RENDER
+    function getFilteredProducts() {
+      return PRODUCTS.filter(p => {
+        const matchesCity = (p.city === currentCity);
+        const matchesCat = (currentCategory === 'all' || p.category === currentCategory);
+        const q = searchQuery.toLowerCase().trim();
+        const matchesSearch = q === '' || p.title.toLowerCase().includes(q) || p.shop.toLowerCase().includes(q);
+        return matchesCity && matchesCat && matchesSearch;
+      });
+    }
+
+    function renderMarketplace() {
+      const grid = document.getElementById('marketplace-grid');
+      if(!grid) return;
+      const items = getFilteredProducts();
+
+      if (items.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; background:#FFF;">No products match current selection.</div>`;
+        return;
+      }
+
+      grid.innerHTML = items.map(item => `
+        <div class="product-card">
+          <img src="${item.image}" class="product-thumb">
+          <div class="product-info">
+            <div class="shop-tag">STORE: ${item.shop} (${item.locality})</div>
+            <div class="product-title">${item.title}</div>
+            <div class="pricing-row">
+              <span class="price-main">₹${item.price}/mo</span>
+              <span class="price-strike">₹${item.originalPrice}</span>
+              <span class="discount-badge">${item.discount}</span>
+            </div>
+            <div class="card-actions">
+              <button class="btn-primary" onclick="openProductDetail('${item.id}')">View Details</button>
+              <button class="btn-secondary" onclick="addToCartDirect('${item.id}')">+ Cart</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function handleCityChange(city) { currentCity = city; renderMarketplace(); populateRelocateProductDropdown(); }
+    function handleSearch(q) { searchQuery = q; renderMarketplace(); }
+    function filterCategory(cat, elem) {
+      document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+      if(elem) elem.classList.add('active');
+      currentCategory = cat;
+      renderMarketplace();
+    }
+
+    function openProductDetail(id) {
+      const item = PRODUCTS.find(p => p.id === id);
+      const container = document.getElementById('product-detail-container');
+      container.innerHTML = `
+        <div>
+          <img src="${item.image}" class="main-detail-img">
+        </div>
+        <div>
+          <div class="shop-tag">${item.shop} (${item.city})</div>
+          <h1 class="serif-font" style="font-size: 26px;">${item.title}</h1>
+          <div class="price-main" style="font-size: 28px; margin: 10px 0;">₹${item.price}/mo</div>
+          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">${item.description}</p>
+          <button class="btn-primary" style="width: 100%; padding: 14px;" onclick="addToCartDirect('${item.id}'); switchView('cart-view');">Add to Cart & Checkout →</button>
+        </div>
+      `;
+      switchView('product-detail-view');
+    }
+
+    // CART
+    function addToCartDirect(id) {
+      const item = PRODUCTS.find(p => p.id === id);
+      const existing = cart.find(c => c.id === id);
+      if(existing) existing.qty += 1;
+      else cart.push({...item, qty: 1});
+      updateCartUI();
+      populateRelocateProductDropdown();
+    }
+
+    function updateCartUI() {
+      document.getElementById('cart-count').innerText = cart.reduce((s, i) => s + i.qty, 0);
+      const list = document.getElementById('cart-items-list');
+      if(!list) return;
+
+      if(cart.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-muted);">Your Rent Basket is empty</div>`;
+      } else {
+        list.innerHTML = cart.map(i => `
+          <div class="cart-item">
+            <img src="${i.image}" class="cart-item-img">
+            <div style="flex-grow:1;">
+              <div style="font-weight:700; font-size:14px;">${i.title}</div>
+              <div style="font-size:12px; color:var(--text-muted);">Store: ${i.shop}</div>
+              <div style="font-weight:800; color:var(--sage-primary);">₹${i.price}/mo</div>
+            </div>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty('${i.id}', -1)">-</button>
+              <span style="font-size:13px; font-weight:700;">${i.qty}</span>
+              <button class="qty-btn" onclick="changeQty('${i.id}', 1)">+</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const baseTotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      const discount = isCouponApplied ? Math.round(baseTotal * 0.18) : 0;
+      const finalTotal = baseTotal - discount;
+
+      document.getElementById('summary-base-rent').innerText = `₹${baseTotal}`;
+      document.getElementById('summary-discount').innerText = `-₹${discount}`;
+      document.getElementById('summary-final-total').innerText = `₹${finalTotal}`;
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(c => c.id === id);
+      if(item) {
+        item.qty += delta;
+        if(item.qty <= 0) cart = cart.filter(c => c.id !== id);
+      }
+      updateCartUI();
+    }
+
+    function applyCoupon() { isCouponApplied = true; alert('Coupon FURMAX Applied!'); updateCartUI(); }
+
+    // RELOCATION LOGISTICS
+    function toggleReinstallationFee(isChecked) {
+      isReinstallSelected = isChecked;
+      document.getElementById('reinstall-fee-display').innerText = isChecked ? '₹350' : '₹0';
+      updateRelocationTotalFee();
+    }
+
+    function updateRelocationTotalFee() {
+      const total = 799 + (isReinstallSelected ? 350 : 0);
+      const advance = Math.round(total * 0.60);
+      document.getElementById('relocate-total-fee').innerText = `₹${total}`;
+      document.getElementById('relocate-advance-fee').innerText = `₹${advance}`;
+    }
+
+    function populateRelocateProductDropdown() {
+      const select = document.getElementById('relocate-product-select');
+      if(!select) return;
+      if(currentDemoMode === 'rani') {
+        select.innerHTML = `
+          <option value="VC-RANI-SOFA">Luxury 3-Seater Living Sofa (Sharma Furnitures)</option>
+          <option value="VC-RANI-WASH">Fully Automatic Washing Machine (Sharma Furnitures)</option>
+        `;
+      } else {
+        const items = cart.length > 0 ? cart : PRODUCTS;
+        select.innerHTML = items.map(p => `<option value="${p.id}">${p.title} (${p.city})</option>`).join('');
+      }
+    }
+
+    function initiateRaniRelocate(id, name) {
+      switchView('relocate-view');
+      document.getElementById('relocate-current-addr').value = 'Gachibowli, Hyderabad';
+      document.getElementById('relocate-dest-addr').value = 'Hitech City, Hyderabad';
+    }
+
+    // UNIVERSAL PAYMENT POPUP SYSTEM
+    function openUniversalPaymentModal(title, amount, sellerShop, defaultAddr = '', type = 'generic') {
+      activePaymentContext = { title, amount, sellerShop, type };
+      document.getElementById('payment-modal-title').innerText = title;
+      document.getElementById('pay-display-amount').value = `₹${amount}`;
+      document.getElementById('fullDeliveryAddress').value = defaultAddr || (currentDemoMode === 'rani' ? 'Gachibowli, Hyderabad' : '');
       
-      const modal = document.getElementById('paymentModal');
-      modal.classList.add('active');
+      document.getElementById('universal-payment-modal').style.display = 'flex';
     }
 
-    // Function to close modal
-    function closePaymentModal() {
-      const modal = document.getElementById('paymentModal');
-      modal.classList.remove('active');
-      document.getElementById('paymentForm').reset();
-      hideAllPaymentDetails();
+    function triggerCartCheckoutPayment() {
+      if(cart.length === 0) return alert('Your Cart is empty!');
+      const baseTotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      const finalTotal = baseTotal - (isCouponApplied ? Math.round(baseTotal * 0.18) : 0);
+      openUniversalPaymentModal('Cart Order Payment', finalTotal, 'VCollab Partner Network', '', 'cart');
     }
 
-    // Toggle fields based on payment method selection
-    function togglePaymentFields() {
-      hideAllPaymentDetails();
-      const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-
-      if (selectedMethod === 'UPI') {
-        document.getElementById('upiDetails').classList.add('active');
-      } else if (selectedMethod === 'Card') {
-        document.getElementById('cardDetails').classList.add('active');
-      } else if (selectedMethod === 'Cash') {
-        document.getElementById('cashDetails').classList.add('active');
-      }
+    function triggerRelocationPayment() {
+      const total = 799 + (isReinstallSelected ? 350 : 0);
+      const advance = Math.round(total * 0.60);
+      const dest = document.getElementById('relocate-dest-addr').value;
+      openUniversalPaymentModal('Relocation Advance (60%)', advance, 'Logistics Hub', dest, 'relocate');
     }
 
-    function hideAllPaymentDetails() {
-      document.querySelectorAll('.payment-details').forEach(el => el.classList.remove('active'));
+    function togglePaymentDetailsDisplay() {
+      document.querySelectorAll('.payment-dynamic-details').forEach(d => d.classList.remove('active'));
+      const selected = document.querySelector('input[name="paymentMethodChoice"]:checked').value;
+      if(selected === 'UPI') document.getElementById('upiInputBox').classList.add('active');
+      if(selected === 'Card') document.getElementById('cardInputBox').classList.add('active');
+      if(selected === 'Cash') document.getElementById('cashInputBox').classList.add('active');
     }
 
-    // Form Submission Handler
-    function handlePaymentSubmit(event) {
+    function handleUniversalPaymentSubmit(event) {
       event.preventDefault();
+      const addr = document.getElementById('fullDeliveryAddress').value;
+      const method = document.querySelector('input[name="paymentMethodChoice"]:checked').value;
 
-      const address = document.getElementById('fullAddress').value;
-      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+      closeModal('universal-payment-modal');
 
-      const payload = {
-        actionContext: activeContext,
-        address: address,
-        paymentMethod: paymentMethod,
-        timestamp: new Date().toISOString()
-      };
+      // Update QR Passport Info
+      document.getElementById('qr-address-display').innerText = addr;
+      document.getElementById('qr-paymethod-display').innerText = method;
 
-      if (paymentMethod === 'UPI') {
-        payload.upiId = document.getElementById('upiId').value;
-      } else if (paymentMethod === 'Card') {
-        payload.cardNumber = document.getElementById('cardNumber').value;
+      const qrTarget = document.getElementById('qrcode');
+      qrTarget.innerHTML = '';
+      new QRCode(qrTarget, { text: `https://vcollab.app/order?ref=${Date.now()}`, width: 150, height: 150 });
+
+      document.getElementById('qr-success-modal').style.display = 'flex';
+
+      // Update Retailer Shift Queue live
+      if(activePaymentContext.type === 'relocate') {
+        const rightTable = document.getElementById('retailer-right-table');
+        if(rightTable) {
+          rightTable.innerHTML += `
+            <tr>
+              <td><strong>${currentDemoMode === 'rani' ? 'Rani' : 'Customer'}</strong></td>
+              <td>Shift to ${addr}</td>
+              <td>₹${activePaymentContext.amount} (${method})</td>
+              <td><span class="verify-badge">Scheduled</span></td>
+            </tr>
+          `;
+        }
       }
-
-      console.log('Submitted Data:', payload);
-      alert(`Order confirmed for ${activeContext} using ${paymentMethod}!`);
-
-      closePaymentModal();
     }
+
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    function simulateScanVerification() {
+      alert('QR Verification Successful! Asset Handover Completed.');
+      closeModal('qr-success-modal');
+      if(activePaymentContext.type === 'cart') cart = [];
+      updateCartUI();
+      switchView('customer-view');
+    }
+
+    // VIEW & MODE SWITCHING
+    function switchView(viewId) {
+      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+      if(viewId === 'relocate-view') populateRelocateProductDropdown();
+    }
+
+    function setDemoMode(mode) {
+      currentDemoMode = mode;
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      const raniLink = document.getElementById('nav-rani-orders-link');
+
+      if(mode === 'customer') {
+        document.getElementById('mode-cust').classList.add('active');
+        if(raniLink) raniLink.style.display = 'none';
+        switchView('customer-view');
+      } else if(mode === 'rani') {
+        document.getElementById('mode-rani').classList.add('active');
+        if(raniLink) raniLink.style.display = 'inline-block';
+        switchView('customer-view');
+      } else if(mode === 'retailer') {
+        document.getElementById('mode-ret').classList.add('active');
+        if(raniLink) raniLink.style.display = 'none';
+        switchView('retailer-view');
+      } else {
+        document.getElementById('mode-adm').classList.add('active');
+        if(raniLink) raniLink.style.display = 'none';
+        switchView('admin-view');
+      }
+    }
+
+    renderMarketplace();
+    updateRelocationTotalFee();
   </script>
 </body>
 </html>
