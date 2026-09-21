@@ -286,7 +286,7 @@
     .gallery-thumb.active { border-color: var(--teal-brand); }
 
     .variant-chips { display: flex; gap: 10px; margin: 12px 0; }
-    .variant-chip { border: 1px solid var(--border-light); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; }
+    .variant-chip { border: 1px solid var(--border-light); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
     .variant-chip.active { border-color: var(--teal-brand); background: var(--teal-light); color: var(--teal-brand); }
 
     /* Cart Page */
@@ -312,9 +312,6 @@
     }
     .modal-close { position: absolute; top: 16px; right: 20px; font-size: 24px; border: none; background: none; cursor: pointer; }
 
-    /* QR Display */
-    .qr-container { text-align: center; padding: 20px 0; }
-    #qrcode { display: flex; justify-content: center; margin: 16px 0; }
     .verify-badge { background: #E6F4EA; color: #137333; padding: 6px 12px; border-radius: 50px; font-weight: 700; font-size: 12px; display: inline-block; }
     .badge-blacklisted { background: var(--danger-bg); color: var(--danger-red); padding: 4px 10px; border-radius: 50px; font-weight: 700; font-size: 11px; display: inline-block; }
 
@@ -374,6 +371,50 @@
       background: var(--teal-brand);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    }
+
+    /* PAYMENT CONFIRMATION CARD UI */
+    .delivery-confirm-box {
+      background: #FAF7F2;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 16px;
+      margin-bottom: 16px;
+    }
+    .confirm-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border-light);
+      font-size: 13px;
+    }
+    .confirm-row:last-child {
+      border-bottom: none;
+    }
+    .otp-input-wrapper {
+      margin-top: 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+    }
+    .status-badge-delivered {
+      background: #E6F4EA;
+      color: #137333;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 12px;
+    }
+    .status-badge-pending {
+      background: #FFF3C4;
+      color: #8A6D3B;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 12px;
     }
   </style>
 </head>
@@ -799,7 +840,7 @@
     <div class="modal-card">
       <button class="modal-close" onclick="closeModal('payment-modal')">×</button>
       <h3 class="serif-font" style="margin-bottom: 4px;">Complete Rental Booking</h3>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">VCollab Escrow Payment Gateway</p>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">VCollab Secure Checkout</p>
 
       <div style="background: var(--bg-cream); padding: 14px; border-radius: 8px; margin-bottom: 20px;">
         <div style="font-size: 12px; color: var(--text-muted);">Amount Payable Now</div>
@@ -819,26 +860,87 @@
     </div>
   </div>
 
-  <!-- ORDER SUCCESS & QR PASSPORT MODAL -->
+  <!-- ORDER SUCCESS & OTP DELIVERY VERIFICATION MODAL -->
   <div class="modal-overlay" id="qr-success-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeModal('qr-success-modal')">×</button>
-      <div class="verify-badge">✓ Payment Confirmed & Escrow Locked</div>
-      <h2 class="serif-font" style="margin-top: 12px; font-size: 22px;">Digital Unit Passport Generated</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Scan this QR code on physical delivery to verify asset quality and release escrow.</p>
+      <div class="verify-badge">✓ Payment Confirmed</div>
+      <h2 class="serif-font" style="margin-top: 10px; font-size: 22px;">Order Delivery Verification</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Your payment is successful! Verify delivery conditions below when your order arrives.</p>
 
-      <div class="qr-container">
-        <div id="qrcode"></div>
-        <div style="font-size: 12px; font-family: monospace; font-weight: 700; background: #F0F0F0; padding: 4px 8px; border-radius: 4px; display: inline-block;" id="qr-item-code">VC-ITEM-001</div>
+      <div class="delivery-confirm-box">
+        <div class="confirm-row">
+          <span style="color: var(--text-muted);">Payment Status:</span>
+          <strong style="color: #137333;">Confirmed</strong>
+        </div>
+        <div class="confirm-row">
+          <span style="color: var(--text-muted);">Order ID:</span>
+          <strong id="confirm-order-id">VC-DEL-89412</strong>
+        </div>
+        <div class="confirm-row">
+          <span style="color: var(--text-muted);">Product Name:</span>
+          <strong id="confirm-product-title">Modern Fabric Living Sofa</strong>
+        </div>
+        <div class="confirm-row">
+          <span style="color: var(--text-muted);">Expected Delivery:</span>
+          <strong style="color: var(--teal-brand);">Within 24 Hours</strong>
+        </div>
+        <div class="confirm-row">
+          <span style="color: var(--text-muted);">Delivery Status:</span>
+          <span id="confirm-status-pill" class="status-badge-pending">Pending Handover</span>
+        </div>
       </div>
 
-      <div style="background: var(--bg-cream); padding: 12px; border-radius: 8px; text-align: left; font-size: 12px; margin-bottom: 20px;">
-        <div><strong>Status:</strong> Order Placed via VCollab Local Hub</div>
-        <div><strong>Condition Log:</strong> Inspected & Tagged (100% Verified)</div>
-        <div><strong>Deposit Status:</strong> ₹0 Held Safely</div>
+      <!-- OTP ENTRY SECTION -->
+      <div id="otp-section-wrapper">
+        <div style="font-size: 13px; font-weight: 600; margin-bottom: 6px;">
+          🔑 Handover Verification Code (OTP)
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
+          Share this OTP with your delivery agent or enter the agent code below upon inspection:
+        </p>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+          <input type="text" id="delivery-otp-input" class="form-input-styled" style="margin-top:0; font-size: 16px; letter-spacing: 2px; text-align: center; font-weight: 700;" placeholder="4-Digit OTP" maxlength="4" value="4829">
+          <button class="btn-primary" style="white-space: nowrap; padding: 0 16px;" onclick="verifyDeliveryOTP()">Confirm Delivery</button>
+        </div>
+        
+        <div id="otp-error-message" style="color: var(--danger-red); font-size: 12px; font-weight: 600; display: none; margin-bottom: 10px;">
+          ❌ Invalid or expired OTP. Please check with your delivery partner.
+        </div>
       </div>
 
-      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="simulateScanVerification()">📱 Simulate Delivery Handover Scan</button>
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+        <button class="btn-secondary" style="border-color: #F5C6CB; color: var(--danger-red); width: 100%; padding: 10px; font-size: 12px;" onclick="openReportModal()">
+          ⚠️ Report Damaged or Incorrect Product
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORT DAMAGE / ISSUE MODAL -->
+  <div class="modal-overlay" id="report-issue-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('report-issue-modal')">×</button>
+      <div style="color: var(--danger-red); font-size: 24px; margin-bottom: 4px;">⚠️</div>
+      <h3 class="serif-font" style="margin-bottom: 4px;">Report Issue with Product</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Our support team will halt the delivery verification and dispatch a replacement.</p>
+
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 12px; font-weight: 700;">Issue Category</label>
+        <select id="issue-category-select" class="form-input-styled">
+          <option value="damaged">Product Damaged / Scratched</option>
+          <option value="wrong_item">Wrong Item / Color Delivered</option>
+          <option value="missing">Missing Accessories / Components</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 12px; font-weight: 700;">Describe the Problem</label>
+        <textarea id="issue-description-input" class="form-input-styled" style="height: 80px; resize: none;" placeholder="Provide details about the issue..."></textarea>
+      </div>
+
+      <button class="btn-primary" style="background: var(--danger-red); width: 100%; padding: 12px;" onclick="submitProductReport()">Submit Report & Request Replacement</button>
     </div>
   </div>
 
@@ -1348,6 +1450,8 @@
     let isCouponApplied = false;
     let isReinstallSelected = true;
     let selectedRetailerShop = 'Delhi Furniture Mart';
+    let activeProductTenure = 6; // Default tenure in months
+    const VALID_DELIVERY_OTP = "4829";
 
     // Chart instances
     let rentedItemsChartInstance = null;
@@ -1482,9 +1586,11 @@
       renderMarketplace();
     }
 
-    // PRODUCT DETAIL VIEW
+    // PRODUCT DETAIL VIEW WITH WORKING 3, 6, 12 MONTH TENURE BUTTONS
     function openProductDetail(id) {
       const item = PRODUCTS.find(p => p.id === id);
+      activeProductTenure = 6; // reset to default standard rate
+      
       const container = document.getElementById('product-detail-container');
       
       container.innerHTML = `
@@ -1498,25 +1604,64 @@
           <div class="shop-tag" style="font-size: 13px;">FULFILLED BY: ${item.shop} (${item.locality}, ${item.city})</div>
           <h1 class="serif-font" style="font-size: 26px; margin: 6px 0 12px;">${item.title}</h1>
           <div class="pricing-row" style="font-size: 24px;">
-            <span class="price-main" style="font-size: 28px;">₹${item.price}/mo</span>
-            <span class="price-strike">₹${item.originalPrice}</span>
-            <span class="discount-badge">${item.discount}</span>
+            <span class="price-main" id="detail-price-display" style="font-size: 28px;">₹${item.price}/mo</span>
+            <span class="price-strike" id="detail-orig-price-display">₹${item.originalPrice}</span>
+            <span class="discount-badge" id="detail-discount-badge">${item.discount}</span>
           </div>
           <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">${item.description}</p>
           
           <div style="margin-bottom: 20px;">
             <label style="font-size: 12px; font-weight: 700;">TENURE OPTION</label>
             <div class="variant-chips">
-              <div class="variant-chip active">6 Months (Best Rate)</div>
-              <div class="variant-chip">3 Months</div>
-              <div class="variant-chip">12 Months</div>
+              <div class="variant-chip" id="tenure-3m" onclick="selectTenure('${item.id}', 3)">3 Months</div>
+              <div class="variant-chip active" id="tenure-6m" onclick="selectTenure('${item.id}', 6)">6 Months (Best Rate)</div>
+              <div class="variant-chip" id="tenure-12m" onclick="selectTenure('${item.id}', 12)">12 Months (10% Off)</div>
             </div>
           </div>
 
-          <button class="btn-primary" style="width: 100%; padding: 14px; font-size: 15px;" onclick="addToCartDirect('${item.id}'); switchView('cart-view');">Add to Cart & Proceed →</button>
+          <button class="btn-primary" style="width: 100%; padding: 14px; font-size: 15px;" onclick="addToCartWithTenure('${item.id}'); switchView('cart-view');">Add to Cart & Proceed →</button>
         </div>
       `;
       switchView('product-detail-view');
+    }
+
+    function selectTenure(productId, months) {
+      activeProductTenure = months;
+      const item = PRODUCTS.find(p => p.id === productId);
+      
+      document.querySelectorAll('.variant-chip').forEach(chip => chip.classList.remove('active'));
+      
+      let calcPrice = item.price;
+      if (months === 3) {
+        document.getElementById('tenure-3m').classList.add('active');
+        calcPrice = Math.round(item.price * 1.15); // +15% short tenure
+      } else if (months === 6) {
+        document.getElementById('tenure-6m').classList.add('active');
+        calcPrice = item.price;
+      } else if (months === 12) {
+        document.getElementById('tenure-12m').classList.add('active');
+        calcPrice = Math.round(item.price * 0.90); // 10% discount long tenure
+      }
+
+      document.getElementById('detail-price-display').innerText = `₹${calcPrice}/mo`;
+    }
+
+    function addToCartWithTenure(id) {
+      const item = PRODUCTS.find(p => p.id === id);
+      let calculatedPrice = item.price;
+      if (activeProductTenure === 3) calculatedPrice = Math.round(item.price * 1.15);
+      if (activeProductTenure === 12) calculatedPrice = Math.round(item.price * 0.90);
+
+      const existing = cart.find(c => c.id === id);
+      if (existing) {
+        existing.qty += 1;
+        existing.price = calculatedPrice;
+        existing.tenure = activeProductTenure;
+      } else {
+        cart.push({...item, price: calculatedPrice, tenure: activeProductTenure, qty: 1});
+      }
+      updateCartUI();
+      populateRelocateProductDropdown();
     }
 
     // CART OPERATIONS
@@ -1526,7 +1671,7 @@
       if(existing) {
         existing.qty += 1;
       } else {
-        cart.push({...item, qty: 1});
+        cart.push({...item, tenure: 6, qty: 1});
       }
       updateCartUI();
       populateRelocateProductDropdown();
@@ -1544,7 +1689,7 @@
             <img src="${i.image}" class="cart-item-img" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';">
             <div style="flex-grow:1;">
               <div style="font-weight:700; font-size:14px;">${i.title}</div>
-              <div style="font-size:12px; color:var(--text-muted);">Store: ${i.shop} (${i.city})</div>
+              <div style="font-size:12px; color:var(--text-muted);">Store: ${i.shop} (${i.city}) | Plan: ${i.tenure || 6} Months</div>
               <div style="font-weight:800; color:var(--sage-primary); margin-top:4px;">₹${i.price}/mo</div>
             </div>
             <div class="qty-counter">
@@ -1676,35 +1821,64 @@
       document.getElementById(id).style.display = 'none';
     }
 
+    // UPDATED PAYMENT EXECUTION & DELIVERY POP-UP WORKFLOW
     function executePayment(method) {
       closeModal('payment-modal');
+      
       const modal = document.getElementById('qr-success-modal');
       modal.style.display = 'flex';
 
-      const qrTarget = document.getElementById('qrcode');
-      qrTarget.innerHTML = '';
       const sampleItem = cart[0] || PRODUCTS[0];
-      document.getElementById('qr-item-code').innerText = sampleItem.id;
-
-      new QRCode(qrTarget, {
-        text: `https://vcollab.app/verify?id=${sampleItem.id}`,
-        width: 160,
-        height: 160
-      });
+      const randomOrderId = "VC-" + Math.floor(10000 + Math.random() * 90000);
+      
+      document.getElementById('confirm-order-id').innerText = randomOrderId;
+      document.getElementById('confirm-product-title').innerText = sampleItem.title;
+      document.getElementById('confirm-status-pill').className = "status-badge-pending";
+      document.getElementById('confirm-status-pill').innerText = "Pending Handover";
+      
+      document.getElementById('otp-error-message').style.display = 'none';
+      document.getElementById('delivery-otp-input').value = VALID_DELIVERY_OTP;
+      document.getElementById('otp-section-wrapper').style.display = 'block';
     }
 
-    function simulateScanVerification() {
-      alert('QR Code Scanned Successfully!\n\nDigital Passport Verified:\n- Item Condition: 100% Intact\n- Escrow Released to Partner Store\n- Status: Active Handover Completed');
-      closeModal('qr-success-modal');
+    function verifyDeliveryOTP() {
+      const enteredOtp = document.getElementById('delivery-otp-input').value.trim();
+      const errorElem = document.getElementById('otp-error-message');
+
+      if (enteredOtp !== VALID_DELIVERY_OTP) {
+        errorElem.style.display = 'block';
+        return;
+      }
+
+      errorElem.style.display = 'none';
+      
+      // Update UI Status to Delivery Confirmed
+      const statusPill = document.getElementById('confirm-status-pill');
+      statusPill.className = "status-badge-delivered";
+      statusPill.innerText = "Delivery Confirmed";
+      
+      alert('✅ Order Status Updated: Delivery Confirmed!\nThank you for choosing VCollab.');
+      
+      // Hide OTP input section after successful verification
+      document.getElementById('otp-section-wrapper').style.display = 'none';
+      
       cart = [];
       updateCartUI();
-      switchView('customer-view');
     }
 
-    // ==========================================
-    // RETAILER DASHBOARD FUNCTIONS
-    // ==========================================
+    function openReportModal() {
+      document.getElementById('report-issue-modal').style.display = 'flex';
+    }
 
+    function submitProductReport() {
+      const category = document.getElementById('issue-category-select').value;
+      const desc = document.getElementById('issue-description-input').value;
+
+      alert(`⚠️ Support Request Registered!\nCategory: ${category}\nNotes: ${desc || 'N/A'}\n\nOur team has halted handover. A delivery agent will inspect and replace the product.`);
+      closeModal('report-issue-modal');
+    }
+
+    // RETAILER DASHBOARD FUNCTIONS
     function populateRetailerShopDropdown() {
       const select = document.getElementById('retailer-shop-select');
       if (!select) return;
@@ -1796,10 +1970,7 @@
       }
     }
 
-    // ==========================================
     // ADMIN DASHBOARD & BAR GRAPHS FUNCTIONS
-    // ==========================================
-
     function renderAdminDashboard() {
       renderAdminCitySummaryTable();
       renderAdminShopCommissionTable();
@@ -1817,7 +1988,7 @@
         const totalListed = cityShops.reduce((sum, s) => sum + s.listed, 0);
         const totalRented = cityShops.reduce((sum, s) => sum + s.rented, 0);
 
-        const cityGrossGMV = cityProducts.reduce((sum, p) => sum + p.price, 0) * 8; // Multiplier for scale
+        const cityGrossGMV = cityProducts.reduce((sum, p) => sum + p.price, 0) * 8;
         const cityCommission = Math.round(cityGrossGMV * 0.15);
         const cityRelocateMargin = Math.round(cityCommission * 0.18);
 
@@ -1865,7 +2036,6 @@
     }
 
     function renderAdminBarGraphs() {
-      // Aggregate Rented Items and Revenue by City
       const rentedDataByCity = CITIES.map(c => {
         return SHOPS_DATABASE.filter(s => s.city === c).reduce((sum, s) => sum + s.rented, 0);
       });
@@ -1877,11 +2047,9 @@
 
       const commissionDataByCity = gmvDataByCity.map(gmv => Math.round(gmv * 0.15));
 
-      // Destroy previous instances if re-rendering
       if (rentedItemsChartInstance) rentedItemsChartInstance.destroy();
       if (commissionChartInstance) commissionChartInstance.destroy();
 
-      // BAR GRAPH 1: Rented Items by City
       const ctx1 = document.getElementById('rentedItemsCityChart').getContext('2d');
       rentedItemsChartInstance = new Chart(ctx1, {
         type: 'bar',
@@ -1914,7 +2082,6 @@
         }
       });
 
-      // BAR GRAPH 2: GMV vs Commission by City
       const ctx2 = document.getElementById('commissionCityChart').getContext('2d');
       commissionChartInstance = new Chart(ctx2, {
         type: 'bar',
