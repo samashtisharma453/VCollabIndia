@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VCollab Checkout Flow</title>
+  <title>VCollab - Premium Rental Platform</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,14 +13,222 @@
     }
 
     body {
-      background-color: #f4f6f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background-color: #f8fafc;
+      color: #1e293b;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Modal Base Overlay */
+    /* Navigation Bar */
+    header {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      background: #00796b;
+      color: white;
+      font-weight: 800;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .brand-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #475569;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #00796b;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f1f5f9;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    /* Main Platform Layout */
+    main {
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 0 20px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, #1a3c34 0%, #00796b 100%);
+      color: white;
+      padding: 36px;
+      border-radius: 20px;
+      margin-bottom: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hero-text h1 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .hero-text p {
+      color: #e2e8f0;
+      font-size: 15px;
+    }
+
+    /* Product Grid */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .product-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+    }
+
+    .product-image {
+      height: 180px;
+      background: #fdfbf7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .product-body {
+      padding: 20px;
+    }
+
+    .product-tag {
+      display: inline-block;
+      background: #e6f4ea;
+      color: #137333;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .product-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+
+    .product-description {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px dashed #e2e8f0;
+      padding-top: 14px;
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1a3c34;
+    }
+
+    .price span {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 400;
+    }
+
+    .btn-rent {
+      background: #00796b;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-rent:hover {
+      background: #004d40;
+    }
+
+    /* Modal Overlay */
     .modal {
       display: none;
       position: fixed;
@@ -37,7 +245,6 @@
       display: flex;
     }
 
-    /* Modal Content Box */
     .modal-content {
       background: #ffffff;
       border-radius: 16px;
@@ -58,8 +265,8 @@
       line-height: 1;
     }
 
-    /* Typography */
-    .title {
+    /* Modal Typography & Elements */
+    .modal .title {
       font-family: Georgia, 'Times New Roman', serif;
       font-size: 24px;
       font-weight: 700;
@@ -67,13 +274,12 @@
       margin-bottom: 4px;
     }
 
-    .subtitle {
+    .modal .subtitle {
       font-size: 13.5px;
       color: #666666;
       margin-bottom: 20px;
     }
 
-    /* Amount Card */
     .amount-card {
       background-color: #fdfbf7;
       border-radius: 12px;
@@ -93,7 +299,6 @@
       margin-top: 4px;
     }
 
-    /* Payment Option Buttons */
     .payment-option-btn {
       width: 100%;
       background: #ffffff;
@@ -160,7 +365,6 @@
       gap: 12px;
     }
 
-    /* Action Button */
     .pay-submit-btn {
       width: 100%;
       background: #00796b;
@@ -178,7 +382,7 @@
       background: #004d40;
     }
 
-    /* UPI QR Display */
+    /* QR Display */
     .qr-container {
       text-align: center;
       margin: 12px 0 16px 0;
@@ -218,7 +422,7 @@
       font-weight: 600;
     }
 
-    /* Verification Screen (Attached SS 1) */
+    /* Verification Screen (Image 1 UI) */
     .badge-success {
       display: inline-flex;
       align-items: center;
@@ -336,13 +540,80 @@
 </head>
 <body>
 
-  <!-- Demo Trigger Button -->
-  <button class="pay-submit-btn" style="width: auto; padding: 12px 24px;" onclick="openModal('checkoutModal')">
-    Open VCollab Checkout
-  </button>
+  <!-- Header Section -->
+  <header>
+    <div class="brand">
+      <div class="brand-logo">V</div>
+      <div class="brand-title">VCollab</div>
+    </div>
+    <nav>
+      <a href="#">Explore</a>
+      <a href="#">Categories</a>
+      <a href="#">My Bookings</a>
+      <a href="#">Support</a>
+      <div class="user-profile">👤 Account</div>
+    </nav>
+  </header>
 
-  <!-- 1. MAIN CHECKOUT MODAL -->
-  <div id="checkoutModal" class="modal active">
+  <!-- Main Body Content -->
+  <main>
+    <div class="hero-section">
+      <div class="hero-text">
+        <h1>Rent High-Quality Items & Spaces</h1>
+        <p>Verified listings with instant handover verification.</p>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h2 class="section-title">Available for Rental</h2>
+    </div>
+
+    <div class="product-grid">
+      <!-- Item Card -->
+      <div class="product-card">
+        <div class="product-image">🪑</div>
+        <div class="product-body">
+          <span class="product-tag">Verified Listing</span>
+          <h3 class="product-title">Relaxing Balcony Swing Chair</h3>
+          <p class="product-description">Premium weather-resistant swing chair with comfortable cushions.</p>
+          <div class="product-footer">
+            <div class="price">₹450 <span>/ day</span></div>
+            <button class="btn-rent" onclick="openModal('checkoutModal')">Rent Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo Items -->
+      <div class="product-card">
+        <div class="product-image">📷</div>
+        <div class="product-body">
+          <span class="product-tag">Electronics</span>
+          <h3 class="product-title">4K DSLR Vlog Camera</h3>
+          <p class="product-description">Compact cinema camera with lens set for high-end video recording.</p>
+          <div class="product-footer">
+            <div class="price">₹850 <span>/ day</span></div>
+            <button class="btn-rent" onclick="openModal('checkoutModal')">Rent Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-image">⛺</div>
+        <div class="product-body">
+          <span class="product-tag">Outdoors</span>
+          <h3 class="product-title">4-Person Camping Tent</h3>
+          <p class="product-description">Waterproof pop-up outdoor tent suitable for weekend trips.</p>
+          <div class="product-footer">
+            <div class="price">₹600 <span>/ day</span></div>
+            <button class="btn-rent" onclick="openModal('checkoutModal')">Rent Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 1. INITIAL CHECKOUT SELECTION MODAL -->
+  <div id="checkoutModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('checkoutModal')">&times;</span>
       <h2 class="title">Complete Rental Booking</h2>
@@ -377,7 +648,6 @@
       <p class="subtitle">Scan QR or enter UPI ID to pay ₹450</p>
       
       <div class="qr-container">
-        <!-- SVG QR Code -->
         <svg width="130" height="130" viewBox="0 0 100 100" fill="#1a1a1a">
           <path d="M0,0 h35 v35 h-35 z M5,5 v25 h25 v-25 z M10,10 h15 v15 h-15 z"/>
           <path d="M65,0 h35 v35 h-35 z M70,5 v25 h25 v-25 z M75,10 h15 v15 h-15 z"/>
@@ -430,7 +700,7 @@
     </div>
   </div>
 
-  <!-- 4. ORDER VERIFICATION MODAL -->
+  <!-- 4. ORDER DELIVERY VERIFICATION MODAL -->
   <div id="verificationModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('verificationModal')">&times;</span>
@@ -468,7 +738,7 @@
         <p class="otp-subtext">Share this OTP with your delivery agent or enter the agent code below upon inspection:</p>
         <div class="otp-action-row">
           <div class="otp-box">4829</div>
-          <button class="btn-confirm">Confirm Delivery</button>
+          <button class="btn-confirm" onclick="alert('Delivery Confirmed!')">Confirm Delivery</button>
         </div>
       </div>
 
@@ -476,6 +746,7 @@
     </div>
   </div>
 
+  <!-- Interaction Logic -->
   <script>
     function openModal(modalId) {
       document.getElementById(modalId).classList.add('active');
