@@ -350,17 +350,12 @@
     }
     .blacklist-btn:hover { background: #D93025; color: #FFF; }
 
-    /* Floating Action Buttons Container */
-    .floating-btns-container {
+    /* Floating About Toggle Button */
+    .about-toggle-btn {
       position: fixed;
       bottom: 24px;
       right: 24px;
       z-index: 999;
-      display: flex;
-      gap: 12px;
-    }
-
-    .floating-btn {
       background: var(--sage-primary);
       color: #FFFFFF;
       border: none;
@@ -375,17 +370,10 @@
       gap: 6px;
       transition: all 0.2s ease-in-out;
     }
-    .floating-btn:hover {
+    .about-toggle-btn:hover {
       background: var(--teal-brand);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-    }
-    .floating-btn.support-btn {
-      background: var(--amber-accent);
-      color: var(--text-charcoal);
-    }
-    .floating-btn.support-btn:hover {
-      background: var(--amber-hover);
     }
   </style>
 </head>
@@ -854,60 +842,10 @@
     </div>
   </div>
 
-  <!-- FLOATING ACTION BUTTONS (HELP & SUPPORT + ABOUT) -->
-  <div class="floating-btns-container">
-    <button class="floating-btn support-btn" onclick="openSupportModal()">
-      <span>❓</span> Help & Support
-    </button>
-    <button class="floating-btn" onclick="openAboutModal()">
-      <span>ℹ️</span> About
-    </button>
-  </div>
-
-  <!-- HELP & SUPPORT POPUP MODAL -->
-  <div class="modal-overlay" id="support-modal">
-    <div class="modal-card" style="max-width: 480px;">
-      <button class="modal-close" onclick="closeModal('support-modal')">×</button>
-      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-        <span style="font-size: 24px;">🎧</span>
-        <h3 class="serif-font" style="font-size: 20px; color: var(--sage-primary);">Help & Support</h3>
-      </div>
-      
-      <div style="background: var(--teal-light); border-left: 4px solid var(--teal-brand); padding: 12px 14px; border-radius: 4px; margin-bottom: 16px;">
-        <p style="font-size: 13px; font-weight: 600; color: var(--sage-primary); line-height: 1.4;">
-          We are here 24/7 to help you with rental orders, product issues, or relocation assistance.
-        </p>
-      </div>
-
-      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
-        <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
-          <span style="font-size: 20px;">💬</span>
-          <div>
-            <div style="font-weight: 700; font-size: 13px;">WhatsApp Support</div>
-            <div style="font-size: 12px; color: var(--text-muted);">+91 98765 43210 (Instant Reply)</div>
-          </div>
-        </div>
-
-        <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
-          <span style="font-size: 20px;">📞</span>
-          <div>
-            <div style="font-weight: 700; font-size: 13px;">Toll-Free Helpline</div>
-            <div style="font-size: 12px; color: var(--text-muted);">1800-VCOLLAB (1800-826-5522)</div>
-          </div>
-        </div>
-
-        <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-cream); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
-          <span style="font-size: 20px;">✉️</span>
-          <div>
-            <div style="font-weight: 700; font-size: 13px;">Email Support</div>
-            <div style="font-size: 12px; color: var(--text-muted);">support@vcollab.in</div>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn-primary" style="width: 100%; padding: 10px;" onclick="closeModal('support-modal')">Close Window</button>
-    </div>
-  </div>
+  <!-- FLOATING ABOUT TOGGLE BUTTON -->
+  <button class="about-toggle-btn" onclick="openAboutModal()">
+    <span>ℹ️</span> About
+  </button>
 
   <!-- ABOUT PLATFORM POPUP MODAL -->
   <div class="modal-overlay" id="about-modal">
@@ -1041,19 +979,6 @@
         description: 'Spacious queen-sized wooden bed designed for deep rest.'
       },
       {
-        id: 'VC-DEL-BED-3',
-        title: 'King Size Solid Wood Bed',
-        category: 'bed',
-        city: 'Delhi-NCR',
-        shop: 'Delhi Bedding Studio',
-        locality: 'Janakpuri',
-        price: 1200,
-        originalPrice: 1600,
-        discount: '25% OFF',
-        image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80',
-        description: 'Luxurious king size solid wood bed with premium teak finish.'
-      },
-      {
         id: 'VC-DEL-APP-1',
         title: 'Fully Automatic Washing Machine',
         category: 'appliances',
@@ -1092,19 +1017,6 @@
         image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=600&q=80',
         description: 'Powerful window air conditioner with instant room cooling.'
       },
-      {
-        id: 'VC-DEL-APP-4',
-        title: '1.5 Ton 5-Star Split AC',
-        category: 'appliances',
-        city: 'Delhi-NCR',
-        shop: 'Sharma Electronics',
-        locality: 'Okhla',
-        price: 1250,
-        originalPrice: 1650,
-        discount: '24% OFF',
-        image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=600&q=80',
-        description: 'High-efficiency 1.5 Ton 5-Star inverter split AC with silent operation.'
-      },
 
       // MUMBAI
       {
@@ -1134,19 +1046,6 @@
         description: 'Cozy indoor/outdoor hanging swing chair with plush cushion.'
       },
       {
-        id: 'VC-MUM-BED-1',
-        title: 'King Size Solid Wood Bed',
-        category: 'bed',
-        city: 'Mumbai',
-        shop: 'Andheri Furniture Hub',
-        locality: 'Andheri',
-        price: 1250,
-        originalPrice: 1650,
-        discount: '24% OFF',
-        image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80',
-        description: 'Grand solid wood king size bed with solid headboard.'
-      },
-      {
         id: 'VC-MUM-APP-1',
         title: 'Countertop Digital Oven',
         category: 'appliances',
@@ -1171,19 +1070,6 @@
         discount: '21% OFF',
         image: 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80',
         description: 'High performance washer equipped with wash cycle presets.'
-      },
-      {
-        id: 'VC-MUM-APP-3',
-        title: '1.5 Ton 5-Star Split AC',
-        category: 'appliances',
-        city: 'Mumbai',
-        shop: 'Bandra Tech & Home',
-        locality: 'Bandra',
-        price: 1300,
-        originalPrice: 1700,
-        discount: '23% OFF',
-        image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=600&q=80',
-        description: 'Fast cooling 1.5 Ton inverter split AC ideal for Mumbai weather.'
       },
 
       // BENGALURU
@@ -1227,19 +1113,6 @@
         description: 'Solid teak finish double bed with elegant mosaic headboard.'
       },
       {
-        id: 'VC-BLR-BED-2',
-        title: 'King Size Solid Wood Bed',
-        category: 'bed',
-        city: 'Bengaluru',
-        shop: 'Koramangala Decor',
-        locality: 'Koramangala',
-        price: 1200,
-        originalPrice: 1550,
-        discount: '22% OFF',
-        image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80',
-        description: 'Spacious king size bed frame handcrafted from solid Sheesham wood.'
-      },
-      {
         id: 'VC-BLR-APP-1',
         title: 'Smart Automatic Washing Machine',
         category: 'appliances',
@@ -1278,19 +1151,6 @@
         image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80',
         description: 'Spacious double door fridge with uniform cooling airflow.'
       },
-      {
-        id: 'VC-BLR-APP-4',
-        title: '1.5 Ton 5-Star Split AC',
-        category: 'appliances',
-        city: 'Bengaluru',
-        shop: 'Indiranagar Home Mart',
-        locality: 'Indiranagar',
-        price: 1250,
-        originalPrice: 1600,
-        discount: '22% OFF',
-        image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=600&q=80',
-        description: 'Energy efficient 1.5 Ton split AC with dual filtration technology.'
-      },
 
       // HYDERABAD
       {
@@ -1305,19 +1165,6 @@
         discount: '23% OFF',
         image: 'https://images.unsplash.com/photo-1540518614846-7ede433c5172?auto=format&fit=crop&w=600&q=80',
         description: 'Premium wooden finish queen bed featuring sturdy frame.'
-      },
-      {
-        id: 'VC-HYD-BED-2',
-        title: 'King Size Solid Wood Bed',
-        category: 'bed',
-        city: 'Hyderabad',
-        shop: 'Gachibowli Furniture World',
-        locality: 'Gachibowli',
-        price: 1180,
-        originalPrice: 1500,
-        discount: '21% OFF',
-        image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80',
-        description: 'Solid wood king size bed with natural grain finish.'
       },
       {
         id: 'VC-HYD-FUR-2',
@@ -1371,19 +1218,6 @@
         image: 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80',
         description: 'Powerful laundry washer with smart agitation technology.'
       },
-      {
-        id: 'VC-HYD-APP-3',
-        title: '1.5 Ton 5-Star Split AC',
-        category: 'appliances',
-        city: 'Hyderabad',
-        shop: 'Gachibowli Appliance World',
-        locality: 'Gachibowli',
-        price: 1220,
-        originalPrice: 1550,
-        discount: '21% OFF',
-        image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=600&q=80',
-        description: 'Heavy-duty 1.5 Ton 5-Star inverter split AC for fast cooling.'
-      },
 
       // CHENNAI
       {
@@ -1411,19 +1245,6 @@
         discount: '26% OFF',
         image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80',
         description: 'Compact space saving bed designed for comfortable rest.'
-      },
-      {
-        id: 'VC-CHE-BED-2',
-        title: 'King Size Solid Wood Bed',
-        category: 'bed',
-        city: 'Chennai',
-        shop: 'T. Nagar Elite Furnishings',
-        locality: 'T. Nagar',
-        price: 1150,
-        originalPrice: 1500,
-        discount: '23% OFF',
-        image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80',
-        description: 'Premium King Size solid wood bed engineered for long life.'
       },
       {
         id: 'VC-CHE-APP-1',
@@ -1463,19 +1284,6 @@
         discount: '23% OFF',
         image: 'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=600&q=80',
         description: 'Energy-efficient refrigerator providing fast ice making.'
-      },
-      {
-        id: 'VC-CHE-APP-4',
-        title: '1.5 Ton 5-Star Split AC',
-        category: 'appliances',
-        city: 'Chennai',
-        shop: 'T. Nagar Retails',
-        locality: 'T. Nagar',
-        price: 1280,
-        originalPrice: 1650,
-        discount: '22% OFF',
-        image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=600&q=80',
-        description: 'Tropical climate 1.5 Ton 5-Star Split AC with instant cooling.'
       },
 
       // KOLKATA
@@ -1519,19 +1327,6 @@
         description: 'Set of sturdy wooden dining chairs with back support.'
       },
       {
-        id: 'VC-KOL-BED-1',
-        title: 'King Size Solid Wood Bed',
-        category: 'bed',
-        city: 'Kolkata',
-        shop: 'Park Street Decor',
-        locality: 'Park Street',
-        price: 1150,
-        originalPrice: 1480,
-        discount: '22% OFF',
-        image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80',
-        description: 'Traditional handcrafted solid wood King Size Bed.'
-      },
-      {
         id: 'VC-KOL-APP-1',
         title: 'Double Door Frost-Free Refrigerator',
         category: 'appliances',
@@ -1543,19 +1338,6 @@
         discount: '23% OFF',
         image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80',
         description: 'Large capacity frost free refrigerator with fast cooling.'
-      },
-      {
-        id: 'VC-KOL-APP-2',
-        title: '1.5 Ton 5-Star Split AC',
-        category: 'appliances',
-        city: 'Kolkata',
-        shop: 'Salt Lake Electricals',
-        locality: 'Salt Lake',
-        price: 1200,
-        originalPrice: 1550,
-        discount: '22% OFF',
-        image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=600&q=80',
-        description: '1.5 Ton 5-Star inverter split AC built for maximum energy efficiency.'
       }
     ];
 
@@ -1648,8 +1430,8 @@
         grid.innerHTML = `
           <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #FFF; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
             <div style="font-size: 32px; margin-bottom: 8px;">🏬</div>
-            <h3 class="serif-font" style="font-size: 18px; margin-bottom: 4px;">No products match your search or filter in ${currentCity}</h3>
-            <p style="font-size: 13px; color: var(--text-muted);">Try searching another keyword or clear your category filter.</p>
+            <h3 class="serif-font" style="font-size: 18px; margin-bottom: 4px;">No products match your current selection</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Try selecting another category or switching to a different city from the top bar.</p>
           </div>
         `;
         return;
@@ -1683,9 +1465,6 @@
 
     function handleSearch(query) {
       searchQuery = query;
-      if (document.getElementById('customer-view').classList.contains('active') === false) {
-        switchView('customer-view');
-      }
       renderMarketplace();
     }
 
@@ -1891,10 +1670,6 @@
 
     function openAboutModal() {
       document.getElementById('about-modal').style.display = 'flex';
-    }
-
-    function openSupportModal() {
-      document.getElementById('support-modal').style.display = 'flex';
     }
 
     function closeModal(id) {
