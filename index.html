@@ -347,12 +347,19 @@
     }
     .blacklist-btn:hover { background: #D93025; color: #FFF; }
 
-    /* Floating About Toggle Button */
-    .about-toggle-btn {
+    /* Floating Toggle Buttons Container */
+    .floating-buttons-group {
       position: fixed;
       bottom: 24px;
       right: 24px;
       z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .about-toggle-btn, .support-toggle-btn {
       background: var(--sage-primary);
       color: #FFFFFF;
       border: none;
@@ -367,8 +374,20 @@
       gap: 6px;
       transition: all 0.2s ease-in-out;
     }
+
+    .support-toggle-btn {
+      background: var(--amber-accent);
+      color: var(--text-charcoal);
+    }
+
     .about-toggle-btn:hover {
       background: var(--teal-brand);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    }
+
+    .support-toggle-btn:hover {
+      background: var(--amber-hover);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(0,0,0,0.2);
     }
@@ -816,6 +835,25 @@
       <tbody id="admin-city-summary-body"></tbody>
     </table>
 
+    <!-- SUBMITTED SUPPORT & FRAUD REPORTS TABLE (ADMIN VIEW) -->
+    <h3 style="font-size: 16px; margin-top: 32px; margin-bottom: 12px; color: var(--danger-red);">🚨 Help, Fraud & Escalation Tickets</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Ticket ID</th>
+          <th>Reporter</th>
+          <th>Type / Subject</th>
+          <th>Target / Shop / Item</th>
+          <th>Details</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="admin-reports-body">
+        <!-- Dynamically populated from support Tickets array -->
+      </tbody>
+    </table>
+
     <!-- SHOP-WISE COMMISSION CALCULATION TABLE (REAL DATA) -->
     <h3 style="font-size: 16px; margin-top: 32px; margin-bottom: 12px;">Shop-Wise Platform Commission Calculations</h3>
     <table class="data-table">
@@ -998,10 +1036,59 @@
     </div>
   </div>
 
-  <!-- FLOATING ABOUT TOGGLE BUTTON -->
-  <button class="about-toggle-btn" onclick="openAboutModal()">
-    <span>ℹ️</span> About
-  </button>
+  <!-- FLOATING TOGGLE BUTTONS GROUP -->
+  <div class="floating-buttons-group">
+    <button class="support-toggle-btn" onclick="openSupportModal()">
+      <span>🛡️</span> Help & Support / Report Fraud
+    </button>
+    <button class="about-toggle-btn" onclick="openAboutModal()">
+      <span>ℹ️</span> About
+    </button>
+  </div>
+
+  <!-- HELP & SUPPORT / REPORT FRAUD MODAL -->
+  <div class="modal-overlay" id="support-modal">
+    <div class="modal-card" style="max-width: 500px;">
+      <button class="modal-close" onclick="closeModal('support-modal')">×</button>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+        <span style="font-size: 24px;">🛡️</span>
+        <h3 class="serif-font" style="font-size: 20px; color: var(--sage-primary);">Help & Support / Report Fraud</h3>
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Have a query, issue, or suspicion of fraudulent listing/seller? Submit details below. It will immediately escalate to the Platform Admin panel.</p>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Reporting User Type</label>
+          <select id="support-reporter-type" class="form-input-styled">
+            <option value="Customer">Customer</option>
+            <option value="Retailer">Retailer Store</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Issue Category</label>
+          <select id="support-category" class="form-input-styled">
+            <option value="Fraud / Fake Listing">🚨 Report Fraud / Fake Listing / Overcharging</option>
+            <option value="Damaged / Defective Item">📦 Damaged / Defective Item Delivered</option>
+            <option value="Non-Payment / Settlement Query">💰 Settlement / Payment Query</option>
+            <option value="General Query / Support">❓ General Query / Account Support</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Target Store Name / Product Code (If applicable)</label>
+          <input type="text" id="support-target" placeholder="e.g. Delhi Furniture Mart / VC-DEL-SOF-1" class="form-input-styled">
+        </div>
+
+        <div>
+          <label style="font-size: 12px; font-weight: 700;">Detailed Explanation / Complaint</label>
+          <textarea id="support-details" class="form-input-styled" style="height: 90px; resize: none;" placeholder="Provide thorough description of your query or fraud report..."></textarea>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="submitSupportTicket()">Submit Ticket to Platform Admin →</button>
+    </div>
+  </div>
 
   <!-- ABOUT PLATFORM POPUP MODAL -->
   <div class="modal-overlay" id="about-modal">
@@ -1044,6 +1131,26 @@
   <script>
     // LIST OF EXACT 6 OPERATING CITIES
     const CITIES = ['Delhi-NCR', 'Mumbai', 'Bengaluru', 'Hyderabad', 'Chennai', 'Kolkata'];
+
+    // GLOBAL SUPPORT / FRAUD TICKETS STORAGE
+    let supportTickets = [
+      {
+        id: 'TICK-1001',
+        reporter: 'Customer (Rohan M.)',
+        type: 'Fraud / Fake Listing',
+        target: 'Capital Electronics Hub',
+        details: 'Retailer demanded security deposit in cash despite zero-deposit policy.',
+        status: 'Pending Admin Review'
+      },
+      {
+        id: 'TICK-1002',
+        reporter: 'Retailer (Sharma Electronics)',
+        type: 'Damaged / Defective Item',
+        target: 'Asset #VC-DEL-APP-3',
+        details: 'Unit returned with broken outer casing.',
+        status: 'Pending Admin Review'
+      }
+    ];
 
     // REAL SHOPS DATABASE (2-3 SHOPS PER CITY ACROSS ALL 6 CITIES)
     const SHOPS_DATABASE = [
@@ -1589,7 +1696,7 @@
           <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #FFF; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
             <div style="font-size: 32px; margin-bottom: 8px;">🏬</div>
             <h3 class="serif-font" style="font-size: 18px; margin-bottom: 4px;">No products match your current selection</h3>
-            <p style="font-size: 13px; color: var(--text-muted);">Try selecting another category or switching to a different city from the top bar.</p>
+            <p style="font-size: 13px; color: var(--text-muted);">Try selecting another category or searching for products in ${currentCity}.</p>
           </div>
         `;
         return;
@@ -1623,6 +1730,10 @@
 
     function handleSearch(query) {
       searchQuery = query;
+      // Switch back to customer marketplace view if searching from another page
+      if (document.getElementById('customer-view').style.display !== 'block' && query.trim() !== '') {
+        switchView('customer-view');
+      }
       renderMarketplace();
     }
 
@@ -1862,6 +1973,20 @@
       }
     }
 
+    function setDemoMode(mode) {
+      document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+      if (mode === 'customer') {
+        document.getElementById('mode-cust').classList.add('active');
+        switchView('customer-view');
+      } else if (mode === 'retailer') {
+        document.getElementById('mode-ret').classList.add('active');
+        switchView('retailer-view');
+      } else if (mode === 'admin') {
+        document.getElementById('mode-adm').classList.add('active');
+        switchView('admin-view');
+      }
+    }
+
     function openPaymentModal() {
       if(cart.length === 0) return alert('Add items to cart first');
       document.getElementById('payment-modal').style.display = 'flex';
@@ -1871,8 +1996,42 @@
       document.getElementById('about-modal').style.display = 'flex';
     }
 
+    function openSupportModal() {
+      document.getElementById('support-modal').style.display = 'flex';
+    }
+
     function closeModal(id) {
       document.getElementById(id).style.display = 'none';
+    }
+
+    // SUPPORT TICKET SUBMISSION TO ADMIN
+    function submitSupportTicket() {
+      const reporter = document.getElementById('support-reporter-type').value;
+      const category = document.getElementById('support-category').value;
+      const target = document.getElementById('support-target').value || 'N/A';
+      const details = document.getElementById('support-details').value;
+
+      if (!details.trim()) {
+        alert('Please describe your ticket query or fraud report.');
+        return;
+      }
+
+      const ticketId = 'TICK-' + Math.floor(1000 + Math.random() * 9000);
+      supportTickets.push({
+        id: ticketId,
+        reporter: reporter,
+        type: category,
+        target: target,
+        details: details,
+        status: 'Pending Admin Review'
+      });
+
+      alert(`✅ Support Ticket (${ticketId}) Submitted Successfully!\n\nYour query/report has been dispatched directly to the Platform Admin Dashboard.`);
+      closeModal('support-modal');
+      
+      // Clear inputs
+      document.getElementById('support-target').value = '';
+      document.getElementById('support-details').value = '';
     }
 
     // PAYMENT SUB-MODAL LOGIC (CARD & UPI)
@@ -1997,126 +2156,132 @@
       const shopGrossRevenue = shopItems.reduce((acc, item) => acc + item.price, 0);
       const shopCommission = Math.round(shopGrossRevenue * 0.15);
 
-      // Populate Summary Boxes
+      // Update Summary Cards
       document.getElementById('ret-box-shop-name').innerText = shopObj.shopName;
       document.getElementById('ret-box-shop-city').innerText = `📍 ${shopObj.city} (${shopObj.locality})`;
-      
       document.getElementById('ret-box-items-listed').innerText = `${totalListed} Units`;
       document.getElementById('ret-box-items-rented').innerText = `${totalRented} Units`;
       document.getElementById('ret-box-rented-rate').innerText = `${utilizationRate}% Utilization`;
-      
       document.getElementById('ret-box-commission').innerText = `₹${shopCommission}/mo`;
-      document.getElementById('ret-box-gross-revenue').innerText = `On Active Rent ₹${shopGrossRevenue}/mo`;
+      document.getElementById('ret-box-gross-revenue').innerText = `On Gross ₹${shopGrossRevenue}/mo`;
 
-      // Populate Table
-      const body = document.getElementById('retailer-table-body');
+      // Render Shop Inventory Table
+      const tbody = document.getElementById('retailer-table-body');
       if (shopItems.length === 0) {
-        body.innerHTML = `
-          <tr>
-            <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 20px;">
-              No individual items cataloged in sample view for this shop. Overview stats derived from live database above.
-            </td>
-          </tr>
-        `;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding: 20px; color: var(--text-muted);">No products currently listed for this store.</td></tr>`;
         return;
       }
 
-      body.innerHTML = shopItems.map(p => {
-        const comm = Math.round(p.price * 0.15);
-        const net = p.price - comm;
+      tbody.innerHTML = shopItems.map((item, idx) => {
+        const comm = Math.round(item.price * 0.15);
+        const payout = item.price - comm;
+        const isRented = idx % 2 === 0; // Simulated status
+
         return `
           <tr>
-            <td><code>${p.id}</code></td>
-            <td><strong>${p.title}</strong></td>
-            <td><span style="text-transform: capitalize;">${p.category}</span></td>
-            <td>${p.city} (${p.locality})</td>
-            <td>₹${p.price}/mo</td>
-            <td style="color: var(--danger-red); font-weight:700;">-₹${comm}</td>
-            <td style="color: green; font-weight:700;">₹${net}</td>
-            <td><span class="verify-badge">✓ Active Listing</span></td>
+            <td><strong>${item.id}</strong></td>
+            <td>${item.title}</td>
+            <td><span style="text-transform: capitalize;">${item.category}</span></td>
+            <td>${item.city} - ${item.locality}</td>
+            <td style="font-weight:700;">₹${item.price}/mo</td>
+            <td style="color: var(--danger-red); font-weight: 600;">₹${comm}</td>
+            <td style="color: #137333; font-weight: 700;">₹${payout}</td>
+            <td>${isRented ? '<span class="status-badge-delivered">Rented Out</span>' : '<span class="status-badge-pending">Available</span>'}</td>
             <td>
-              <button class="blacklist-btn" onclick="toggleShopBlacklist('${shopObj.shopName}')" title="Report & Blacklist Fraud Store">
-                🚫 ${shopObj.isBlacklisted ? 'Unflag' : 'Report Fraud'}
-              </button>
+              <button class="btn-secondary" style="padding: 4px 8px; font-size: 11px; color: var(--danger-red); border-color: #F5C6CB;" onclick="openSupportModal()">Flag Issue</button>
             </td>
           </tr>
         `;
       }).join('');
     }
 
-    function toggleShopBlacklist(shopName) {
-      const shop = SHOPS_DATABASE.find(s => s.shopName === shopName);
-      if (shop) {
-        shop.isBlacklisted = !shop.isBlacklisted;
-        if (shop.isBlacklisted) {
-          alert(`⚠️ ALERT: ${shopName} has been blacklisted for fraudulent activity! VCollab operations team notified.`);
-        } else {
-          alert(`✅ Notice: Blacklist flag removed for ${shopName}.`);
-        }
-        renderRetailerDashboard();
-        if (document.getElementById('admin-view').classList.contains('active')) {
-          renderAdminDashboard();
-        }
-      }
-    }
-
-    // ADMIN DASHBOARD & BAR GRAPHS FUNCTIONS
+    // PLATFORM ADMIN DASHBOARD & CHARTS
     function renderAdminDashboard() {
       renderAdminCitySummaryTable();
+      renderAdminReportsTable();
       renderAdminShopCommissionTable();
-      renderAdminBarGraphs();
+      renderAdminCharts();
     }
 
     function renderAdminCitySummaryTable() {
-      const body = document.getElementById('admin-city-summary-body');
+      const tbody = document.getElementById('admin-city-summary-body');
       
-      body.innerHTML = CITIES.map(cityName => {
-        const cityShops = SHOPS_DATABASE.filter(s => s.city === cityName);
-        const cityProducts = PRODUCTS.filter(p => p.city === cityName);
+      tbody.innerHTML = CITIES.map(city => {
+        const cityShops = SHOPS_DATABASE.filter(s => s.city === city);
+        const cityProducts = PRODUCTS.filter(p => p.city === city);
 
-        const storeCount = cityShops.length;
-        const totalListed = cityShops.reduce((sum, s) => sum + s.listed, 0);
-        const totalRented = cityShops.reduce((sum, s) => sum + s.rented, 0);
+        const totalStores = cityShops.length;
+        const listedItems = cityShops.reduce((s, sh) => s + sh.listed, 0);
+        const rentedItems = cityShops.reduce((s, sh) => s + sh.rented, 0);
 
-        const cityGrossGMV = cityProducts.reduce((sum, p) => sum + p.price, 0) * 8;
-        const cityCommission = Math.round(cityGrossGMV * 0.15);
-        const cityRelocateMargin = Math.round(cityCommission * 0.18);
+        const grossGmv = cityProducts.reduce((s, p) => s + p.price, 0);
+        const commission = Math.round(grossGmv * 0.15);
+        const relocationRev = (totalStores * 1149);
 
         return `
           <tr>
-            <td><strong>📍 ${cityName}</strong></td>
-            <td>${storeCount} Active Stores</td>
-            <td>${totalListed} Units</td>
-            <td><strong style="color: var(--sage-primary);">${totalRented} Rented</strong></td>
-            <td>₹${cityGrossGMV.toLocaleString('en-IN')}</td>
-            <td><strong style="color: var(--teal-brand);">₹${cityCommission.toLocaleString('en-IN')}</strong></td>
-            <td>₹${cityRelocateMargin.toLocaleString('en-IN')}</td>
+            <td><strong>📍 ${city}</strong></td>
+            <td>${totalStores} Stores</td>
+            <td>${listedItems} Units</td>
+            <td><strong style="color: #137333;">${rentedItems} Units</strong></td>
+            <td style="font-weight: 700;">₹${grossGmv.toLocaleString()}</td>
+            <td style="color: var(--teal-brand); font-weight: 800;">₹${commission.toLocaleString()}</td>
+            <td>₹${relocationRev.toLocaleString()}</td>
           </tr>
         `;
       }).join('');
     }
 
-    function renderAdminShopCommissionTable() {
-      const body = document.getElementById('admin-shop-commission-body');
+    function renderAdminReportsTable() {
+      const tbody = document.getElementById('admin-reports-body');
+      
+      if (supportTickets.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-muted); padding:16px;">No support tickets or fraud reports submitted.</td></tr>`;
+        return;
+      }
 
-      body.innerHTML = SHOPS_DATABASE.map(shop => {
+      tbody.innerHTML = supportTickets.map(t => `
+        <tr>
+          <td><strong>${t.id}</strong></td>
+          <td>${t.reporter}</td>
+          <td><span style="color: var(--danger-red); font-weight: 700;">${t.type}</span></td>
+          <td><strong>${t.target}</strong></td>
+          <td style="max-width: 250px; font-size: 12px; color: var(--text-muted);">${t.details}</td>
+          <td><span class="status-badge-pending">${t.status}</span></td>
+          <td>
+            <button class="btn-primary" style="padding: 4px 8px; font-size: 11px;" onclick="resolveSupportTicket('${t.id}')">Resolve & Dismiss</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function resolveSupportTicket(ticketId) {
+      supportTickets = supportTickets.filter(t => t.id !== ticketId);
+      alert(`Ticket ${ticketId} has been resolved by Admin.`);
+      renderAdminReportsTable();
+    }
+
+    function renderAdminShopCommissionTable() {
+      const tbody = document.getElementById('admin-shop-commission-body');
+
+      tbody.innerHTML = SHOPS_DATABASE.map(shop => {
         const shopProds = PRODUCTS.filter(p => p.shop === shop.shopName);
-        const grossRent = shopProds.reduce((sum, p) => sum + p.price, 0) || (shop.rented * 850);
-        const commissionAmt = Math.round(grossRent * 0.15);
+        const grossVal = shopProds.reduce((s, p) => s + p.price, 0);
+        const commEarned = Math.round(grossVal * 0.15);
 
         return `
           <tr>
             <td><strong>${shop.shopName}</strong></td>
             <td>${shop.city}</td>
             <td>${shop.locality}</td>
-            <td>${shop.listed} Listed / <span style="color: #137333; font-weight: 700;">${shop.rented} Rented</span></td>
-            <td>₹${grossRent.toLocaleString('en-IN')}</td>
-            <td><code style="background: #FAF7F2; padding: 2px 6px; border-radius: 4px;">15% of ₹${grossRent}</code></td>
-            <td><strong style="color: var(--teal-brand);">₹${commissionAmt.toLocaleString('en-IN')}</strong></td>
+            <td>${shop.listed} / ${shop.rented} Units</td>
+            <td>₹${grossVal}</td>
+            <td>15% Flat Rate</td>
+            <td style="color: var(--teal-brand); font-weight: 800;">₹${commEarned}</td>
             <td>
               ${shop.isBlacklisted 
-                ? `<span class="badge-blacklisted">🚫 Blacklisted</span>` 
-                : `<button class="blacklist-btn" onclick="toggleShopBlacklist('${shop.shopName}')">🚫 Blacklist</button>`
+                ? '<span class="badge-blacklisted">Blacklisted</span>' 
+                : `<button class="blacklist-btn" onclick="toggleBlacklistShop('${shop.shopName}')">⛔ Blacklist Store</button>`
               }
             </td>
           </tr>
@@ -2124,83 +2289,86 @@
       }).join('');
     }
 
-    function renderAdminBarGraphs() {
-      const cityRentedData = CITIES.map(c => {
-        return SHOPS_DATABASE.filter(s => s.city === c).reduce((sum, s) => sum + s.rented, 0);
-      });
-
-      const cityCommissionData = CITIES.map(c => {
-        const prods = PRODUCTS.filter(p => p.city === c);
-        const gmv = prods.reduce((sum, p) => sum + p.price, 0) * 8;
-        return Math.round(gmv * 0.15);
-      });
-
-      // Chart 1: Rented Items Volume
-      const ctx1 = document.getElementById('rentedItemsCityChart');
-      if (ctx1) {
-        if (rentedItemsChartInstance) rentedItemsChartInstance.destroy();
-        rentedItemsChartInstance = new Chart(ctx1, {
-          type: 'bar',
-          data: {
-            labels: CITIES,
-            datasets: [{
-              label: 'Rented Units',
-              data: cityRentedData,
-              backgroundColor: '#008080',
-              borderRadius: 6
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-          }
-        });
+    function toggleBlacklistShop(shopName) {
+      const shop = SHOPS_DATABASE.find(s => s.shopName === shopName);
+      if (shop) {
+        shop.isBlacklisted = !shop.isBlacklisted;
+        alert(`Store ${shopName} status updated!`);
+        renderAdminDashboard();
       }
+    }
 
-      // Chart 2: Commission Collection
-      const ctx2 = document.getElementById('commissionCityChart');
-      if (ctx2) {
-        if (commissionChartInstance) commissionChartInstance.destroy();
-        commissionChartInstance = new Chart(ctx2, {
-          type: 'bar',
-          data: {
-            labels: CITIES,
-            datasets: [{
-              label: 'Commission (₹)',
-              data: cityCommissionData,
+    function renderAdminCharts() {
+      const cityLabels = CITIES;
+      
+      // Calculate Rented Volume per city
+      const rentedData = cityLabels.map(city => {
+        return SHOPS_DATABASE.filter(s => s.city === city).reduce((acc, s) => acc + s.rented, 0);
+      });
+
+      // Calculate GMV & Commission per city
+      const gmvData = cityLabels.map(city => {
+        return PRODUCTS.filter(p => p.city === city).reduce((acc, p) => acc + p.price, 0);
+      });
+      const commData = gmvData.map(val => Math.round(val * 0.15));
+
+      // Destroy previous instances if they exist
+      if (rentedItemsChartInstance) rentedItemsChartInstance.destroy();
+      if (commissionChartInstance) commissionChartInstance.destroy();
+
+      // CHART 1: RENTED VOLUME
+      const ctx1 = document.getElementById('rentedItemsCityChart').getContext('2d');
+      rentedItemsChartInstance = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: cityLabels,
+          datasets: [{
+            label: 'Rented Units',
+            data: rentedData,
+            backgroundColor: '#008080',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      // CHART 2: REVENUE VS COMMISSION
+      const ctx2 = document.getElementById('commissionCityChart').getContext('2d');
+      commissionChartInstance = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: cityLabels,
+          datasets: [
+            {
+              label: 'Gross Rental Value (₹)',
+              data: gmvData,
+              backgroundColor: '#EAE5DC',
+              borderRadius: 6
+            },
+            {
+              label: '15% Admin Commission (₹)',
+              data: commData,
               backgroundColor: '#E8A33D',
               borderRadius: 6
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-          }
-        });
-      }
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
     }
 
-    function setDemoMode(mode) {
-      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-      if (mode === 'customer') {
-        document.getElementById('mode-cust').classList.add('active');
-        switchView('customer-view');
-      } else if (mode === 'retailer') {
-        document.getElementById('mode-ret').classList.add('active');
-        switchView('retailer-view');
-      } else if (mode === 'admin') {
-        document.getElementById('mode-adm').classList.add('active');
-        switchView('admin-view');
-      }
-    }
-
-    // INITIAL RENDER
-    renderMarketplace();
-    updateCartUI();
+    // INITIALIZATION ON PAGE LOAD
+    window.addEventListener('DOMContentLoaded', () => {
+      renderMarketplace();
+      updateCartUI();
+    });
   </script>
 </body>
 </html>
