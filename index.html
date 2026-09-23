@@ -1954,104 +1954,176 @@
     function toggleReinstallationFee(isChecked) {
       isReinstallSelected = isChecked;
       document.getElementById('reinstall-fee-display').innerText = isChecked ? '₹350' : '₹0 (Skipped)';
-      
-      const baseFee = 799;
-      const reinstallFee = isChecked ? 350 : 0;
-      const totalFee = baseFee + reinstallFee;
-      const advanceFee = Math.round(totalFee * 0.60);
-      const postFee = totalFee - advanceFee;
+      updateRelocationTotalFee();
+    }
 
-      document.getElementById('relocate-total-fee').innerText = `₹${totalFee}`;
-      document.getElementById('relocate-advance-fee').innerText = `₹${advanceFee}`;
-      document.getElementById('relocate-post-fee').innerText = `₹${postFee}`;
-      document.getElementById('modal-pay-now').innerText = `₹${advanceFee}`;
-      document.getElementById('modal-pay-later').innerText = `₹${postFee}`;
+    function updateRelocationTotalFee() {
+      const baseFee = 799;
+      const reinstallFee = isReinstallSelected ? 350 : 0;
+      const total = baseFee + reinstallFee;
+      
+      const advance = Math.round(total * 0.60);
+      const post = total - advance;
+
+      document.getElementById('relocate-total-fee').innerText = `₹${total}`;
+      document.getElementById('relocate-advance-fee').innerText = `₹${advance}`;
+      document.getElementById('relocate-post-fee').innerText = `₹${post}`;
+
+      document.getElementById('modal-pay-now').innerText = `₹${advance}`;
+      document.getElementById('modal-pay-later').innerText = `₹${post}`;
     }
 
     function populateRelocateProductDropdown() {
       const select = document.getElementById('relocate-product-select');
-      if (!select) return;
+      if(!select) return;
 
-      if (cart.length > 0) {
-        select.innerHTML = cart.map(item => `
-          <option value="${item.id}">${item.title} (From ${item.shop})</option>
-        `).join('');
-      } else {
-        const activeCityProducts = PRODUCTS.filter(p => p.city === currentCity);
-        select.innerHTML = activeCityProducts.map(item => `
-          <option value="${item.id}">${item.title} (Store: ${item.shop})</option>
-        `).join('');
-      }
+      const itemsAvailable = cart.length > 0 ? cart : PRODUCTS.filter(p => p.city === currentCity);
+      
+      select.innerHTML = itemsAvailable.map(p => `
+        <option value="${p.id}">${p.title} (${p.city})</option>
+      `).join('');
     }
 
     function openRelocationModal() {
-      const destAddr = document.getElementById('relocate-dest-addr').value.trim();
-      if (!destAddr) {
-        alert('Please enter your destination relocation locality.');
+      const currentAddr = document.getElementById('relocate-current-addr').value;
+      const destAddr = document.getElementById('relocate-dest-addr').value;
+
+      if (!destAddr.trim()) {
+        alert('Please enter your Destination Relocation Locality address.');
         return;
       }
-      
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById('relocate-date-input').value = today;
-      document.getElementById('relocate-time-input').value = '10:00 AM - 01:00 PM';
 
-      openModal('relocation-modal');
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById('relocate-date-input').value = tomorrow.toISOString().split('T')[0];
+
+      document.getElementById('relocation-modal').style.display = 'flex';
     }
 
     function confirmRelocationBooking() {
       const dateVal = document.getElementById('relocate-date-input').value;
-      const timeVal = document.getElementById('relocate-time-input').value;
+      const timeVal = document.getElementById('relocate-time-input').value || 'Flexible Hours';
 
-      if (!dateVal || !timeVal) {
-        alert('Please specify both relocation date and time slot.');
+      if (!dateVal) {
+        alert('Please choose a relocation date.');
         return;
       }
 
+      alert(`Your request is submitted successfully!\n\nRelocation Scheduled on: ${dateVal}\nPreferred Time: ${timeVal}\n\n60% Advance Payment Received! Our partner driver will reach out shortly.`);
       closeModal('relocation-modal');
-      alert(`🎉 Relocation Booking Confirmed!\n\nScheduled Date: ${dateVal}\nTime Slot: ${timeVal}\n60% Advance Paid Successfully.`);
+      switchView('customer-view');
     }
 
-    // VIEW SWITCHING
+    // ADD STOCK MODAL FUNCTIONS
+    function openAddStockModal() {
+      document.getElementById('add-stock-shop-name').value = selectedRetailerShop;
+      document.getElementById('add-stock-modal').style.display = 'flex';
+    }
+
+    function submitNewStock() {
+      const shopName = document.getElementById('add-stock-shop-name').value;
+      const title = document.getElementById('add-stock-title').value.trim();
+      const category = document.getElementById('add-stock-category').value;
+      const price = parseFloat(document.getElementById('add-stock-price').value);
+      const image = document.getElementById('add-stock-image').value.trim();
+
+      if (!title || isNaN(price) || price <= 0) {
+        alert('Please fill in a valid product title and price.');
+        return;
+      }
+
+      // Find shop metadata from SHOPS_DATABASE
+      const shopObj = SHOPS_DATABASE.find(s => s.shopName === shopName) || {
+        city: currentCity,
+        locality: 'Central'
+      };
+
+      const newId = `VC-${shopObj.city.substring(0, 3).toUpperCase()}-${category.substring(0, 3).toUpperCase()}-${PRODUCTS.length + 1}`;
+      const defaultImg = image || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';
+
+      const newProduct = {
+        id: newId,
+        title: title,
+        category: category,
+        city: shopObj.city,
+        shop: shopName,
+        locality: shopObj.locality,
+        price: price,
+        originalPrice: Math.round(price * 1.25),
+        discount: '20% OFF',
+        image: defaultImg,
+        description: `${title} listed by ${shopName}. High quality rental inventory.`
+      };
+
+      // Add to global catalog
+      PRODUCTS.push(newProduct);
+
+      // Update shop count
+      if (shopObj) {
+        shopObj.listed += 1;
+      }
+
+      alert(`Success! Stock item "${title}" added to ${shopName}. Information has been synchronized with the Admin Panel.`);
+
+      // Reset form
+      document.getElementById('add-stock-title').value = '';
+      document.getElementById('add-stock-price').value = '';
+      document.getElementById('add-stock-image').value = '';
+
+      closeModal('add-stock-modal');
+
+      // Refresh current views
+      renderRetailerDashboard();
+      renderAdminDashboard();
+      renderMarketplace();
+    }
+
+    // VIEW & MODAL MANAGEMENT
     function switchView(viewId) {
       document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
       const targetView = document.getElementById(viewId);
-      if(targetView) targetView.classList.add('active');
+      if (targetView) {
+        targetView.classList.add('active');
+        window.scrollTo(0, 0);
+      }
 
-      if(viewId === 'retailer-view') {
+      if (viewId === 'retailer-view') {
         populateRetailerShopDropdown();
         renderRetailerDashboard();
       }
-      if(viewId === 'admin-view') {
+
+      if (viewId === 'admin-view') {
         renderAdminDashboard();
       }
-      if(viewId === 'relocate-view') {
-        populateRelocateProductDropdown();
-      }
-      
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function setDemoMode(mode) {
-      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-      
-      if(mode === 'customer') {
+      document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+      if (mode === 'customer') {
         document.getElementById('mode-cust').classList.add('active');
         switchView('customer-view');
-      } else if(mode === 'retailer') {
+      } else if (mode === 'retailer') {
         document.getElementById('mode-ret').classList.add('active');
         switchView('retailer-view');
-      } else if(mode === 'admin') {
+      } else if (mode === 'admin') {
         document.getElementById('mode-adm').classList.add('active');
         switchView('admin-view');
       }
     }
 
-    // RETAILER DASHBOARD REAL DATA COMPUTATIONS
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.style.display = 'none';
+    }
+
+    // RETAILER DASHBOARD RENDERING
     function populateRetailerShopDropdown() {
       const select = document.getElementById('retailer-shop-select');
-      select.innerHTML = SHOPS_DATABASE.map(shop => `
-        <option value="${shop.shopName}" ${shop.shopName === selectedRetailerShop ? 'selected' : ''}>
-          ${shop.shopName} (${shop.city})
+      if (!select) return;
+
+      select.innerHTML = SHOPS_DATABASE.map(s => `
+        <option value="${s.shopName}" ${s.shopName === selectedRetailerShop ? 'selected' : ''}>
+          ${s.shopName} (${s.city})
         </option>
       `).join('');
     }
@@ -2065,174 +2137,125 @@
       const shopObj = SHOPS_DATABASE.find(s => s.shopName === selectedRetailerShop) || SHOPS_DATABASE[0];
       const shopProducts = PRODUCTS.filter(p => p.shop === shopObj.shopName);
 
+      // Update Summary Cards
       document.getElementById('ret-box-shop-name').innerText = shopObj.shopName;
       document.getElementById('ret-box-shop-city').innerText = `📍 ${shopObj.city} (${shopObj.locality})`;
-      document.getElementById('ret-box-items-listed').innerText = `${shopObj.listed} Units`;
+      document.getElementById('ret-box-items-listed').innerText = `${shopProducts.length} Units`;
       document.getElementById('ret-box-items-rented').innerText = `${shopObj.rented} Units`;
 
-      const utilRate = ((shopObj.rented / shopObj.listed) * 100).toFixed(1);
+      const utilRate = shopProducts.length > 0 ? ((shopObj.rented / shopProducts.length) * 100).toFixed(1) : 0;
       document.getElementById('ret-box-rented-rate').innerText = `${utilRate}% Utilization`;
 
       const grossRev = shopProducts.reduce((sum, p) => sum + p.price, 0);
-      const commissionFee = Math.round(grossRev * 0.15);
+      const commission = Math.round(grossRev * 0.15);
 
-      document.getElementById('ret-box-commission').innerText = `₹${commissionFee}/mo`;
+      document.getElementById('ret-box-commission').innerText = `₹${commission}/mo`;
       document.getElementById('ret-box-gross-revenue').innerText = `On Gross ₹${grossRev}/mo`;
 
-      const tableBody = document.getElementById('retailer-table-body');
-      
+      // Render Table
+      const tbody = document.getElementById('retailer-table-body');
       if (shopProducts.length === 0) {
-        tableBody.innerHTML = `
-          <tr>
-            <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 20px;">
-              No items listed yet for ${shopObj.shopName}. Click <strong>+ Add Stock</strong> above to add inventory.
-            </td>
-          </tr>
-        `;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding: 20px;">No listed inventory for this store.</td></tr>`;
         return;
       }
 
-      tableBody.innerHTML = shopProducts.map((item, idx) => {
+      tbody.innerHTML = shopProducts.map((item, idx) => {
         const comm = Math.round(item.price * 0.15);
         const netPayout = item.price - comm;
-        const statusText = (idx % 2 === 0) ? 'Rented Out' : 'Available in Shop';
-        const statusColor = (idx % 2 === 0) ? 'color: #137333; font-weight:700;' : 'color: var(--teal-brand); font-weight:600;';
+        const statusStr = idx < shopObj.rented ? '🟢 Rented' : '🔵 Available';
 
         return `
           <tr>
             <td><strong>${item.id}</strong></td>
             <td>${item.title}</td>
-            <td style="text-transform: capitalize;">${item.category}</td>
-            <td>${item.city} (${item.locality})</td>
-            <td><strong>₹${item.price}/mo</strong></td>
-            <td style="color: var(--danger-red); font-weight: 700;">-₹${comm}</td>
-            <td style="color: #137333; font-weight: 800;">₹${netPayout}</td>
-            <td style="${statusColor}">${statusText}</td>
+            <td><span style="text-transform: capitalize;">${item.category}</span></td>
+            <td>${item.city} - ${item.locality}</td>
+            <td>₹${item.price}/mo</td>
+            <td style="color: var(--danger-red); font-weight:700;">₹${comm}</td>
+            <td style="color: #137333; font-weight:700;">₹${netPayout}</td>
+            <td>${statusStr}</td>
+            <td><button class="btn-secondary" style="padding: 4px 8px; font-size:11px;" onclick="openSupportModalWithTarget('${item.id}')">Report Issue</button></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ADMIN DASHBOARD & ANALYTICS RENDERING
+    function renderAdminDashboard() {
+      // 1. Render City Cluster Table
+      const citySummaryBody = document.getElementById('admin-city-summary-body');
+      
+      const cityData = CITIES.map(city => {
+        const cityShops = SHOPS_DATABASE.filter(s => s.city === city);
+        const cityProds = PRODUCTS.filter(p => p.city === city);
+        const rentedCount = cityShops.reduce((sum, s) => sum + s.rented, 0);
+        const grossGmv = cityProds.reduce((sum, p) => sum + p.price, 0);
+        const comm = Math.round(grossGmv * 0.15);
+        const relocateRev = cityShops.length * 1149; // Simulated logistics rev
+
+        return { city, shopCount: cityShops.length, listed: cityProds.length, rented: rentedCount, grossGmv, comm, relocateRev };
+      });
+
+      citySummaryBody.innerHTML = cityData.map(d => `
+        <tr>
+          <td><strong>${d.city}</strong></td>
+          <td>${d.shopCount} Stores</td>
+          <td>${d.listed} Units</td>
+          <td>${d.rented} Rented</td>
+          <td>₹${d.grossGmv}</td>
+          <td style="color: var(--sage-primary); font-weight: 700;">₹${d.comm}</td>
+          <td style="color: var(--teal-brand);">₹${d.relocateRev}</td>
+        </tr>
+      `).join('');
+
+      // 2. Render Support Reports Table
+      const reportsBody = document.getElementById('admin-reports-body');
+      reportsBody.innerHTML = supportTickets.map(t => `
+        <tr>
+          <td><strong>${t.id}</strong></td>
+          <td>${t.reporter}</td>
+          <td>${t.type}</td>
+          <td>${t.target}</td>
+          <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t.details}</td>
+          <td><span class="status-badge-pending">${t.status}</span></td>
+          <td><button class="btn-primary" style="padding: 4px 8px; font-size:11px;" onclick="resolveTicket('${t.id}')">Mark Resolved</button></td>
+        </tr>
+      `).join('');
+
+      // 3. Render Shop-wise Commission & Fraud Flag Table
+      const shopCommBody = document.getElementById('admin-shop-commission-body');
+      shopCommBody.innerHTML = SHOPS_DATABASE.map(s => {
+        const shopProds = PRODUCTS.filter(p => p.shop === s.shopName);
+        const grossVal = shopProds.reduce((sum, p) => sum + p.price, 0);
+        const commEarned = Math.round(grossVal * 0.15);
+
+        return `
+          <tr>
+            <td><strong>${s.shopName}</strong> ${s.isBlacklisted ? '<span class="badge-blacklisted">BLACKLISTED</span>' : ''}</td>
+            <td>${s.city}</td>
+            <td>${s.locality}</td>
+            <td>${shopProds.length} Listed / ${s.rented} Rented</td>
+            <td>₹${grossVal}</td>
+            <td>15% Flat Rate</td>
+            <td style="color: var(--teal-brand); font-weight: 700;">₹${commEarned}</td>
             <td>
-              <button class="btn-secondary" style="padding: 4px 8px; font-size: 11px; border-color: #F5C6CB; color: var(--danger-red);" onclick="openSupportModalWithTarget('${shopObj.shopName}', '${item.id}')">
-                ⚠️ Report Fraud/Issue
+              <button class="blacklist-btn" onclick="toggleBlacklistShop('${s.shopName}')">
+                ${s.isBlacklisted ? '✅ Unflag Store' : '🚫 Blacklist Shop'}
               </button>
             </td>
           </tr>
         `;
       }).join('');
+
+      // 4. Render Charts
+      renderAdminCharts(cityData);
     }
 
-    // ADMIN DASHBOARD & REAL-TIME ANALYTICS COMPUTATIONS (6 CITIES)
-    function renderAdminDashboard() {
-      const citySummary = CITIES.map(city => {
-        const cityShops = SHOPS_DATABASE.filter(s => s.city === city);
-        const cityProducts = PRODUCTS.filter(p => p.city === city);
-
-        const totalStores = cityShops.length;
-        const totalListed = cityShops.reduce((sum, s) => sum + s.listed, 0);
-        const totalRented = cityShops.reduce((sum, s) => sum + s.rented, 0);
-
-        const grossGMV = cityProducts.reduce((sum, p) => sum + p.price, 0);
-        const commissionEarned = Math.round(grossGMV * 0.15);
-        const relocationRev = totalRented * 120; // Avg relocation share per rented item
-
-        return {
-          city,
-          totalStores,
-          totalListed,
-          totalRented,
-          grossGMV,
-          commissionEarned,
-          relocationRev
-        };
-      });
-
-      const summaryTableBody = document.getElementById('admin-city-summary-body');
-      summaryTableBody.innerHTML = citySummary.map(row => `
-        <tr>
-          <td><strong>📍 ${row.city}</strong></td>
-          <td>${row.totalStores} Partner Stores</td>
-          <td>${row.totalListed} Items</td>
-          <td style="color: #137333; font-weight: 700;">${row.totalRented} Rented</td>
-          <td><strong>₹${row.grossGMV.toLocaleString()}</strong></td>
-          <td style="color: var(--sage-primary); font-weight: 800;">₹${row.commissionEarned.toLocaleString()}</td>
-          <td style="color: var(--teal-brand); font-weight: 600;">₹${row.relocationRev.toLocaleString()}</td>
-        </tr>
-      `).join('');
-
-      renderAdminReportsTable();
-      renderShopCommissionTable();
-      renderAdminCharts(citySummary);
-    }
-
-    function renderAdminReportsTable() {
-      const reportsBody = document.getElementById('admin-reports-body');
-      
-      if (supportTickets.length === 0) {
-        reportsBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 16px;">No support tickets or fraud reports submitted.</td></tr>`;
-        return;
-      }
-
-      reportsBody.innerHTML = supportTickets.map((t, idx) => `
-        <tr>
-          <td><strong>${t.id}</strong></td>
-          <td>${t.reporter}</td>
-          <td><span style="color: var(--danger-red); font-weight: 700;">${t.type}</span></td>
-          <td>${t.target}</td>
-          <td style="max-width: 220px; font-size: 12px; line-height: 1.3;">${t.details}</td>
-          <td><span style="background: #FFF3C4; color: #8A6D3B; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">${t.status}</span></td>
-          <td>
-            <button class="btn-primary" style="padding: 4px 8px; font-size: 11px; background: #137333;" onclick="resolveSupportTicket(${idx})">Resolve Ticket</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function resolveSupportTicket(index) {
-      supportTickets[index].status = 'Resolved';
-      alert(`Ticket ${supportTickets[index].id} marked as Resolved!`);
-      renderAdminReportsTable();
-    }
-
-    function renderShopCommissionTable() {
-      const shopCommBody = document.getElementById('admin-shop-commission-body');
-
-      shopCommBody.innerHTML = SHOPS_DATABASE.map((shop, idx) => {
-        const shopProds = PRODUCTS.filter(p => p.shop === shop.shopName);
-        const grossValue = shopProds.reduce((sum, p) => sum + p.price, 0);
-        const commission = Math.round(grossValue * 0.15);
-
-        return `
-          <tr>
-            <td><strong>${shop.shopName}</strong></td>
-            <td>${shop.city}</td>
-            <td>${shop.locality}</td>
-            <td>${shop.listed} Listed / <strong>${shop.rented} Rented</strong></td>
-            <td>₹${grossValue.toLocaleString()}</td>
-            <td style="font-size: 12px; color: var(--text-muted);">₹${grossValue} × 15%</td>
-            <td style="color: var(--sage-primary); font-weight: 800;">₹${commission.toLocaleString()}</td>
-            <td>
-              ${shop.isBlacklisted ? 
-                `<span class="badge-blacklisted">Blacklisted</span>` : 
-                `<button class="blacklist-btn" onclick="toggleBlacklistShop(${idx})">🚫 Flag / Blacklist</button>`
-              }
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function toggleBlacklistShop(index) {
-      const shop = SHOPS_DATABASE[index];
-      if (confirm(`Are you sure you want to blacklist "${shop.shopName}" for platform violations/fraud?`)) {
-        shop.isBlacklisted = true;
-        renderShopCommissionTable();
-        alert(`Store "${shop.shopName}" has been blacklisted.`);
-      }
-    }
-
-    // CHART.JS RENDER FOR 6 ACTIVE CITIES
-    function renderAdminCharts(citySummary) {
-      const labels = citySummary.map(c => c.city);
-      const rentedData = citySummary.map(c => c.totalRented);
-      const gmvData = citySummary.map(c => c.grossGMV);
-      const commData = citySummary.map(c => c.commissionEarned);
+    function renderAdminCharts(cityData) {
+      const labels = cityData.map(d => d.city);
+      const rentedCounts = cityData.map(d => d.rented);
+      const gmvValues = cityData.map(d => d.grossGmv);
+      const commValues = cityData.map(d => d.comm);
 
       // Chart 1: Rented Volume
       const ctx1 = document.getElementById('rentedItemsCityChart').getContext('2d');
@@ -2243,8 +2266,8 @@
         data: {
           labels: labels,
           datasets: [{
-            label: 'Rented Items Volume',
-            data: rentedData,
+            label: 'Rented Items (Units)',
+            data: rentedCounts,
             backgroundColor: '#008080',
             borderRadius: 6
           }]
@@ -2252,8 +2275,7 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true } }
+          plugins: { legend: { display: false } }
         }
       });
 
@@ -2267,14 +2289,14 @@
           labels: labels,
           datasets: [
             {
-              label: 'Gross Rental Value (₹)',
-              data: gmvData,
+              label: 'Gross GMV (₹)',
+              data: gmvValues,
               backgroundColor: '#4A6E5E',
               borderRadius: 6
             },
             {
-              label: 'Platform Commission (15%)',
-              data: commData,
+              label: 'VCollab Commission (15%)',
+              data: commValues,
               backgroundColor: '#E8A33D',
               borderRadius: 6
             }
@@ -2282,202 +2304,149 @@
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
-          scales: { y: { beginAtZero: true } }
+          maintainAspectRatio: false
         }
       });
     }
 
-    // PAYMENT SIMULATION & HANDOVER VERIFICATION
+    function toggleBlacklistShop(shopName) {
+      const shop = SHOPS_DATABASE.find(s => s.shopName === shopName);
+      if (shop) {
+        shop.isBlacklisted = !shop.isBlacklisted;
+        alert(`Status updated for ${shopName}. Blacklisted: ${shop.isBlacklisted}`);
+        renderAdminDashboard();
+      }
+    }
+
+    function resolveTicket(ticketId) {
+      supportTickets = supportTickets.filter(t => t.id !== ticketId);
+      alert(`Ticket ${ticketId} resolved and archived.`);
+      renderAdminDashboard();
+    }
+
+    // PAYMENT & ORDER MODALS
     function openPaymentModal() {
       if (cart.length === 0) {
-        alert('Your rent cart is empty. Please add items to proceed.');
+        alert('Your cart is empty!');
         return;
       }
-      openModal('payment-modal');
+      document.getElementById('payment-modal').style.display = 'flex';
     }
 
     function showPaymentSubModal(type) {
       closeModal('payment-modal');
-      if (type === 'upi') {
-        openModal('upi-payment-modal');
-        generateFakeQRCode();
-      } else if (type === 'card') {
-        openModal('card-payment-modal');
-      }
-    }
-
-    function generateFakeQRCode() {
-      const container = document.getElementById('upi-qrcode-container');
-      container.innerHTML = '';
-      if (window.QRCode) {
+      if (type === 'card') {
+        document.getElementById('card-payment-modal').style.display = 'flex';
+      } else if (type === 'upi') {
+        const container = document.getElementById('upi-qrcode-container');
+        container.innerHTML = '';
         new QRCode(container, {
-          text: "upi://pay?pa=vcollab@upi&pn=VCollabIndia&am=1000&cu=INR",
-          width: 150,
-          height: 150
+          text: "upi://pay?pa=vcollab@upi&pn=VCollab%20Rentals&am=1000&cu=INR",
+          width: 140,
+          height: 140
         });
+        document.getElementById('upi-payment-modal').style.display = 'flex';
       }
     }
 
-    function processSubPayment(methodName) {
-      const activeModalId = methodName.includes('Card') ? 'card-payment-modal' : 'upi-payment-modal';
-      closeModal(activeModalId);
+    function processSubPayment(method) {
+      closeModal('card-payment-modal');
+      closeModal('upi-payment-modal');
 
-      const firstItem = cart[0] || { title: 'Modern Fabric Living Sofa' };
+      const firstItem = cart[0] || { title: 'Modern Living Furniture', id: 'VC-ORD-9912' };
+      document.getElementById('confirm-order-id').innerText = `VC-ORD-${Math.floor(10000 + Math.random() * 90000)}`;
       document.getElementById('confirm-product-title').innerText = firstItem.title;
-      document.getElementById('confirm-order-id').innerText = `VC-DEL-${Math.floor(10000 + Math.random() * 90000)}`;
 
-      document.getElementById('confirm-status-pill').className = 'status-badge-pending';
-      document.getElementById('confirm-status-pill').innerText = 'Pending Handover';
-      document.getElementById('otp-error-message').style.display = 'none';
-
-      openModal('qr-success-modal');
+      document.getElementById('qr-success-modal').style.display = 'flex';
       cart = [];
       updateCartUI();
     }
 
     function verifyDeliveryOTP() {
-      const inputVal = document.getElementById('delivery-otp-input').value.trim();
-      const errorElem = document.getElementById('otp-error-message');
-      
-      if (inputVal === VALID_DELIVERY_OTP) {
-        errorElem.style.display = 'none';
-        const pill = document.getElementById('confirm-status-pill');
-        pill.className = 'status-badge-delivered';
-        pill.innerText = '✓ Handover Completed & Verified';
-        alert('🎉 Delivery Handover Verified Successfully!\n\nYour rental order is active.');
+      const inputOtp = document.getElementById('delivery-otp-input').value.trim();
+      const errBox = document.getElementById('otp-error-message');
+
+      if (inputOtp === VALID_DELIVERY_OTP) {
+        errBox.style.display = 'none';
+        document.getElementById('confirm-status-pill').className = 'status-badge-delivered';
+        document.getElementById('confirm-status-pill').innerText = '✓ Delivered & Verified';
+        alert('OTP Verification Successful! Product Handover Completed.');
       } else {
-        errorElem.style.display = 'block';
+        errBox.style.display = 'block';
       }
-    }
-
-    // MODAL CONTROL FUNCTIONS
-    function openModal(modalId) {
-      const target = document.getElementById(modalId);
-      if(target) target.style.display = 'flex';
-    }
-
-    function closeModal(modalId) {
-      const target = document.getElementById(modalId);
-      if(target) target.style.display = 'none';
-    }
-
-    function openAboutModal() { openModal('about-modal'); }
-    
-    function openSupportModal() {
-      openModal('support-modal');
-    }
-
-    function openSupportModalWithTarget(shopName, assetId) {
-      document.getElementById('support-target').value = `${shopName} / ${assetId}`;
-      openModal('support-modal');
-    }
-
-    function submitSupportTicket() {
-      const reporterType = document.getElementById('support-reporter-type').value;
-      const category = document.getElementById('support-category').value;
-      const target = document.getElementById('support-target').value.trim();
-      const details = document.getElementById('support-details').value.trim();
-
-      if (!details) {
-        alert('Please provide details for your complaint or support request.');
-        return;
-      }
-
-      const newTicket = {
-        id: `TICK-${Math.floor(1000 + Math.random() * 9000)}`,
-        reporter: `${reporterType} User`,
-        type: category,
-        target: target || 'N/A',
-        details: details,
-        status: 'Pending Admin Review'
-      };
-
-      supportTickets.unshift(newTicket);
-      closeModal('support-modal');
-      alert(`✅ Ticket ${newTicket.id} Submitted Successfully!\n\nOur platform admin team will review it.`);
-      
-      document.getElementById('support-target').value = '';
-      document.getElementById('support-details').value = '';
     }
 
     function openReportModal() {
       closeModal('qr-success-modal');
-      openModal('report-issue-modal');
+      document.getElementById('report-issue-modal').style.display = 'flex';
     }
 
     function submitProductReport() {
-      const category = document.getElementById('issue-category-select').value;
-      const details = document.getElementById('issue-description-input').value.trim();
+      const cat = document.getElementById('issue-category-select').value;
+      const desc = document.getElementById('issue-description-input').value;
 
-      if (!details) {
-        alert('Please describe the issue with your delivered item.');
+      if (!desc.trim()) {
+        alert('Please describe the issue in detail.');
         return;
       }
 
+      supportTickets.push({
+        id: `TICK-${Math.floor(1000 + Math.random() * 9000)}`,
+        reporter: 'Customer (Order Delivery)',
+        type: `Delivery Issue: ${cat}`,
+        target: document.getElementById('confirm-product-title').innerText,
+        details: desc,
+        status: 'Pending Admin Action'
+      });
+
+      alert('Report submitted successfully! Our support agent will contact you within 1 hour.');
       closeModal('report-issue-modal');
-      alert('⚠️ Report Logged!\n\nDelivery verification halted. Our local dispatch team will contact you for instant replacement.');
     }
 
-    // ADD STOCK INTERACTION LOGIC
-    function openAddStockModal() {
-      const shopObj = SHOPS_DATABASE.find(s => s.shopName === selectedRetailerShop) || SHOPS_DATABASE[0];
-      document.getElementById('add-stock-shop-name').value = `${shopObj.shopName} (${shopObj.city})`;
-      openModal('add-stock-modal');
+    // SUPPORT & ABOUT MODALS
+    function openSupportModal() {
+      document.getElementById('support-modal').style.display = 'flex';
     }
 
-    function submitNewStock() {
-      const shopObj = SHOPS_DATABASE.find(s => s.shopName === selectedRetailerShop) || SHOPS_DATABASE[0];
-      const title = document.getElementById('add-stock-title').value.trim();
-      const category = document.getElementById('add-stock-category').value;
-      const priceVal = parseFloat(document.getElementById('add-stock-price').value);
-      let imageVal = document.getElementById('add-stock-image').value.trim();
+    function openSupportModalWithTarget(targetCode) {
+      document.getElementById('support-target').value = targetCode;
+      openSupportModal();
+    }
 
-      if (!title || isNaN(priceVal) || priceVal <= 0) {
-        alert('Please fill out product title and a valid monthly price.');
+    function submitSupportTicket() {
+      const type = document.getElementById('support-reporter-type').value;
+      const cat = document.getElementById('support-category').value;
+      const target = document.getElementById('support-target').value || 'N/A';
+      const details = document.getElementById('support-details').value;
+
+      if (!details.trim()) {
+        alert('Please provide complaint or query details.');
         return;
       }
 
-      if (!imageVal) {
-        imageVal = 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';
-      }
+      supportTickets.push({
+        id: `TICK-${Math.floor(1000 + Math.random() * 9000)}`,
+        reporter: `${type} User`,
+        type: cat,
+        target: target,
+        details: details,
+        status: 'Pending Admin Review'
+      });
 
-      const newProductId = `VC-${shopObj.city.substring(0, 3).toUpperCase()}-NEW-${Math.floor(100 + Math.random() * 900)}`;
-
-      const newProduct = {
-        id: newProductId,
-        title: title,
-        category: category,
-        city: shopObj.city,
-        shop: shopObj.shopName,
-        locality: shopObj.locality,
-        price: Math.round(priceVal),
-        originalPrice: Math.round(priceVal * 1.25),
-        discount: '20% OFF',
-        image: imageVal,
-        description: `Newly listed item from ${shopObj.shopName}. High quality and ready for instant delivery.`
-      };
-
-      PRODUCTS.unshift(newProduct);
-      shopObj.listed += 1;
-
-      closeModal('add-stock-modal');
-
-      document.getElementById('add-stock-title').value = '';
-      document.getElementById('add-stock-price').value = '';
-      document.getElementById('add-stock-image').value = '';
-
-      renderRetailerDashboard();
-      renderMarketplace();
-
-      alert(`✅ New Product "${title}" Added Successfully!\n\nProduct ID: ${newProductId}\nIt is now live on the marketplace and synced with the Central Admin Dashboard.`);
+      alert('Ticket created! The Platform Admin panel has been updated with your report.');
+      closeModal('support-modal');
+      document.getElementById('support-details').value = '';
     }
 
-    // INITIALIZATION
+    function openAboutModal() {
+      document.getElementById('about-modal').style.display = 'flex';
+    }
+
+    // INITIALIZATION ON LOAD
     window.addEventListener('DOMContentLoaded', () => {
       renderMarketplace();
       populateRelocateProductDropdown();
-      populateRetailerShopDropdown();
+      updateRelocationTotalFee();
     });
   </script>
 </body>
